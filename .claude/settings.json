@@ -1,0 +1,21 @@
+{
+  "extraKnownMarketplaces": {
+    "ahrena": {
+      "source": {
+        "source": "github",
+        "repo": "ahrenatechnology/ahrena-framework"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "ahrena-engineering-delivery@ahrena": true,
+    "ahrena-engineering-frontend@ahrena": true,
+    "ahrena-engineering-backend@ahrena": true,
+    "ahrena-engineering-quality@ahrena": true,
+    "ahrena-engineering-fundamentals@ahrena": true,
+    "ahrena-engineering-security@ahrena": true,
+    "ahrena-contributing@ahrena": true,
+    "ahrena-foundation@ahrena": true,
+    "ahrena-engineering-python@ahrena": true
+  }
+}

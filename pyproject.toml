@@ -1,0 +1,23 @@
+[project]
+name = "formacao-fde-case"
+version = "0.1.0"
+description = "Public case repository for the Barte FDE training (Formação FDE)"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "Apache-2.0"
+dependencies = [
+    "anthropic>=2.6.0",
+    "python-dotenv>=1.2.4",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
