@@ -99,10 +99,12 @@ Nunca coloque o arquivo `.env` nem nenhuma chave ou senha num commit. O `.env` j
 | Sábado, 14/11, 9h | Git em prática e formação dos grupos, junto com o **desafio do kit** (pasta `challenge/`). |
 | Sábado, 14/11, 9h40 | Roleplay: primeira reunião com o CFO, a controladoria e compras da Já Chegou. |
 | Sábado, 14/11, 10h30 | O **dossiê** chega como um commit no repositório original (a pasta exata será indicada pela coordenação; a proposta é `case/dossier/`). Atualize o seu fork para recebê-lo. |
-| Sábado, 14/11, ao longo do dia | **Checkpoint 1**: diagnóstico e prioridade (o problema, o número a mover, a prioridade). **Checkpoint 2**: checklist de acessos e credenciais, desenho da solução, plano de entrega e o que se repete num segundo cliente, a Terminal Sul. |
-| Domingo, 15/11, 9h | Aula: da solução ao agente (componentes, harness, ferramentas, evals, guardrails). |
-| Domingo, 15/11, 10h30–16h15 | Construção em grupo, com coaches circulando. O ponto de partida do agente entra no repositório nesse dia. |
-| Domingo, 15/11, 16h15 | Pitches dos grupos. |
+| Sábado, 14/11, 12h | **Checkpoint 1**: diagnóstico e prioridade (o problema, o número a mover, a prioridade). |
+| Sábado, 14/11, 15h–18h | Solution Design e aplicação no caso (a aplicação vai das 16h15 às 17h30, depois do café da tarde), fechando com o **checkpoint 2**: checklist de acessos e credenciais, desenho da solução, plano de entrega e o que se repete num segundo cliente, a Terminal Sul. |
+| Domingo, 15/11, 9h–10h30 | Aula: da solução ao agente (componentes, harness, ferramentas, evals, guardrails), metade teoria e metade mão na massa. |
+| Domingo, 15/11, 10h30–11h30 | Q&A com convidado. |
+| Domingo, 15/11, 11h30–15h45 | Construção em grupo, com coaches circulando (almoço das 13h às 14h). O ponto de partida do agente entra no repositório nesse dia. |
+| Domingo, 15/11, 16h15 | Pitches dos grupos e fechamento, depois do café da tarde. |
 
 ## Mapa das pastas
 
