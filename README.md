@@ -109,7 +109,7 @@ Nunca coloque o arquivo `.env` nem nenhuma chave ou senha num commit. O `.env` j
 
 ## Mapa das pastas
 
-O material de domingo (dados, ponto de partida do agente) entra neste repositório durante a imersão.
+O kit de domingo já está aqui, menos o gabarito, que entra no domingo de manhã.
 
 | Pasta | O que tem |
 |---|---|
@@ -117,6 +117,12 @@ O material de domingo (dados, ponto de partida do agente) entra neste repositór
 | `challenge/` | As instruções do desafio do kit, de sábado de manhã. |
 | `templates/` | Os modelos dos entregáveis dos checkpoints. |
 | `teams/` | Uma pasta por grupo, com nome, integrantes e o link do fork líder. |
+| `DOMINGO.md` | Como funciona o kit de domingo: o agente, as três skills, as tools e o eval. |
+| `agente/` | O agente de domingo: instruções, as três skills e o script que roda. |
+| `mcp_server/`, `jachegou/` | As tools do agente, expostas por MCP, e o acesso à base. |
+| `dados/` | A base sintética de domingo. O gabarito (`dados/gabarito/`) chega no domingo de manhã. |
+| `baseline/`, `eval/` | Regras simples sem IA para comparar, e o eval contra o gabarito. |
+| `saidas/` | Onde o agente e o baseline gravam as propostas. |
 | `scripts/` | Utilitários, como o verificador de setup `scripts/check_setup.py`. |
 | `tests/` | Os testes automáticos do repositório (`uv run pytest`). |
 

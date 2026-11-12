@@ -1,0 +1,10 @@
+{
+  "E1": "Falta física: o item veio na nota, mas não chegou na doca",
+  "E2": "Item trocado: a nota traz um item que não está na ordem, no lugar de um que está",
+  "E3": "Quantidade menor: chegou menos do que a nota cobra",
+  "E4": "Unidade de medida: ordem em unidade, nota em caixa; o preço unitário parece divergir cerca de 300%",
+  "E5": "Nota sem ordem: ninguém sabe quem comprou",
+  "E6": "Duplicidade: a mesma compra aparece em duas notas ou dois boletos",
+  "E7": "Pago fora do fluxo: compra emergencial da loja, recebida e paga antes de a nota chegar",
+  "E8": "Item sem cadastro: a ordem travou, a mercadoria entrou sob pressão comercial e a nota não integra no ERP"
+}
