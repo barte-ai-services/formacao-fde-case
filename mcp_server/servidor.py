@@ -181,7 +181,6 @@ def registrar_proposta(nota_id: str, classificacao: str, acao_doca: str, encamin
                 "justificativa": justificativa.strip(), "origem": os.environ.get("FDE_ORIGEM", "agente"),
                 "registrado_em": datetime.now().isoformat(timespec="seconds")}
     if NIVEIS.index(encaminhamento) < NIVEIS.index(nivel_minimo(classificacao, nota)):
-        # A recusa fica gravada: o eval mede a skill 3 na primeira tentativa, não na que passou.
         gravar({**proposta, "recusada": "regua"})
         return {"registrada": False,
                 "erro": f"a régua não permite encaminhar {classificacao} desta nota para '{encaminhamento}'; consulte a régua"}
