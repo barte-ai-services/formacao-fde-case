@@ -1,6 +1,6 @@
 # Tutorial: o trabalho do grupo como peça de portfólio
 
-> **Momento:** domingo, 15/11, durante a construção e depois do pitch das 16h15.
+> **Momento:** domingo, 15/11, durante a construção e depois do pitch das 16h30.
 >
 > **Prazo:** a definir pela coordenação.
 >

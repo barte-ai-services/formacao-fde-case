@@ -1,8 +1,8 @@
 # Pitch de domingo
 
-> **Momento:** pitch dos grupos, domingo, 15/11, às **16h15**.
+> **Momento:** pitch dos grupos, domingo, 15/11, às **16h30**.
 >
-> **Prazo:** o roteiro fica pronto antes das 16h15; o tempo total de cada pitch é a definir pela
+> **Prazo:** o roteiro fica pronto antes das 16h30; o tempo total de cada pitch é a definir pela
 > coordenação.
 >
 > **Onde entregar:** no fork do líder do grupo, em `teams/group-N/sunday-pitch.md`, por pull request.
