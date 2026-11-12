@@ -92,5 +92,5 @@ Terminal Sul, e o que teria de mudar.
 | --- | --- | --- |
 | Checkpoint 1 (sábado) | Diagnóstico e prioridade: problema, número a mover, prioridade. | [`checkpoint-1-diagnosis.md`](../templates/checkpoint-1-diagnosis.md) |
 | Checkpoint 2 (sábado) | Checklist de acessos, desenho da solução, plano de entrega e o que se repete na Terminal Sul. | [`checkpoint-2-access-checklist.md`](../templates/checkpoint-2-access-checklist.md), [`checkpoint-2-solution-design.md`](../templates/checkpoint-2-solution-design.md), [`checkpoint-2-delivery-plan.md`](../templates/checkpoint-2-delivery-plan.md) |
-| Pitch (domingo, 16h15) | Apresentação do grupo. | [`sunday-pitch.md`](../templates/sunday-pitch.md) |
+| Pitch (domingo, 16h30) | Apresentação do grupo. | [`sunday-pitch.md`](../templates/sunday-pitch.md) |
 | Portfólio | O trabalho do grupo contado como peça de portfólio. | [`portfolio-tutorial.md`](../templates/portfolio-tutorial.md) |
