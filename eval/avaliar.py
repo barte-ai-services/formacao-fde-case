@@ -5,7 +5,9 @@ Uso:
     uv run python eval/avaliar.py saidas/propostas.jsonl --comparar saidas/baseline.jsonl
 
 Uma nota conta como acerto completo quando classificação, ação na doca e encaminhamento batem.
-Notas sem proposta contam como erro. Se houver mais de uma proposta para a mesma nota, vale a última.
+Notas sem proposta contam como erro. Se houver mais de uma proposta para a mesma nota, vale a última aceita.
+O servidor também grava as tentativas que a régua recusou. Com elas, o eval mede o encaminhamento na primeira
+tentativa de cada nota: um agente que só acerta depois de ser recusado não sabe a régua.
 """
 
 from __future__ import annotations
@@ -24,13 +26,30 @@ from jachegou.base import CLASSIFICACOES, Base  # noqa: E402
 CAMPOS = ("classificacao", "acao_doca", "encaminhamento")
 
 
+def ler_linhas(caminho: Path) -> list[dict]:
+    return [json.loads(linha) for linha in caminho.read_text(encoding="utf-8").splitlines() if linha.strip()]
+
+
 def ler_propostas(caminho: Path) -> dict[str, dict]:
-    props = {}
-    for linha in caminho.read_text(encoding="utf-8").splitlines():
-        if linha.strip():
-            p = json.loads(linha)
-            props[p["nota_id"]] = p
-    return props
+    """A última proposta aceita de cada nota."""
+    return {p["nota_id"]: p for p in ler_linhas(caminho) if not p.get("recusada")}
+
+
+def ler_primeiras(caminho: Path) -> dict[str, dict]:
+    """A primeira tentativa de cada nota, aceita ou recusada pela régua."""
+    primeiras: dict[str, dict] = {}
+    for p in ler_linhas(caminho):
+        primeiras.setdefault(p["nota_id"], p)
+    return primeiras
+
+
+def avaliar_arquivo(caminho: Path, gabarito: list[dict]) -> dict:
+    r = avaliar(ler_propostas(caminho), gabarito)
+    primeiras = ler_primeiras(caminho)
+    r["encaminhamento_primeira"] = sum(primeiras.get(g["nota_id"], {}).get("encaminhamento") == g["encaminhamento"]
+                                       for g in gabarito)
+    r["notas_com_recusa"] = len({p["nota_id"] for p in ler_linhas(caminho) if p.get("recusada")})
+    return r
 
 
 def avaliar(props: dict[str, dict], gabarito: list[dict]) -> dict:
@@ -81,6 +100,9 @@ def relatorio(nome: str, r: dict, outro: tuple[str, dict] | None = None) -> str:
     linha("Acerto completo (as três skills)", pct(r["completo"], n), pct(o["completo"], n) if o else "")
     for c, rot in zip(CAMPOS, ("Skill 1 · classificação", "Skill 2 · ação na doca", "Skill 3 · encaminhamento")):
         linha(rot, pct(r["campos"][c], n), pct(o["campos"][c], n) if o else "")
+    linha("Skill 3 · encaminhamento na primeira tentativa", pct(r["encaminhamento_primeira"], n),
+          pct(o["encaminhamento_primeira"], n) if o else "")
+    linha("Notas com recusa da régua", str(r["notas_com_recusa"]), str(o["notas_com_recusa"]) if o else "")
     ok, tot = r["risco"]
     linha("Valor em risco (até R$ 1 de diferença)", f"{ok} de {tot}" if tot else "não informado",
           (f"{o['risco'][0]} de {o['risco'][1]}" if o and o["risco"][1] else "não informado") if o else "")
@@ -111,8 +133,8 @@ def main():
     if not arquivo.exists():
         raise SystemExit("O gabarito ainda não está em dados/gabarito/. Ele chega no domingo.")
     gabarito = json.loads(arquivo.read_text(encoding="utf-8"))
-    r = avaliar(ler_propostas(a.propostas), gabarito)
-    outro = ("baseline", avaliar(ler_propostas(a.comparar), gabarito)) if a.comparar else None
+    r = avaliar_arquivo(a.propostas, gabarito)
+    outro = ("baseline", avaliar_arquivo(a.comparar, gabarito)) if a.comparar else None
     texto = relatorio(a.propostas.stem, r, outro)
     print(texto)
     if a.erros:
