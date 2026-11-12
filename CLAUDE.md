@@ -1,3 +1,5 @@
+@AGENTS.md
+
 <!-- ahrena:agency:start -->
 ## Build work enters through the agency
 
