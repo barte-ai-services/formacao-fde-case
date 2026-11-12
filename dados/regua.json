@@ -1,0 +1,22 @@
+{
+  "tolerancia_valor": 50.0,
+  "tolerancia_percentual": 0.005,
+  "teto_regra_tolerancia": 5000.0,
+  "teto_analista": 20000.0,
+  "teto_coordenacao": 100000.0,
+  "niveis": [
+    "regra",
+    "analista",
+    "coordenacao",
+    "diretoria",
+    "bloqueio"
+  ],
+  "texto": [
+    "Regra: match exato, ou diferença de até R$ 50 e até 0,5% em nota de até R$ 5 mil. A regra libera; a coordenação aprova o lote do dia.",
+    "Analista: exceções 1 a 4 em nota de até R$ 20 mil. O agente classifica, calcula a diferença e propõe a ação.",
+    "Coordenação: nota acima de R$ 20 mil com exceção, ou exceções 5, 7 e 8 em qualquer valor. O agente monta o dossiê da exceção com as evidências.",
+    "Diretoria: nota acima de R$ 100 mil ou fornecedor bloqueado. O agente prepara a decisão, sem recomendar valor.",
+    "Bloqueio: suspeita de duplicidade (exceção 6). Ninguém paga até resolver; o agente bloqueia o título e avisa a coordenação.",
+    "O agente nunca aprova nem paga. Ele propõe a ação e encaminha."
+  ]
+}

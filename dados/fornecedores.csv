@@ -1,0 +1,13 @@
+fornecedor_id,razao_social,cnpj,bloqueado,motivo_bloqueio
+F01,Laticínios Serra Azul Ltda.,26.804.190/0001-06,False,
+F02,Bebidas Rio Claro S.A.,74.055.489/0001-48,False,
+F03,Hortifruti Vale Verde Ltda.,94.433.432/0001-43,False,
+F04,Higiene Lume Indústria Ltda.,00.023.027/0001-11,False,
+F05,Mercearia Atlântica Distribuidora Ltda.,54.813.096/0001-49,False,
+F06,Congelados Polar Sul Ltda.,47.573.594/0001-06,False,
+F07,Padaria Trigo Bom Ltda.,13.769.729/0001-82,False,
+F08,Distribuidora Cerrado Alimentos Ltda.,62.833.783/0001-54,False,
+F09,Pet Amigo Comércio Ltda.,96.332.932/0001-13,False,
+F10,Limpeza Brilho Produtos Ltda.,53.194.517/0001-38,False,
+F11,Snacks Crocante Ltda.,93.339.323/0001-08,False,
+F12,Café Monte Alto Ltda.,09.891.615/0001-33,True,Pagamentos bloqueados pela diretoria até revisão de contrato

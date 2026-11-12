@@ -1,0 +1,1952 @@
+[
+  {
+    "recebimento_id": "RC-9107",
+    "nota_chave": "35261154813096000149550010000705851810705196",
+    "ordem_id": "OC-2026-41879",
+    "fornecedor_id": "F05",
+    "destino": "LJ-012",
+    "canal": "app_loja",
+    "data": "2026-11-13",
+    "itens": [
+      {
+        "codigo_fornecedor": "F05-004",
+        "descricao": "Açúcar refinado 1 kg",
+        "quantidade": 196,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F05-001",
+        "descricao": "Arroz tipo 1 5 kg",
+        "quantidade": 32,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F05-002",
+        "descricao": "Feijão carioca 1 kg",
+        "quantidade": 116,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9109",
+    "nota_chave": "35261153194517000138550010000843721564148302",
+    "ordem_id": "OC-2026-41904",
+    "fornecedor_id": "F10",
+    "destino": "LJ-005",
+    "canal": "app_loja",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F10-003",
+        "descricao": "Água sanitária 2 L",
+        "quantidade": 228,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F10-001",
+        "descricao": "Detergente 500 ml",
+        "quantidade": 484,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F10-002",
+        "descricao": "Sabão em pó 1,6 kg",
+        "quantidade": 44,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9115",
+    "nota_chave": "35261153194517000138550010000844021907712449",
+    "ordem_id": "OC-2026-41914",
+    "fornecedor_id": "F10",
+    "destino": "LJ-030",
+    "canal": "app_loja",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F10-001",
+        "descricao": "Detergente 500 ml",
+        "quantidade": 280,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F10-003",
+        "descricao": "Água sanitária 2 L",
+        "quantidade": 184,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F10-002",
+        "descricao": "Sabão em pó 1,6 kg",
+        "quantidade": 28,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9119",
+    "nota_chave": "35261153194517000138550010000844231159573413",
+    "ordem_id": "OC-2026-41937",
+    "fornecedor_id": "F10",
+    "destino": "CD-04",
+    "canal": "doca_cd",
+    "data": "2026-11-11",
+    "itens": [
+      {
+        "codigo_fornecedor": "F10-003",
+        "descricao": "Água sanitária 2 L",
+        "quantidade": 352,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F10-002",
+        "descricao": "Sabão em pó 1,6 kg",
+        "quantidade": 108,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F10-001",
+        "descricao": "Detergente 500 ml",
+        "quantidade": 1556,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9126",
+    "nota_chave": "35261194433432000143550010000894041209560377",
+    "ordem_id": "OC-2026-41971",
+    "fornecedor_id": "F03",
+    "destino": "CD-03",
+    "canal": "doca_cd",
+    "data": "2026-11-13",
+    "itens": [
+      {
+        "codigo_fornecedor": "F03-001",
+        "descricao": "Banana prata kg",
+        "quantidade": 6360,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F03-002",
+        "descricao": "Tomate italiano kg",
+        "quantidade": 3400,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F03-003",
+        "descricao": "Alface crespa unidade",
+        "quantidade": 14268,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9134",
+    "nota_chave": "35261109891615000133550010000454371848235436",
+    "ordem_id": "OC-2026-41997",
+    "fornecedor_id": "F12",
+    "destino": "CD-02",
+    "canal": "doca_cd",
+    "data": "2026-11-11",
+    "itens": [
+      {
+        "codigo_fornecedor": "F12-003",
+        "descricao": "Filtro de papel 103",
+        "quantidade": 388,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F12-001",
+        "descricao": "Café em cápsula 10 un",
+        "quantidade": 148,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F12-002",
+        "descricao": "Café solúvel 200 g",
+        "quantidade": 72,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9140",
+    "nota_chave": "35261162833783000154550010000374011846887219",
+    "ordem_id": "OC-2026-42035",
+    "fornecedor_id": "F08",
+    "destino": "LJ-014",
+    "canal": "app_loja",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F08-003",
+        "descricao": "Molho de tomate 340 g",
+        "quantidade": 236,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F08-002",
+        "descricao": "Macarrão espaguete 500 g",
+        "quantidade": 200,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F08-001",
+        "descricao": "Óleo de soja 900 ml",
+        "quantidade": 124,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9142",
+    "nota_chave": "35261174055489000148550010000438381354248490",
+    "ordem_id": "OC-2026-42040",
+    "fornecedor_id": "F02",
+    "destino": "LJ-027",
+    "canal": "app_loja",
+    "data": "2026-11-11",
+    "itens": [
+      {
+        "codigo_fornecedor": "F02-004",
+        "descricao": "Água de coco 1 L",
+        "quantidade": 32,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-002",
+        "descricao": "Refrigerante cola 2 L",
+        "quantidade": 28,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-003",
+        "descricao": "Suco de uva integral 1 L",
+        "quantidade": 28,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9148",
+    "nota_chave": "35261193339323000108550010000452301219580171",
+    "ordem_id": "OC-2026-42067",
+    "fornecedor_id": "F11",
+    "destino": "LJ-020",
+    "canal": "app_loja",
+    "data": "2026-11-12",
+    "itens": [
+      {
+        "codigo_fornecedor": "F11-002",
+        "descricao": "Amendoim torrado 500 g",
+        "quantidade": 32,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F11-003",
+        "descricao": "Biscoito recheado 140 g",
+        "quantidade": 160,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Recebido pelo app"
+  },
+  {
+    "recebimento_id": "RC-9155",
+    "nota_chave": "35261174055489000148550010000438641990594118",
+    "ordem_id": "OC-2026-42097",
+    "fornecedor_id": "F02",
+    "destino": "LJ-028",
+    "canal": "app_loja",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F02-002",
+        "descricao": "Refrigerante cola 2 L",
+        "quantidade": 116,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-003",
+        "descricao": "Suco de uva integral 1 L",
+        "quantidade": 96,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Recebido pelo app"
+  },
+  {
+    "recebimento_id": "RC-9158",
+    "nota_chave": "35261100023027000111550010000479111651390609",
+    "ordem_id": "OC-2026-42112",
+    "fornecedor_id": "F04",
+    "destino": "LJ-012",
+    "canal": "app_loja",
+    "data": "2026-11-13",
+    "itens": [
+      {
+        "codigo_fornecedor": "F04-002",
+        "descricao": "Creme dental 90 g",
+        "quantidade": 108,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F04-001",
+        "descricao": "Sabonete em barra 85 g",
+        "quantidade": 252,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Recebido pelo app"
+  },
+  {
+    "recebimento_id": "RC-9167",
+    "nota_chave": "35261193339323000108550010000452511887500515",
+    "ordem_id": "OC-2026-42136",
+    "fornecedor_id": "F11",
+    "destino": "LJ-021",
+    "canal": "app_loja",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F11-003",
+        "descricao": "Biscoito recheado 140 g",
+        "quantidade": 244,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F11-002",
+        "descricao": "Amendoim torrado 500 g",
+        "quantidade": 68,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Recebido pelo app"
+  },
+  {
+    "recebimento_id": "RC-9169",
+    "nota_chave": "35261126804190000106550010000727411584646281",
+    "ordem_id": "OC-2026-42170",
+    "fornecedor_id": "F01",
+    "destino": "LJ-023",
+    "canal": "app_loja",
+    "data": "2026-11-11",
+    "itens": [
+      {
+        "codigo_fornecedor": "F01-001",
+        "descricao": "Leite integral 1 L",
+        "quantidade": 268,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F01-002",
+        "descricao": "Iogurte natural 170 g",
+        "quantidade": 272,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Recebido pelo app"
+  },
+  {
+    "recebimento_id": "RC-9172",
+    "nota_chave": "35261193339323000108550010000452741392955627",
+    "ordem_id": "OC-2026-42191",
+    "fornecedor_id": "F11",
+    "destino": "CD-04",
+    "canal": "doca_cd",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F11-003",
+        "descricao": "Biscoito recheado 140 g",
+        "quantidade": 908,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F11-002",
+        "descricao": "Amendoim torrado 500 g",
+        "quantidade": 236,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Conferência concluída"
+  },
+  {
+    "recebimento_id": "RC-9174",
+    "nota_chave": "35261196332932000113550010000306151218215455",
+    "ordem_id": "OC-2026-42196",
+    "fornecedor_id": "F09",
+    "destino": "CD-03",
+    "canal": "doca_cd",
+    "data": "2026-11-11",
+    "itens": [
+      {
+        "codigo_fornecedor": "F09-002",
+        "descricao": "Areia sanitária 4 kg",
+        "quantidade": 476,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Conferência concluída"
+  },
+  {
+    "recebimento_id": "RC-9182",
+    "nota_chave": "35261193339323000108550010000452941836412686",
+    "ordem_id": "OC-2026-42205",
+    "fornecedor_id": "F11",
+    "destino": "CD-03",
+    "canal": "doca_cd",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F11-002",
+        "descricao": "Amendoim torrado 500 g",
+        "quantidade": 1180,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F11-003",
+        "descricao": "Biscoito recheado 140 g",
+        "quantidade": 5240,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Conferência concluída"
+  },
+  {
+    "recebimento_id": "RC-9183",
+    "nota_chave": "35261174055489000148550010000438891665161800",
+    "ordem_id": "OC-2026-42232",
+    "fornecedor_id": "F02",
+    "destino": "CD-03",
+    "canal": "doca_cd",
+    "data": "2026-11-13",
+    "itens": [
+      {
+        "codigo_fornecedor": "F02-002",
+        "descricao": "Refrigerante cola 2 L",
+        "quantidade": 3000,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-001",
+        "descricao": "Água mineral 1,5 L",
+        "quantidade": 16320,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Conferência concluída"
+  },
+  {
+    "recebimento_id": "RC-9192",
+    "nota_chave": "35261193339323000108550010000453211681766520",
+    "ordem_id": "OC-2026-42261",
+    "fornecedor_id": "F11",
+    "destino": "LJ-022",
+    "canal": "app_loja",
+    "data": "2026-11-11",
+    "itens": [
+      {
+        "codigo_fornecedor": "F11-003",
+        "descricao": "Biscoito recheado 140 g",
+        "quantidade": 196,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F11-001",
+        "descricao": "Batata chips 120 g",
+        "quantidade": 44,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9193",
+    "nota_chave": "35261113769729000182550010000136961739161849",
+    "ordem_id": "OC-2026-42267",
+    "fornecedor_id": "F07",
+    "destino": "LJ-013",
+    "canal": "app_loja",
+    "data": "2026-11-13",
+    "itens": [
+      {
+        "codigo_fornecedor": "F07-001",
+        "descricao": "Pão de forma 500 g",
+        "quantidade": 224,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9195",
+    "nota_chave": "35261154813096000149550010000706101618947616",
+    "ordem_id": "OC-2026-42296",
+    "fornecedor_id": "F05",
+    "destino": "LJ-005",
+    "canal": "app_loja",
+    "data": "2026-11-12",
+    "itens": [
+      {
+        "codigo_fornecedor": "F05-003",
+        "descricao": "Café torrado 500 g",
+        "quantidade": 36,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F05-001",
+        "descricao": "Arroz tipo 1 5 kg",
+        "quantidade": 44,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F05-002",
+        "descricao": "Feijão carioca 1 kg",
+        "quantidade": 84,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9196",
+    "nota_chave": "35261174055489000148550010000438941174512643",
+    "ordem_id": "OC-2026-42328",
+    "fornecedor_id": "F02",
+    "destino": "LJ-012",
+    "canal": "app_loja",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F02-002",
+        "descricao": "Refrigerante cola 2 L",
+        "quantidade": 72,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-004",
+        "descricao": "Água de coco 1 L",
+        "quantidade": 28,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-001",
+        "descricao": "Água mineral 1,5 L",
+        "quantidade": 192,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9205",
+    "nota_chave": "35261113769729000182550010000137161692183529",
+    "ordem_id": "OC-2026-42334",
+    "fornecedor_id": "F07",
+    "destino": "LJ-008",
+    "canal": "app_loja",
+    "data": "2026-11-11",
+    "itens": [
+      {
+        "codigo_fornecedor": "F07-001",
+        "descricao": "Pão de forma 500 g",
+        "quantidade": 288,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9209",
+    "nota_chave": "35261100023027000111550010000479411353478484",
+    "ordem_id": "OC-2026-42352",
+    "fornecedor_id": "F04",
+    "destino": "CD-01",
+    "canal": "doca_cd",
+    "data": "2026-11-11",
+    "itens": [
+      {
+        "codigo_fornecedor": "F04-002",
+        "descricao": "Creme dental 90 g",
+        "quantidade": 672,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F04-003",
+        "descricao": "Shampoo 350 ml",
+        "quantidade": 376,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9211",
+    "nota_chave": "35261154813096000149550010000706331730119123",
+    "ordem_id": "OC-2026-42361",
+    "fornecedor_id": "F05",
+    "destino": "CD-03",
+    "canal": "doca_cd",
+    "data": "2026-11-12",
+    "itens": [
+      {
+        "codigo_fornecedor": "F05-002",
+        "descricao": "Feijão carioca 1 kg",
+        "quantidade": 320,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F05-003",
+        "descricao": "Café torrado 500 g",
+        "quantidade": 256,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F05-004",
+        "descricao": "Açúcar refinado 1 kg",
+        "quantidade": 784,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9214",
+    "nota_chave": "35261147573594000106550010000130581699597092",
+    "ordem_id": "OC-2026-42378",
+    "fornecedor_id": "F06",
+    "destino": "CD-02",
+    "canal": "doca_cd",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F06-002",
+        "descricao": "Pizza congelada 460 g",
+        "quantidade": 484,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F06-001",
+        "descricao": "Pão de queijo congelado 1 kg",
+        "quantidade": 288,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9215",
+    "nota_chave": "35261147573594000106550010000130711911816076",
+    "ordem_id": "OC-2026-42387",
+    "fornecedor_id": "F06",
+    "destino": "CD-03",
+    "canal": "doca_cd",
+    "data": "2026-11-11",
+    "itens": [
+      {
+        "codigo_fornecedor": "F06-001",
+        "descricao": "Pão de queijo congelado 1 kg",
+        "quantidade": 1416,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F06-002",
+        "descricao": "Pizza congelada 460 g",
+        "quantidade": 1316,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9219",
+    "nota_chave": "35261162833783000154550010000374231762376796",
+    "ordem_id": "OC-2026-42397",
+    "fornecedor_id": "F08",
+    "destino": "LJ-004",
+    "canal": "app_loja",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F08-001",
+        "descricao": "Óleo de soja 900 ml",
+        "quantidade": 75,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F08-003",
+        "descricao": "Molho de tomate 340 g",
+        "quantidade": 196,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F08-002",
+        "descricao": "Macarrão espaguete 500 g",
+        "quantidade": 196,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9226",
+    "nota_chave": "35261147573594000106550010000130781132902052",
+    "ordem_id": "OC-2026-42414",
+    "fornecedor_id": "F06",
+    "destino": "LJ-030",
+    "canal": "app_loja",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F06-003",
+        "descricao": "Sorvete 1,5 L",
+        "quantidade": 15,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F06-001",
+        "descricao": "Pão de queijo congelado 1 kg",
+        "quantidade": 24,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F06-002",
+        "descricao": "Pizza congelada 460 g",
+        "quantidade": 16,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9228",
+    "nota_chave": "35261126804190000106550010000727681835351811",
+    "ordem_id": "OC-2026-42428",
+    "fornecedor_id": "F01",
+    "destino": "LJ-030",
+    "canal": "app_loja",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F01-003",
+        "descricao": "Queijo muçarela fatiado 150 g",
+        "quantidade": 28,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F01-004",
+        "descricao": "Manteiga com sal 200 g",
+        "quantidade": 36,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F01-001",
+        "descricao": "Leite integral 1 L",
+        "quantidade": 66,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9233",
+    "nota_chave": "35261162833783000154550010000374281137980170",
+    "ordem_id": "OC-2026-42465",
+    "fornecedor_id": "F08",
+    "destino": "LJ-019",
+    "canal": "app_loja",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F08-002",
+        "descricao": "Macarrão espaguete 500 g",
+        "quantidade": 52,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F08-003",
+        "descricao": "Molho de tomate 340 g",
+        "quantidade": 39,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F08-001",
+        "descricao": "Óleo de soja 900 ml",
+        "quantidade": 32,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9241",
+    "nota_chave": "35261100023027000111550010000479631513989258",
+    "ordem_id": "OC-2026-42504",
+    "fornecedor_id": "F04",
+    "destino": "CD-01",
+    "canal": "doca_cd",
+    "data": "2026-11-12",
+    "itens": [
+      {
+        "codigo_fornecedor": "F04-001",
+        "descricao": "Sabonete em barra 85 g",
+        "quantidade": 1074,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F04-002",
+        "descricao": "Creme dental 90 g",
+        "quantidade": 452,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F04-003",
+        "descricao": "Shampoo 350 ml",
+        "quantidade": 216,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9250",
+    "nota_chave": "35261174055489000148550010000439001702370730",
+    "ordem_id": "OC-2026-42519",
+    "fornecedor_id": "F02",
+    "destino": "CD-04",
+    "canal": "doca_cd",
+    "data": "2026-11-11",
+    "itens": [
+      {
+        "codigo_fornecedor": "F02-001",
+        "descricao": "Água mineral 1,5 L",
+        "quantidade": 1588,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-003",
+        "descricao": "Suco de uva integral 1 L",
+        "quantidade": 252,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-002",
+        "descricao": "Refrigerante cola 2 L",
+        "quantidade": 892,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9259",
+    "nota_chave": "35261113769729000182550010000137451787814280",
+    "ordem_id": "OC-2026-42533",
+    "fornecedor_id": "F07",
+    "destino": "CD-02",
+    "canal": "doca_cd",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F07-001",
+        "descricao": "Pão de forma 500 g",
+        "quantidade": 549,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F07-002",
+        "descricao": "Bisnaguinha 300 g",
+        "quantidade": 1412,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9268",
+    "nota_chave": "35261153194517000138550010000844331298860518",
+    "ordem_id": "OC-2026-42538",
+    "fornecedor_id": "F10",
+    "destino": "CD-03",
+    "canal": "doca_cd",
+    "data": "2026-11-12",
+    "itens": [
+      {
+        "codigo_fornecedor": "F10-003",
+        "descricao": "Água sanitária 2 L",
+        "quantidade": 1536,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F10-002",
+        "descricao": "Sabão em pó 1,6 kg",
+        "quantidade": 246,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F10-001",
+        "descricao": "Detergente 500 ml",
+        "quantidade": 3020,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9270",
+    "nota_chave": "35261194433432000143550010000894081384279035",
+    "ordem_id": "OC-2026-42573",
+    "fornecedor_id": "F03",
+    "destino": "CD-02",
+    "canal": "doca_cd",
+    "data": "2026-11-11",
+    "itens": [
+      {
+        "codigo_fornecedor": "F03-001",
+        "descricao": "Banana prata kg",
+        "quantidade": 4740,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F03-003",
+        "descricao": "Alface crespa unidade",
+        "quantidade": 8298,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F03-002",
+        "descricao": "Tomate italiano kg",
+        "quantidade": 7344,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9278",
+    "nota_chave": "35261193339323000108550010000453341310610778",
+    "ordem_id": "OC-2026-42608",
+    "fornecedor_id": "F11",
+    "destino": "LJ-009",
+    "canal": "app_loja",
+    "data": "2026-11-11",
+    "itens": [
+      {
+        "codigo_fornecedor": "F11-002",
+        "descricao": "Amendoim torrado 500 g",
+        "quantidade": 92,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F11-001",
+        "descricao": "Batata chips 120 g",
+        "quantidade": 76,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F11-003",
+        "descricao": "Biscoito recheado 140 g",
+        "quantidade": 96,
+        "unidade": "CX"
+      }
+    ],
+    "observacao": "WMS registra em caixa; sem conversão para unidade"
+  },
+  {
+    "recebimento_id": "RC-9282",
+    "nota_chave": "35261154813096000149550010000706431621743193",
+    "ordem_id": "OC-2026-42615",
+    "fornecedor_id": "F05",
+    "destino": "LJ-026",
+    "canal": "app_loja",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F05-002",
+        "descricao": "Feijão carioca 1 kg",
+        "quantidade": 60,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F05-004",
+        "descricao": "Açúcar refinado 1 kg",
+        "quantidade": 38,
+        "unidade": "CX"
+      },
+      {
+        "codigo_fornecedor": "F05-001",
+        "descricao": "Arroz tipo 1 5 kg",
+        "quantidade": 24,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "WMS registra em caixa; sem conversão para unidade"
+  },
+  {
+    "recebimento_id": "RC-9285",
+    "nota_chave": "35261100023027000111550010000479761598126270",
+    "ordem_id": "OC-2026-42644",
+    "fornecedor_id": "F04",
+    "destino": "LJ-009",
+    "canal": "app_loja",
+    "data": "2026-11-12",
+    "itens": [
+      {
+        "codigo_fornecedor": "F04-002",
+        "descricao": "Creme dental 90 g",
+        "quantidade": 144,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F04-003",
+        "descricao": "Shampoo 350 ml",
+        "quantidade": 8,
+        "unidade": "CX"
+      },
+      {
+        "codigo_fornecedor": "F04-001",
+        "descricao": "Sabonete em barra 85 g",
+        "quantidade": 308,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "WMS registra em caixa; sem conversão para unidade"
+  },
+  {
+    "recebimento_id": "RC-9288",
+    "nota_chave": "35261162833783000154550010000374521840226160",
+    "ordem_id": "OC-2026-42673",
+    "fornecedor_id": "F08",
+    "destino": "CD-03",
+    "canal": "doca_cd",
+    "data": "2026-11-12",
+    "itens": [
+      {
+        "codigo_fornecedor": "F08-002",
+        "descricao": "Macarrão espaguete 500 g",
+        "quantidade": 232,
+        "unidade": "CX"
+      },
+      {
+        "codigo_fornecedor": "F08-001",
+        "descricao": "Óleo de soja 900 ml",
+        "quantidade": 312,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F08-003",
+        "descricao": "Molho de tomate 340 g",
+        "quantidade": 664,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "WMS registra em caixa; sem conversão para unidade"
+  },
+  {
+    "recebimento_id": "RC-9289",
+    "nota_chave": "35261162833783000154550010000374771889327915",
+    "ordem_id": "OC-2026-42682",
+    "fornecedor_id": "F08",
+    "destino": "CD-04",
+    "canal": "doca_cd",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F08-003",
+        "descricao": "Molho de tomate 340 g",
+        "quantidade": 186,
+        "unidade": "CX"
+      },
+      {
+        "codigo_fornecedor": "F08-001",
+        "descricao": "Óleo de soja 900 ml",
+        "quantidade": 232,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F08-002",
+        "descricao": "Macarrão espaguete 500 g",
+        "quantidade": 420,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "WMS registra em caixa; sem conversão para unidade"
+  },
+  {
+    "recebimento_id": "RC-9298",
+    "nota_chave": "35261126804190000106550010000727821842767366",
+    "ordem_id": "OC-2026-42710",
+    "fornecedor_id": "F01",
+    "destino": "CD-01",
+    "canal": "doca_cd",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F01-002",
+        "descricao": "Iogurte natural 170 g",
+        "quantidade": 1024,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F01-004",
+        "descricao": "Manteiga com sal 200 g",
+        "quantidade": 176,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F01-003",
+        "descricao": "Queijo muçarela fatiado 150 g",
+        "quantidade": 103,
+        "unidade": "CX"
+      }
+    ],
+    "observacao": "WMS registra em caixa; sem conversão para unidade"
+  },
+  {
+    "recebimento_id": "RC-9301",
+    "nota_chave": "35261147573594000106550010000130861307025411",
+    "ordem_id": "OC-2026-42714",
+    "fornecedor_id": "F06",
+    "destino": "CD-04",
+    "canal": "doca_cd",
+    "data": "2026-11-13",
+    "itens": [
+      {
+        "codigo_fornecedor": "F06-002",
+        "descricao": "Pizza congelada 460 g",
+        "quantidade": 56,
+        "unidade": "CX"
+      },
+      {
+        "codigo_fornecedor": "F06-001",
+        "descricao": "Pão de queijo congelado 1 kg",
+        "quantidade": 184,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F06-003",
+        "descricao": "Sorvete 1,5 L",
+        "quantidade": 104,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "WMS registra em caixa; sem conversão para unidade"
+  },
+  {
+    "recebimento_id": "RC-9305",
+    "nota_chave": "35261113769729000182550010000137591816304136",
+    "ordem_id": "OC-2026-42742",
+    "fornecedor_id": "F07",
+    "destino": "CD-04",
+    "canal": "doca_cd",
+    "data": "2026-11-11",
+    "itens": [
+      {
+        "codigo_fornecedor": "F07-001",
+        "descricao": "Pão de forma 500 g",
+        "quantidade": 867,
+        "unidade": "CX"
+      },
+      {
+        "codigo_fornecedor": "F07-002",
+        "descricao": "Bisnaguinha 300 g",
+        "quantidade": 2600,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "WMS registra em caixa; sem conversão para unidade"
+  },
+  {
+    "recebimento_id": "RC-9310",
+    "nota_chave": "35261153194517000138550010000844441912118632",
+    "ordem_id": "OC-2026-42773",
+    "fornecedor_id": "F10",
+    "destino": "CD-01",
+    "canal": "doca_cd",
+    "data": "2026-11-11",
+    "itens": [
+      {
+        "codigo_fornecedor": "F10-002",
+        "descricao": "Sabão em pó 1,6 kg",
+        "quantidade": 768,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F10-003",
+        "descricao": "Água sanitária 2 L",
+        "quantidade": 923,
+        "unidade": "CX"
+      },
+      {
+        "codigo_fornecedor": "F10-001",
+        "descricao": "Detergente 500 ml",
+        "quantidade": 7788,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "WMS registra em caixa; sem conversão para unidade"
+  },
+  {
+    "recebimento_id": "RC-9312",
+    "nota_chave": "35261147573594000106550010000131151861817373",
+    "ordem_id": "OC-2026-42809",
+    "fornecedor_id": "F06",
+    "destino": "LJ-003",
+    "canal": "app_loja",
+    "data": "2026-11-05",
+    "itens": [
+      {
+        "codigo_fornecedor": "F06-002",
+        "descricao": "Pizza congelada 460 g",
+        "quantidade": 20,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F06-003",
+        "descricao": "Sorvete 1,5 L",
+        "quantidade": 12,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F06-001",
+        "descricao": "Pão de queijo congelado 1 kg",
+        "quantidade": 8,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9316",
+    "nota_chave": "35261194433432000143550010000894101464288543",
+    "ordem_id": "OC-2026-42812",
+    "fornecedor_id": "F03",
+    "destino": "LJ-030",
+    "canal": "app_loja",
+    "data": "2026-11-05",
+    "itens": [
+      {
+        "codigo_fornecedor": "F03-002",
+        "descricao": "Tomate italiano kg",
+        "quantidade": 44,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F03-001",
+        "descricao": "Banana prata kg",
+        "quantidade": 60,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F03-003",
+        "descricao": "Alface crespa unidade",
+        "quantidade": 124,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9323",
+    "nota_chave": "35261154813096000149550010000706601858205502",
+    "ordem_id": "OC-2026-42830",
+    "fornecedor_id": "F05",
+    "destino": "LJ-013",
+    "canal": "app_loja",
+    "data": "2026-11-07",
+    "itens": [
+      {
+        "codigo_fornecedor": "F05-002",
+        "descricao": "Feijão carioca 1 kg",
+        "quantidade": 124,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F05-001",
+        "descricao": "Arroz tipo 1 5 kg",
+        "quantidade": 44,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F05-004",
+        "descricao": "Açúcar refinado 1 kg",
+        "quantidade": 124,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9325",
+    "nota_chave": "35261174055489000148550010000439021423673626",
+    "ordem_id": "OC-2026-42853",
+    "fornecedor_id": "F02",
+    "destino": "LJ-025",
+    "canal": "app_loja",
+    "data": "2026-11-05",
+    "itens": [
+      {
+        "codigo_fornecedor": "F02-004",
+        "descricao": "Água de coco 1 L",
+        "quantidade": 32,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-002",
+        "descricao": "Refrigerante cola 2 L",
+        "quantidade": 44,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-003",
+        "descricao": "Suco de uva integral 1 L",
+        "quantidade": 24,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9332",
+    "nota_chave": "35261100023027000111550010000480471401375459",
+    "ordem_id": "OC-2026-42892",
+    "fornecedor_id": "F04",
+    "destino": "CD-04",
+    "canal": "doca_cd",
+    "data": "2026-11-07",
+    "itens": [
+      {
+        "codigo_fornecedor": "F04-003",
+        "descricao": "Shampoo 350 ml",
+        "quantidade": 208,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F04-001",
+        "descricao": "Sabonete em barra 85 g",
+        "quantidade": 1180,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F04-002",
+        "descricao": "Creme dental 90 g",
+        "quantidade": 500,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9341",
+    "nota_chave": "35261154813096000149550010000706831115008414",
+    "ordem_id": "OC-2026-42909",
+    "fornecedor_id": "F05",
+    "destino": "CD-02",
+    "canal": "doca_cd",
+    "data": "2026-11-05",
+    "itens": [
+      {
+        "codigo_fornecedor": "F05-004",
+        "descricao": "Açúcar refinado 1 kg",
+        "quantidade": 552,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F05-003",
+        "descricao": "Café torrado 500 g",
+        "quantidade": 92,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F05-002",
+        "descricao": "Feijão carioca 1 kg",
+        "quantidade": 300,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9345",
+    "nota_chave": "35261153194517000138550010000844661342604093",
+    "ordem_id": "OC-2026-42912",
+    "fornecedor_id": "F10",
+    "destino": "CD-03",
+    "canal": "doca_cd",
+    "data": "2026-11-05",
+    "itens": [
+      {
+        "codigo_fornecedor": "F10-003",
+        "descricao": "Água sanitária 2 L",
+        "quantidade": 868,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F10-002",
+        "descricao": "Sabão em pó 1,6 kg",
+        "quantidade": 204,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F10-001",
+        "descricao": "Detergente 500 ml",
+        "quantidade": 2256,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9348",
+    "nota_chave": "35261113769729000182550010000137731145340609",
+    "ordem_id": "OC-2026-42924",
+    "fornecedor_id": "F07",
+    "destino": "CD-02",
+    "canal": "doca_cd",
+    "data": "2026-11-02",
+    "itens": [
+      {
+        "codigo_fornecedor": "F07-001",
+        "descricao": "Pão de forma 500 g",
+        "quantidade": 1012,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F07-002",
+        "descricao": "Bisnaguinha 300 g",
+        "quantidade": 836,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9350",
+    "nota_chave": "35261147573594000106550010000131371591560338",
+    "ordem_id": "OC-2026-42950",
+    "fornecedor_id": "F06",
+    "destino": "CD-02",
+    "canal": "doca_cd",
+    "data": "2026-11-06",
+    "itens": [
+      {
+        "codigo_fornecedor": "F06-002",
+        "descricao": "Pizza congelada 460 g",
+        "quantidade": 1492,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F06-003",
+        "descricao": "Sorvete 1,5 L",
+        "quantidade": 1788,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F06-001",
+        "descricao": "Pão de queijo congelado 1 kg",
+        "quantidade": 1524,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": ""
+  },
+  {
+    "recebimento_id": "RC-9356",
+    "nota_chave": null,
+    "ordem_id": null,
+    "fornecedor_id": "F09",
+    "destino": "LJ-025",
+    "canal": "app_loja",
+    "data": "2026-11-02",
+    "itens": [
+      {
+        "codigo_fornecedor": "F09-002",
+        "descricao": "Areia sanitária 4 kg",
+        "quantidade": 84,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F09-001",
+        "descricao": "Ração para cães 10 kg",
+        "quantidade": 16,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Compra emergencial da loja; nota a caminho"
+  },
+  {
+    "recebimento_id": "RC-9362",
+    "nota_chave": null,
+    "ordem_id": null,
+    "fornecedor_id": "F01",
+    "destino": "LJ-007",
+    "canal": "app_loja",
+    "data": "2026-11-08",
+    "itens": [
+      {
+        "codigo_fornecedor": "F01-004",
+        "descricao": "Manteiga com sal 200 g",
+        "quantidade": 84,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F01-003",
+        "descricao": "Queijo muçarela fatiado 150 g",
+        "quantidade": 180,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Compra emergencial da loja; nota a caminho"
+  },
+  {
+    "recebimento_id": "RC-9368",
+    "nota_chave": null,
+    "ordem_id": null,
+    "fornecedor_id": "F10",
+    "destino": "LJ-014",
+    "canal": "app_loja",
+    "data": "2026-11-09",
+    "itens": [
+      {
+        "codigo_fornecedor": "F10-002",
+        "descricao": "Sabão em pó 1,6 kg",
+        "quantidade": 96,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F10-003",
+        "descricao": "Água sanitária 2 L",
+        "quantidade": 228,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Compra emergencial da loja; nota a caminho"
+  },
+  {
+    "recebimento_id": "RC-9372",
+    "nota_chave": null,
+    "ordem_id": null,
+    "fornecedor_id": "F05",
+    "destino": "LJ-006",
+    "canal": "app_loja",
+    "data": "2026-11-05",
+    "itens": [
+      {
+        "codigo_fornecedor": "F05-002",
+        "descricao": "Feijão carioca 1 kg",
+        "quantidade": 144,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F05-001",
+        "descricao": "Arroz tipo 1 5 kg",
+        "quantidade": 40,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Compra emergencial da loja; nota a caminho"
+  },
+  {
+    "recebimento_id": "RC-9381",
+    "nota_chave": null,
+    "ordem_id": null,
+    "fornecedor_id": "F02",
+    "destino": "LJ-002",
+    "canal": "app_loja",
+    "data": "2026-11-05",
+    "itens": [
+      {
+        "codigo_fornecedor": "F02-001",
+        "descricao": "Água mineral 1,5 L",
+        "quantidade": 308,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-004",
+        "descricao": "Água de coco 1 L",
+        "quantidade": 68,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Compra emergencial da loja; nota a caminho"
+  },
+  {
+    "recebimento_id": "RC-9389",
+    "nota_chave": null,
+    "ordem_id": null,
+    "fornecedor_id": "F03",
+    "destino": "LJ-004",
+    "canal": "app_loja",
+    "data": "2026-11-05",
+    "itens": [
+      {
+        "codigo_fornecedor": "F03-001",
+        "descricao": "Banana prata kg",
+        "quantidade": 308,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F03-002",
+        "descricao": "Tomate italiano kg",
+        "quantidade": 156,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Compra emergencial da loja; nota a caminho"
+  },
+  {
+    "recebimento_id": "RC-9393",
+    "nota_chave": null,
+    "ordem_id": null,
+    "fornecedor_id": "F02",
+    "destino": "LJ-009",
+    "canal": "app_loja",
+    "data": "2026-11-01",
+    "itens": [
+      {
+        "codigo_fornecedor": "F02-004",
+        "descricao": "Água de coco 1 L",
+        "quantidade": 104,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-002",
+        "descricao": "Refrigerante cola 2 L",
+        "quantidade": 156,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Compra emergencial da loja; nota a caminho"
+  },
+  {
+    "recebimento_id": "RC-9399",
+    "nota_chave": null,
+    "ordem_id": null,
+    "fornecedor_id": "F06",
+    "destino": "LJ-019",
+    "canal": "app_loja",
+    "data": "2026-11-08",
+    "itens": [
+      {
+        "codigo_fornecedor": "F06-001",
+        "descricao": "Pão de queijo congelado 1 kg",
+        "quantidade": 28,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F06-002",
+        "descricao": "Pizza congelada 460 g",
+        "quantidade": 52,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Compra emergencial da loja; nota a caminho"
+  },
+  {
+    "recebimento_id": "RC-9401",
+    "nota_chave": null,
+    "ordem_id": null,
+    "fornecedor_id": "F10",
+    "destino": "LJ-004",
+    "canal": "app_loja",
+    "data": "2026-11-04",
+    "itens": [
+      {
+        "codigo_fornecedor": "F10-001",
+        "descricao": "Detergente 500 ml",
+        "quantidade": 156,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F10-003",
+        "descricao": "Água sanitária 2 L",
+        "quantidade": 64,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Compra emergencial da loja; nota a caminho"
+  },
+  {
+    "recebimento_id": "RC-9402",
+    "nota_chave": "35261100023027000111550010000480631271179173",
+    "ordem_id": "OC-2026-42985",
+    "fornecedor_id": "F04",
+    "destino": "LJ-028",
+    "canal": "app_loja",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F04-003",
+        "descricao": "Shampoo 350 ml",
+        "quantidade": 68,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F04-002",
+        "descricao": "Creme dental 90 g",
+        "quantidade": 120,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F04-N42",
+        "descricao": "Desodorante sem alumínio 55 g (lançamento)",
+        "quantidade": 20,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Recebido a pedido do comercial"
+  },
+  {
+    "recebimento_id": "RC-9405",
+    "nota_chave": "35261174055489000148550010000439731584272469",
+    "ordem_id": "OC-2026-43025",
+    "fornecedor_id": "F02",
+    "destino": "LJ-026",
+    "canal": "app_loja",
+    "data": "2026-11-13",
+    "itens": [
+      {
+        "codigo_fornecedor": "F02-003",
+        "descricao": "Suco de uva integral 1 L",
+        "quantidade": 12,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-001",
+        "descricao": "Água mineral 1,5 L",
+        "quantidade": 68,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-N27",
+        "descricao": "Isotônico limão 500 ml (lançamento)",
+        "quantidade": 60,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Recebido a pedido do comercial"
+  },
+  {
+    "recebimento_id": "RC-9407",
+    "nota_chave": "35261174055489000148550010000439751116755064",
+    "ordem_id": "OC-2026-43028",
+    "fornecedor_id": "F02",
+    "destino": "LJ-017",
+    "canal": "app_loja",
+    "data": "2026-11-13",
+    "itens": [
+      {
+        "codigo_fornecedor": "F02-003",
+        "descricao": "Suco de uva integral 1 L",
+        "quantidade": 60,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-002",
+        "descricao": "Refrigerante cola 2 L",
+        "quantidade": 116,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-N52",
+        "descricao": "Isotônico limão 500 ml (lançamento)",
+        "quantidade": 72,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Recebido a pedido do comercial"
+  },
+  {
+    "recebimento_id": "RC-9412",
+    "nota_chave": "35261147573594000106550010000131581876759056",
+    "ordem_id": "OC-2026-43046",
+    "fornecedor_id": "F06",
+    "destino": "LJ-029",
+    "canal": "app_loja",
+    "data": "2026-11-12",
+    "itens": [
+      {
+        "codigo_fornecedor": "F06-003",
+        "descricao": "Sorvete 1,5 L",
+        "quantidade": 8,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F06-002",
+        "descricao": "Pizza congelada 460 g",
+        "quantidade": 12,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F06-N10",
+        "descricao": "Hambúrguer vegetal 4 un (lançamento)",
+        "quantidade": 20,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Recebido a pedido do comercial"
+  },
+  {
+    "recebimento_id": "RC-9419",
+    "nota_chave": "35261154813096000149550010000707371988084281",
+    "ordem_id": "OC-2026-43060",
+    "fornecedor_id": "F05",
+    "destino": "CD-03",
+    "canal": "doca_cd",
+    "data": "2026-11-13",
+    "itens": [
+      {
+        "codigo_fornecedor": "F05-004",
+        "descricao": "Açúcar refinado 1 kg",
+        "quantidade": 636,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F05-003",
+        "descricao": "Café torrado 500 g",
+        "quantidade": 296,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F05-N42",
+        "descricao": "Granola sem açúcar 800 g (lançamento)",
+        "quantidade": 72,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Recebido a pedido do comercial"
+  },
+  {
+    "recebimento_id": "RC-9428",
+    "nota_chave": "35261100023027000111550010000480911971111829",
+    "ordem_id": "OC-2026-43100",
+    "fornecedor_id": "F04",
+    "destino": "CD-01",
+    "canal": "doca_cd",
+    "data": "2026-11-11",
+    "itens": [
+      {
+        "codigo_fornecedor": "F04-002",
+        "descricao": "Creme dental 90 g",
+        "quantidade": 628,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F04-003",
+        "descricao": "Shampoo 350 ml",
+        "quantidade": 148,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F04-N98",
+        "descricao": "Desodorante sem alumínio 55 g (lançamento)",
+        "quantidade": 68,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Recebido a pedido do comercial"
+  },
+  {
+    "recebimento_id": "RC-9431",
+    "nota_chave": "35261193339323000108550010000453601693601737",
+    "ordem_id": "OC-2026-43136",
+    "fornecedor_id": "F11",
+    "destino": "CD-02",
+    "canal": "doca_cd",
+    "data": "2026-11-13",
+    "itens": [
+      {
+        "codigo_fornecedor": "F11-002",
+        "descricao": "Amendoim torrado 500 g",
+        "quantidade": 304,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F11-003",
+        "descricao": "Biscoito recheado 140 g",
+        "quantidade": 1808,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F11-N18",
+        "descricao": "Chips de mandioca 80 g (lançamento)",
+        "quantidade": 256,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Recebido a pedido do comercial"
+  },
+  {
+    "recebimento_id": "RC-9440",
+    "nota_chave": "35261154813096000149550010000707561452613736",
+    "ordem_id": "OC-2026-43149",
+    "fornecedor_id": "F05",
+    "destino": "CD-02",
+    "canal": "doca_cd",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F05-002",
+        "descricao": "Feijão carioca 1 kg",
+        "quantidade": 432,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F05-003",
+        "descricao": "Café torrado 500 g",
+        "quantidade": 180,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F05-N32",
+        "descricao": "Granola sem açúcar 800 g (lançamento)",
+        "quantidade": 68,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Recebido a pedido do comercial"
+  },
+  {
+    "recebimento_id": "RC-9442",
+    "nota_chave": "35261174055489000148550010000439781205145698",
+    "ordem_id": "OC-2026-43157",
+    "fornecedor_id": "F02",
+    "destino": "CD-03",
+    "canal": "doca_cd",
+    "data": "2026-11-10",
+    "itens": [
+      {
+        "codigo_fornecedor": "F02-001",
+        "descricao": "Água mineral 1,5 L",
+        "quantidade": 18644,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-002",
+        "descricao": "Refrigerante cola 2 L",
+        "quantidade": 3796,
+        "unidade": "UN"
+      },
+      {
+        "codigo_fornecedor": "F02-N91",
+        "descricao": "Isotônico limão 500 ml (lançamento)",
+        "quantidade": 5176,
+        "unidade": "UN"
+      }
+    ],
+    "observacao": "Recebido a pedido do comercial"
+  }
+]

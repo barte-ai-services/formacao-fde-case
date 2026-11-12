@@ -1,0 +1,335 @@
+[
+  {
+    "sku": "SKU-1001",
+    "descricao": "Leite integral 1 L",
+    "fornecedor_id": "F01",
+    "codigo_fornecedor": "F01-001",
+    "unidade_base": "UN",
+    "fator_caixa": 12,
+    "preco_referencia_un": 4.89
+  },
+  {
+    "sku": "SKU-1002",
+    "descricao": "Iogurte natural 170 g",
+    "fornecedor_id": "F01",
+    "codigo_fornecedor": "F01-002",
+    "unidade_base": "UN",
+    "fator_caixa": 6,
+    "preco_referencia_un": 3.29
+  },
+  {
+    "sku": "SKU-1003",
+    "descricao": "Queijo muçarela fatiado 150 g",
+    "fornecedor_id": "F01",
+    "codigo_fornecedor": "F01-003",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 9.9
+  },
+  {
+    "sku": "SKU-1004",
+    "descricao": "Manteiga com sal 200 g",
+    "fornecedor_id": "F01",
+    "codigo_fornecedor": "F01-004",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 12.4
+  },
+  {
+    "sku": "SKU-1005",
+    "descricao": "Água mineral 1,5 L",
+    "fornecedor_id": "F02",
+    "codigo_fornecedor": "F02-001",
+    "unidade_base": "UN",
+    "fator_caixa": 6,
+    "preco_referencia_un": 2.79
+  },
+  {
+    "sku": "SKU-1006",
+    "descricao": "Refrigerante cola 2 L",
+    "fornecedor_id": "F02",
+    "codigo_fornecedor": "F02-002",
+    "unidade_base": "UN",
+    "fator_caixa": 6,
+    "preco_referencia_un": 8.49
+  },
+  {
+    "sku": "SKU-1007",
+    "descricao": "Suco de uva integral 1 L",
+    "fornecedor_id": "F02",
+    "codigo_fornecedor": "F02-003",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 14.9
+  },
+  {
+    "sku": "SKU-1008",
+    "descricao": "Água de coco 1 L",
+    "fornecedor_id": "F02",
+    "codigo_fornecedor": "F02-004",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 9.7
+  },
+  {
+    "sku": "SKU-1009",
+    "descricao": "Banana prata kg",
+    "fornecedor_id": "F03",
+    "codigo_fornecedor": "F03-001",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 6.9
+  },
+  {
+    "sku": "SKU-1010",
+    "descricao": "Tomate italiano kg",
+    "fornecedor_id": "F03",
+    "codigo_fornecedor": "F03-002",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 8.5
+  },
+  {
+    "sku": "SKU-1011",
+    "descricao": "Alface crespa unidade",
+    "fornecedor_id": "F03",
+    "codigo_fornecedor": "F03-003",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 3.4
+  },
+  {
+    "sku": "SKU-1012",
+    "descricao": "Sabonete em barra 85 g",
+    "fornecedor_id": "F04",
+    "codigo_fornecedor": "F04-001",
+    "unidade_base": "UN",
+    "fator_caixa": 12,
+    "preco_referencia_un": 2.49
+  },
+  {
+    "sku": "SKU-1013",
+    "descricao": "Creme dental 90 g",
+    "fornecedor_id": "F04",
+    "codigo_fornecedor": "F04-002",
+    "unidade_base": "UN",
+    "fator_caixa": 12,
+    "preco_referencia_un": 5.9
+  },
+  {
+    "sku": "SKU-1014",
+    "descricao": "Shampoo 350 ml",
+    "fornecedor_id": "F04",
+    "codigo_fornecedor": "F04-003",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 16.9
+  },
+  {
+    "sku": "SKU-1015",
+    "descricao": "Arroz tipo 1 5 kg",
+    "fornecedor_id": "F05",
+    "codigo_fornecedor": "F05-001",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 27.9
+  },
+  {
+    "sku": "SKU-1016",
+    "descricao": "Feijão carioca 1 kg",
+    "fornecedor_id": "F05",
+    "codigo_fornecedor": "F05-002",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 8.9
+  },
+  {
+    "sku": "SKU-1017",
+    "descricao": "Café torrado 500 g",
+    "fornecedor_id": "F05",
+    "codigo_fornecedor": "F05-003",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 19.9
+  },
+  {
+    "sku": "SKU-1018",
+    "descricao": "Açúcar refinado 1 kg",
+    "fornecedor_id": "F05",
+    "codigo_fornecedor": "F05-004",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 4.99
+  },
+  {
+    "sku": "SKU-1019",
+    "descricao": "Pão de queijo congelado 1 kg",
+    "fornecedor_id": "F06",
+    "codigo_fornecedor": "F06-001",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 24.9
+  },
+  {
+    "sku": "SKU-1020",
+    "descricao": "Pizza congelada 460 g",
+    "fornecedor_id": "F06",
+    "codigo_fornecedor": "F06-002",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 21.9
+  },
+  {
+    "sku": "SKU-1021",
+    "descricao": "Sorvete 1,5 L",
+    "fornecedor_id": "F06",
+    "codigo_fornecedor": "F06-003",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 26.9
+  },
+  {
+    "sku": "SKU-1022",
+    "descricao": "Pão de forma 500 g",
+    "fornecedor_id": "F07",
+    "codigo_fornecedor": "F07-001",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 9.49
+  },
+  {
+    "sku": "SKU-1023",
+    "descricao": "Bisnaguinha 300 g",
+    "fornecedor_id": "F07",
+    "codigo_fornecedor": "F07-002",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 7.99
+  },
+  {
+    "sku": "SKU-1024",
+    "descricao": "Óleo de soja 900 ml",
+    "fornecedor_id": "F08",
+    "codigo_fornecedor": "F08-001",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 7.89
+  },
+  {
+    "sku": "SKU-1025",
+    "descricao": "Macarrão espaguete 500 g",
+    "fornecedor_id": "F08",
+    "codigo_fornecedor": "F08-002",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 4.69
+  },
+  {
+    "sku": "SKU-1026",
+    "descricao": "Molho de tomate 340 g",
+    "fornecedor_id": "F08",
+    "codigo_fornecedor": "F08-003",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 3.99
+  },
+  {
+    "sku": "SKU-1027",
+    "descricao": "Ração para cães 10 kg",
+    "fornecedor_id": "F09",
+    "codigo_fornecedor": "F09-001",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 109.9
+  },
+  {
+    "sku": "SKU-1028",
+    "descricao": "Areia sanitária 4 kg",
+    "fornecedor_id": "F09",
+    "codigo_fornecedor": "F09-002",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 19.9
+  },
+  {
+    "sku": "SKU-1029",
+    "descricao": "Detergente 500 ml",
+    "fornecedor_id": "F10",
+    "codigo_fornecedor": "F10-001",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 2.69
+  },
+  {
+    "sku": "SKU-1030",
+    "descricao": "Sabão em pó 1,6 kg",
+    "fornecedor_id": "F10",
+    "codigo_fornecedor": "F10-002",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 24.9
+  },
+  {
+    "sku": "SKU-1031",
+    "descricao": "Água sanitária 2 L",
+    "fornecedor_id": "F10",
+    "codigo_fornecedor": "F10-003",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 6.49
+  },
+  {
+    "sku": "SKU-1032",
+    "descricao": "Batata chips 120 g",
+    "fornecedor_id": "F11",
+    "codigo_fornecedor": "F11-001",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 11.9
+  },
+  {
+    "sku": "SKU-1033",
+    "descricao": "Amendoim torrado 500 g",
+    "fornecedor_id": "F11",
+    "codigo_fornecedor": "F11-002",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 13.9
+  },
+  {
+    "sku": "SKU-1034",
+    "descricao": "Biscoito recheado 140 g",
+    "fornecedor_id": "F11",
+    "codigo_fornecedor": "F11-003",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 3.79
+  },
+  {
+    "sku": "SKU-1035",
+    "descricao": "Café em cápsula 10 un",
+    "fornecedor_id": "F12",
+    "codigo_fornecedor": "F12-001",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 21.9
+  },
+  {
+    "sku": "SKU-1036",
+    "descricao": "Café solúvel 200 g",
+    "fornecedor_id": "F12",
+    "codigo_fornecedor": "F12-002",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 24.9
+  },
+  {
+    "sku": "SKU-1037",
+    "descricao": "Filtro de papel 103",
+    "fornecedor_id": "F12",
+    "codigo_fornecedor": "F12-003",
+    "unidade_base": "UN",
+    "fator_caixa": 4,
+    "preco_referencia_un": 6.9
+  }
+]

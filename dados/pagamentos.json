@@ -1,0 +1,92 @@
+[
+  {
+    "pagamento_id": "PG-5301",
+    "fornecedor_id": "F09",
+    "destino": "LJ-025",
+    "data": "2026-11-02",
+    "valor": 3430.0,
+    "forma": "boleto avulso",
+    "origem": "compra emergencial da loja, fora do fluxo",
+    "nota_chave": null
+  },
+  {
+    "pagamento_id": "PG-5304",
+    "fornecedor_id": "F01",
+    "destino": "LJ-007",
+    "data": "2026-11-08",
+    "valor": 2823.6,
+    "forma": "boleto avulso",
+    "origem": "compra emergencial da loja, fora do fluxo",
+    "nota_chave": null
+  },
+  {
+    "pagamento_id": "PG-5308",
+    "fornecedor_id": "F10",
+    "destino": "LJ-014",
+    "data": "2026-11-09",
+    "valor": 3870.12,
+    "forma": "pix",
+    "origem": "compra emergencial da loja, fora do fluxo",
+    "nota_chave": null
+  },
+  {
+    "pagamento_id": "PG-5314",
+    "fornecedor_id": "F05",
+    "destino": "LJ-006",
+    "data": "2026-11-05",
+    "valor": 2397.6,
+    "forma": "pix",
+    "origem": "compra emergencial da loja, fora do fluxo",
+    "nota_chave": null
+  },
+  {
+    "pagamento_id": "PG-5317",
+    "fornecedor_id": "F02",
+    "destino": "LJ-002",
+    "data": "2026-11-05",
+    "valor": 1518.92,
+    "forma": "pix",
+    "origem": "compra emergencial da loja, fora do fluxo",
+    "nota_chave": null
+  },
+  {
+    "pagamento_id": "PG-5322",
+    "fornecedor_id": "F03",
+    "destino": "LJ-004",
+    "data": "2026-11-05",
+    "valor": 3451.2,
+    "forma": "pix",
+    "origem": "compra emergencial da loja, fora do fluxo",
+    "nota_chave": null
+  },
+  {
+    "pagamento_id": "PG-5325",
+    "fornecedor_id": "F02",
+    "destino": "LJ-009",
+    "data": "2026-11-01",
+    "valor": 2333.24,
+    "forma": "boleto avulso",
+    "origem": "compra emergencial da loja, fora do fluxo",
+    "nota_chave": null
+  },
+  {
+    "pagamento_id": "PG-5330",
+    "fornecedor_id": "F06",
+    "destino": "LJ-019",
+    "data": "2026-11-08",
+    "valor": 1836.0,
+    "forma": "boleto avulso",
+    "origem": "compra emergencial da loja, fora do fluxo",
+    "nota_chave": null
+  },
+  {
+    "pagamento_id": "PG-5337",
+    "fornecedor_id": "F10",
+    "destino": "LJ-004",
+    "data": "2026-11-04",
+    "valor": 835.0,
+    "forma": "boleto avulso",
+    "origem": "compra emergencial da loja, fora do fluxo",
+    "nota_chave": null
+  }
+]

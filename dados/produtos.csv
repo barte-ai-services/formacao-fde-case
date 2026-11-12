@@ -1,0 +1,38 @@
+sku,descricao,fornecedor_id,codigo_fornecedor,unidade_base,fator_caixa,preco_referencia_un
+SKU-1001,Leite integral 1 L,F01,F01-001,UN,12,4.89
+SKU-1002,Iogurte natural 170 g,F01,F01-002,UN,6,3.29
+SKU-1003,Queijo muçarela fatiado 150 g,F01,F01-003,UN,4,9.9
+SKU-1004,Manteiga com sal 200 g,F01,F01-004,UN,4,12.4
+SKU-1005,"Água mineral 1,5 L",F02,F02-001,UN,6,2.79
+SKU-1006,Refrigerante cola 2 L,F02,F02-002,UN,6,8.49
+SKU-1007,Suco de uva integral 1 L,F02,F02-003,UN,4,14.9
+SKU-1008,Água de coco 1 L,F02,F02-004,UN,4,9.7
+SKU-1009,Banana prata kg,F03,F03-001,UN,4,6.9
+SKU-1010,Tomate italiano kg,F03,F03-002,UN,4,8.5
+SKU-1011,Alface crespa unidade,F03,F03-003,UN,4,3.4
+SKU-1012,Sabonete em barra 85 g,F04,F04-001,UN,12,2.49
+SKU-1013,Creme dental 90 g,F04,F04-002,UN,12,5.9
+SKU-1014,Shampoo 350 ml,F04,F04-003,UN,4,16.9
+SKU-1015,Arroz tipo 1 5 kg,F05,F05-001,UN,4,27.9
+SKU-1016,Feijão carioca 1 kg,F05,F05-002,UN,4,8.9
+SKU-1017,Café torrado 500 g,F05,F05-003,UN,4,19.9
+SKU-1018,Açúcar refinado 1 kg,F05,F05-004,UN,4,4.99
+SKU-1019,Pão de queijo congelado 1 kg,F06,F06-001,UN,4,24.9
+SKU-1020,Pizza congelada 460 g,F06,F06-002,UN,4,21.9
+SKU-1021,"Sorvete 1,5 L",F06,F06-003,UN,4,26.9
+SKU-1022,Pão de forma 500 g,F07,F07-001,UN,4,9.49
+SKU-1023,Bisnaguinha 300 g,F07,F07-002,UN,4,7.99
+SKU-1024,Óleo de soja 900 ml,F08,F08-001,UN,4,7.89
+SKU-1025,Macarrão espaguete 500 g,F08,F08-002,UN,4,4.69
+SKU-1026,Molho de tomate 340 g,F08,F08-003,UN,4,3.99
+SKU-1027,Ração para cães 10 kg,F09,F09-001,UN,4,109.9
+SKU-1028,Areia sanitária 4 kg,F09,F09-002,UN,4,19.9
+SKU-1029,Detergente 500 ml,F10,F10-001,UN,4,2.69
+SKU-1030,"Sabão em pó 1,6 kg",F10,F10-002,UN,4,24.9
+SKU-1031,Água sanitária 2 L,F10,F10-003,UN,4,6.49
+SKU-1032,Batata chips 120 g,F11,F11-001,UN,4,11.9
+SKU-1033,Amendoim torrado 500 g,F11,F11-002,UN,4,13.9
+SKU-1034,Biscoito recheado 140 g,F11,F11-003,UN,4,3.79
+SKU-1035,Café em cápsula 10 un,F12,F12-001,UN,4,21.9
+SKU-1036,Café solúvel 200 g,F12,F12-002,UN,4,24.9
+SKU-1037,Filtro de papel 103,F12,F12-003,UN,4,6.9
