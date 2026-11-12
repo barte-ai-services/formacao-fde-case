@@ -12,7 +12,7 @@ Os alunos da Formação FDE fazem fork dele. Por isso:
   - o gabarito (`dados/gabarito/`) só entra no domingo de manhã;
   - o gerador da base e a solução de referência nunca entram.
 - **Os três ficam no repositório privado [`formacao-fde-ops`](https://github.com/barte-ai-services/formacao-fde-ops), em `kit-domingo/`.**
-- **A base de domingo não se edita à mão.** Ela sai do gerador no ops, com a semente 1511, e chega aqui copiada.
+- **A base de domingo não se edita à mão.** Ela sai do gerador no ops, com a semente padrão dele, e chega aqui copiada.
 - **Nenhum nome de cliente real** no texto nem nos dados. Os testes guardam a lista do que é proibido.
 - **Nada de segredo.** A chave da API fica no `.env`, que não entra no git.
 
