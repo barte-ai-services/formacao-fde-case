@@ -1,90 +1,90 @@
 [
   {
-    "pagamento_id": "PG-5306",
-    "fornecedor_id": "F08",
-    "destino": "LJ-027",
-    "data": "2026-11-05",
-    "valor": 1370.04,
-    "forma": "pix",
-    "origem": "compra emergencial da loja, fora do fluxo",
-    "nota_chave": null
-  },
-  {
-    "pagamento_id": "PG-5312",
-    "fornecedor_id": "F10",
-    "destino": "LJ-022",
+    "pagamento_id": "PG-5320",
+    "fornecedor_id": "F06",
+    "destino": "LJ-026",
     "data": "2026-11-02",
-    "valor": 3056.96,
+    "valor": 3796.4,
     "forma": "boleto avulso",
     "origem": "compra emergencial da loja, fora do fluxo",
     "nota_chave": null
   },
   {
-    "pagamento_id": "PG-5315",
+    "pagamento_id": "PG-5313",
     "fornecedor_id": "F04",
-    "destino": "LJ-007",
-    "data": "2026-11-03",
-    "valor": 1528.8,
-    "forma": "boleto avulso",
-    "origem": "compra emergencial da loja, fora do fluxo",
-    "nota_chave": null
-  },
-  {
-    "pagamento_id": "PG-5318",
-    "fornecedor_id": "F02",
-    "destino": "LJ-004",
-    "data": "2026-11-01",
-    "valor": 714.72,
-    "forma": "pix",
-    "origem": "compra emergencial da loja, fora do fluxo",
-    "nota_chave": null
-  },
-  {
-    "pagamento_id": "PG-5322",
-    "fornecedor_id": "F04",
-    "destino": "LJ-015",
-    "data": "2026-11-04",
-    "valor": 1624.96,
-    "forma": "pix",
-    "origem": "compra emergencial da loja, fora do fluxo",
-    "nota_chave": null
-  },
-  {
-    "pagamento_id": "PG-5328",
-    "fornecedor_id": "F07",
-    "destino": "LJ-005",
+    "destino": "LJ-006",
     "data": "2026-11-05",
-    "valor": 3158.28,
+    "valor": 3612.4,
+    "forma": "boleto avulso",
+    "origem": "compra emergencial da loja, fora do fluxo",
+    "nota_chave": null
+  },
+  {
+    "pagamento_id": "PG-5319",
+    "fornecedor_id": "F05",
+    "destino": "LJ-025",
+    "data": "2026-11-05",
+    "valor": 1386.0,
+    "forma": "boleto avulso",
+    "origem": "compra emergencial da loja, fora do fluxo",
+    "nota_chave": null
+  },
+  {
+    "pagamento_id": "PG-5306",
+    "fornecedor_id": "F07",
+    "destino": "LJ-004",
+    "data": "2026-11-06",
+    "valor": 1258.56,
+    "forma": "pix",
+    "origem": "compra emergencial da loja, fora do fluxo",
+    "nota_chave": null
+  },
+  {
+    "pagamento_id": "PG-5339",
+    "fornecedor_id": "F11",
+    "destino": "LJ-026",
+    "data": "2026-11-04",
+    "valor": 3881.6,
+    "forma": "boleto avulso",
+    "origem": "compra emergencial da loja, fora do fluxo",
+    "nota_chave": null
+  },
+  {
+    "pagamento_id": "PG-5326",
+    "fornecedor_id": "F08",
+    "destino": "LJ-002",
+    "data": "2026-11-03",
+    "valor": 3269.28,
+    "forma": "pix",
+    "origem": "compra emergencial da loja, fora do fluxo",
+    "nota_chave": null
+  },
+  {
+    "pagamento_id": "PG-5336",
+    "fornecedor_id": "F05",
+    "destino": "LJ-025",
+    "data": "2026-11-05",
+    "valor": 2071.2,
+    "forma": "pix",
+    "origem": "compra emergencial da loja, fora do fluxo",
+    "nota_chave": null
+  },
+  {
+    "pagamento_id": "PG-5301",
+    "fornecedor_id": "F08",
+    "destino": "LJ-028",
+    "data": "2026-11-05",
+    "valor": 2566.32,
     "forma": "boleto avulso",
     "origem": "compra emergencial da loja, fora do fluxo",
     "nota_chave": null
   },
   {
     "pagamento_id": "PG-5333",
-    "fornecedor_id": "F09",
-    "destino": "LJ-018",
-    "data": "2026-11-07",
-    "valor": 2592.4,
-    "forma": "pix",
-    "origem": "compra emergencial da loja, fora do fluxo",
-    "nota_chave": null
-  },
-  {
-    "pagamento_id": "PG-5334",
-    "fornecedor_id": "F02",
-    "destino": "LJ-029",
-    "data": "2026-11-02",
-    "valor": 2643.96,
-    "forma": "pix",
-    "origem": "compra emergencial da loja, fora do fluxo",
-    "nota_chave": null
-  },
-  {
-    "pagamento_id": "PG-5338",
-    "fornecedor_id": "F10",
-    "destino": "LJ-029",
-    "data": "2026-11-05",
-    "valor": 3291.2,
+    "fornecedor_id": "F03",
+    "destino": "LJ-008",
+    "data": "2026-11-03",
+    "valor": 571.2,
     "forma": "boleto avulso",
     "origem": "compra emergencial da loja, fora do fluxo",
     "nota_chave": null
