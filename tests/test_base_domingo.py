@@ -131,3 +131,16 @@ def test_sistema_inclui_as_tres_skills():
     s = montar_sistema()
     for titulo in ("Skill 1", "Skill 2", "Skill 3"):
         assert titulo in s
+
+
+def test_recusa_da_regua_nao_revela_o_nivel(base, monkeypatch, tmp_path):
+    """Se a recusa disser o nível mínimo, o agente se corrige sozinho e a skill 3 deixa de ser medida."""
+    monkeypatch.setenv("FDE_DADOS", str(DADOS))
+    from mcp_server import servidor
+    monkeypatch.setattr(servidor, "SAIDAS", tmp_path)
+    nota_id = next(n for n in base.notas if servidor.nivel_minimo("E5", base.notas[n]) != "regra")
+    r = servidor.registrar_proposta(nota_id, "E5", "recusar", "regra", "teste da recusa pela régua")
+    assert r["registrada"] is False
+    assert "régua" in r["erro"]
+    for nivel in ("analista", "coordenacao", "diretoria", "bloqueio"):
+        assert nivel not in r["erro"]

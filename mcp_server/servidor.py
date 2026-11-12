@@ -177,7 +177,7 @@ def registrar_proposta(nota_id: str, classificacao: str, acao_doca: str, encamin
     if not problemas:
         minimo = nivel_minimo(classificacao, nota)
         if NIVEIS.index(encaminhamento) < NIVEIS.index(minimo):
-            problemas.append(f"a régua não permite encaminhar {classificacao} desta nota para '{encaminhamento}': o mínimo é '{minimo}'")
+            problemas.append(f"a régua não permite encaminhar {classificacao} desta nota para '{encaminhamento}'; consulte a régua")
     if problemas:
         return {"registrada": False, "erro": "; ".join(problemas)}
     SAIDAS.mkdir(parents=True, exist_ok=True)

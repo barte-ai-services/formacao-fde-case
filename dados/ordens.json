@@ -75,7 +75,7 @@
     "destino": "CD-03",
     "data_emissao": "2026-11-06",
     "status": "travada",
-    "motivo_status": "Item sem cadastro: aguarda master data",
+    "motivo_status": "Pendência com compras",
     "itens": [
       {
         "sku": "SKU-1018",
@@ -110,7 +110,7 @@
     "destino": "CD-01",
     "data_emissao": "2026-11-04",
     "status": "travada",
-    "motivo_status": "Item sem cadastro: aguarda master data",
+    "motivo_status": "Em revisão",
     "itens": [
       {
         "sku": "SKU-1013",
@@ -584,7 +584,7 @@
     "destino": "CD-02",
     "data_emissao": "2026-11-03",
     "status": "travada",
-    "motivo_status": "Item sem cadastro: aguarda master data",
+    "motivo_status": "Pendência com compras",
     "itens": [
       {
         "sku": "SKU-1016",
@@ -1244,7 +1244,7 @@
     "destino": "LJ-026",
     "data_emissao": "2026-11-06",
     "status": "travada",
-    "motivo_status": "Item sem cadastro: aguarda master data",
+    "motivo_status": "Aguarda liberação",
     "itens": [
       {
         "sku": "SKU-1007",
@@ -1998,7 +1998,7 @@
     "destino": "CD-03",
     "data_emissao": "2026-11-03",
     "status": "travada",
-    "motivo_status": "Item sem cadastro: aguarda master data",
+    "motivo_status": "Pendência com compras",
     "itens": [
       {
         "sku": "SKU-1005",
@@ -2235,7 +2235,7 @@
     "destino": "LJ-029",
     "data_emissao": "2026-11-05",
     "status": "travada",
-    "motivo_status": "Item sem cadastro: aguarda master data",
+    "motivo_status": "Pendência com compras",
     "itens": [
       {
         "sku": "SKU-1021",
@@ -2402,7 +2402,7 @@
     "destino": "LJ-028",
     "data_emissao": "2026-11-03",
     "status": "travada",
-    "motivo_status": "Item sem cadastro: aguarda master data",
+    "motivo_status": "Pendência com compras",
     "itens": [
       {
         "sku": "SKU-1014",
@@ -3186,7 +3186,7 @@
     "destino": "CD-02",
     "data_emissao": "2026-11-06",
     "status": "travada",
-    "motivo_status": "Item sem cadastro: aguarda master data",
+    "motivo_status": "Aguarda liberação",
     "itens": [
       {
         "sku": "SKU-1033",
@@ -3396,7 +3396,7 @@
     "destino": "LJ-017",
     "data_emissao": "2026-11-06",
     "status": "travada",
-    "motivo_status": "Item sem cadastro: aguarda master data",
+    "motivo_status": "Aguarda liberação",
     "itens": [
       {
         "sku": "SKU-1007",
