@@ -94,8 +94,8 @@ def test_servidor_mcp_expoe_as_tools_e_trava_a_regua(tmp_path, monkeypatch):
                                                            "encaminhamento": "bloqueio", "justificativa": "teste da trava da régua"})
             assert '"registrada": true' in ok.content[0].text
     asyncio.run(rodar())
-    linhas = (tmp_path / "propostas.jsonl").read_text(encoding="utf-8").splitlines()
-    assert len(linhas) == 1
+    linhas = [json.loads(x) for x in (tmp_path / "propostas.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert [(x["encaminhamento"], x.get("recusada")) for x in linhas] == [("regra", "regua"), ("bloqueio", None)]
 
 
 class LLMFalso:
@@ -144,3 +144,33 @@ def test_recusa_da_regua_nao_revela_o_nivel(base, monkeypatch, tmp_path):
     assert "régua" in r["erro"]
     for nivel in ("analista", "coordenacao", "diretoria", "bloqueio"):
         assert nivel not in r["erro"]
+
+
+def test_recusa_da_regua_fica_gravada(base, monkeypatch, tmp_path):
+    monkeypatch.setenv("FDE_DADOS", str(DADOS))
+    monkeypatch.setenv("FDE_ARQUIVO_PROPOSTAS", "teste.jsonl")
+    from mcp_server import servidor
+    monkeypatch.setattr(servidor, "SAIDAS", tmp_path)
+    nota_id = next(n for n in base.notas if servidor.nivel_minimo("E5", base.notas[n]) != "regra")
+    minimo = servidor.nivel_minimo("E5", base.notas[nota_id])
+    servidor.registrar_proposta(nota_id, "E5", "recusar", "regra", "primeira tentativa, abaixo da régua")
+    servidor.registrar_proposta(nota_id, "E5", "recusar", minimo, "segunda tentativa, no nível da régua")
+    linhas = [json.loads(x) for x in (tmp_path / "teste.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert [x.get("recusada") for x in linhas] == ["regua", None]
+
+
+def test_eval_mede_o_encaminhamento_na_primeira_tentativa(tmp_path):
+    from eval.avaliar import avaliar_arquivo
+    gabarito = [{"nota_id": n, "chave": n, "classificacao": "E5", "acao_doca": "recusar", "encaminhamento": "coordenacao",
+                 "valor_em_risco": 0.0, "explicacao": "-"} for n in ("NF-001", "NF-002")]
+    linhas = [
+        {"nota_id": "NF-001", "classificacao": "E5", "acao_doca": "recusar", "encaminhamento": "regra", "recusada": "regua"},
+        {"nota_id": "NF-001", "classificacao": "E5", "acao_doca": "recusar", "encaminhamento": "coordenacao"},
+        {"nota_id": "NF-002", "classificacao": "E5", "acao_doca": "recusar", "encaminhamento": "coordenacao"},
+    ]
+    arquivo = tmp_path / "propostas.jsonl"
+    arquivo.write_text("\n".join(json.dumps(x) for x in linhas), encoding="utf-8")
+    r = avaliar_arquivo(arquivo, gabarito)
+    assert r["campos"]["encaminhamento"] == 2
+    assert r["encaminhamento_primeira"] == 1
+    assert r["notas_com_recusa"] == 1

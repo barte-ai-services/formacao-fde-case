@@ -174,20 +174,25 @@ def registrar_proposta(nota_id: str, classificacao: str, acao_doca: str, encamin
         problemas.append(f"encaminhamento deve ser um de {NIVEIS}")
     if not justificativa or len(justificativa.strip()) < 10:
         problemas.append("justificativa precisa citar as evidências")
-    if not problemas:
-        minimo = nivel_minimo(classificacao, nota)
-        if NIVEIS.index(encaminhamento) < NIVEIS.index(minimo):
-            problemas.append(f"a régua não permite encaminhar {classificacao} desta nota para '{encaminhamento}'; consulte a régua")
     if problemas:
         return {"registrada": False, "erro": "; ".join(problemas)}
-    SAIDAS.mkdir(parents=True, exist_ok=True)
     proposta = {"nota_id": nota_id, "classificacao": classificacao, "acao_doca": acao_doca,
                 "encaminhamento": encaminhamento, "valor_em_risco": valor_em_risco,
                 "justificativa": justificativa.strip(), "origem": os.environ.get("FDE_ORIGEM", "agente"),
                 "registrado_em": datetime.now().isoformat(timespec="seconds")}
-    with open(SAIDAS / os.environ.get("FDE_ARQUIVO_PROPOSTAS", "propostas.jsonl"), "a", encoding="utf-8") as f:
-        f.write(json.dumps(proposta, ensure_ascii=False) + "\n")
+    if NIVEIS.index(encaminhamento) < NIVEIS.index(nivel_minimo(classificacao, nota)):
+        # A recusa fica gravada: o eval mede a skill 3 na primeira tentativa, não na que passou.
+        gravar({**proposta, "recusada": "regua"})
+        return {"registrada": False,
+                "erro": f"a régua não permite encaminhar {classificacao} desta nota para '{encaminhamento}'; consulte a régua"}
+    gravar(proposta)
     return {"registrada": True, "proposta": proposta}
+
+
+def gravar(linha: dict) -> None:
+    SAIDAS.mkdir(parents=True, exist_ok=True)
+    with open(SAIDAS / os.environ.get("FDE_ARQUIVO_PROPOSTAS", "propostas.jsonl"), "a", encoding="utf-8") as f:
+        f.write(json.dumps(linha, ensure_ascii=False) + "\n")
 
 
 if __name__ == "__main__":
