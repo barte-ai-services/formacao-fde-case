@@ -1,1130 +1,728 @@
 [
   {
     "nota_id": null,
-    "chave": "35261147573594000106550010000131151861817373",
-    "numero": 13115,
+    "chave": "35261177067000000146550010000512101370950898",
+    "numero": 51210,
     "serie": 1,
-    "fornecedor_id": "F06",
-    "destino": "LJ-003",
-    "data_emissao": "2026-11-04",
-    "pedido_referenciado": "OC-2026-42809",
+    "fornecedor_id": "F09",
+    "destino": "LJ-018",
+    "data_emissao": "2026-11-02",
+    "pedido_referenciado": "OC-2026-42773",
     "canal_entrada": "SEFAZ",
     "itens": [
       {
-        "codigo_fornecedor": "F06-002",
-        "sku": "SKU-1020",
-        "descricao": "Pizza congelada 460 g",
-        "quantidade": 20,
+        "codigo_fornecedor": "F09-001",
+        "sku": "SKU-1027",
+        "descricao": "Ração para cães 10 kg",
+        "quantidade": 4,
         "unidade": "UN",
-        "preco_unitario": 21.9,
-        "valor": 438.0
+        "preco_unitario": 109.9,
+        "valor": 439.6
       },
       {
-        "codigo_fornecedor": "F06-003",
-        "sku": "SKU-1021",
-        "descricao": "Sorvete 1,5 L",
-        "quantidade": 12,
-        "unidade": "UN",
-        "preco_unitario": 26.9,
-        "valor": 322.8
-      },
-      {
-        "codigo_fornecedor": "F06-001",
-        "sku": "SKU-1019",
-        "descricao": "Pão de queijo congelado 1 kg",
-        "quantidade": 8,
-        "unidade": "UN",
-        "preco_unitario": 24.9,
-        "valor": 199.2
-      }
-    ],
-    "valor_total": 960.0,
-    "situacao": "lançada"
-  },
-  {
-    "nota_id": null,
-    "chave": "35261194433432000143550010000894101464288543",
-    "numero": 89410,
-    "serie": 1,
-    "fornecedor_id": "F03",
-    "destino": "LJ-030",
-    "data_emissao": "2026-11-04",
-    "pedido_referenciado": "OC-2026-42812",
-    "canal_entrada": "SEFAZ",
-    "itens": [
-      {
-        "codigo_fornecedor": "F03-002",
-        "sku": "SKU-1010",
-        "descricao": "Tomate italiano kg",
+        "codigo_fornecedor": "F09-002",
+        "sku": "SKU-1028",
+        "descricao": "Areia sanitária 4 kg",
         "quantidade": 44,
         "unidade": "UN",
-        "preco_unitario": 8.5,
-        "valor": 374.0
-      },
-      {
-        "codigo_fornecedor": "F03-001",
-        "sku": "SKU-1009",
-        "descricao": "Banana prata kg",
-        "quantidade": 60,
-        "unidade": "UN",
-        "preco_unitario": 6.9,
-        "valor": 414.0
-      },
-      {
-        "codigo_fornecedor": "F03-003",
-        "sku": "SKU-1011",
-        "descricao": "Alface crespa unidade",
-        "quantidade": 124,
-        "unidade": "UN",
-        "preco_unitario": 3.4,
-        "valor": 421.6
+        "preco_unitario": 19.9,
+        "valor": 875.6
       }
     ],
-    "valor_total": 1209.6,
-    "situacao": "lançada"
-  },
-  {
-    "nota_id": null,
-    "chave": "35261154813096000149550010000706601858205502",
-    "numero": 70660,
-    "serie": 1,
-    "fornecedor_id": "F05",
-    "destino": "LJ-013",
-    "data_emissao": "2026-11-06",
-    "pedido_referenciado": "OC-2026-42830",
-    "canal_entrada": "SEFAZ",
-    "itens": [
-      {
-        "codigo_fornecedor": "F05-002",
-        "sku": "SKU-1016",
-        "descricao": "Feijão carioca 1 kg",
-        "quantidade": 124,
-        "unidade": "UN",
-        "preco_unitario": 8.9,
-        "valor": 1103.6
-      },
-      {
-        "codigo_fornecedor": "F05-001",
-        "sku": "SKU-1015",
-        "descricao": "Arroz tipo 1 5 kg",
-        "quantidade": 44,
-        "unidade": "UN",
-        "preco_unitario": 27.9,
-        "valor": 1227.6
-      },
-      {
-        "codigo_fornecedor": "F05-004",
-        "sku": "SKU-1018",
-        "descricao": "Açúcar refinado 1 kg",
-        "quantidade": 124,
-        "unidade": "UN",
-        "preco_unitario": 4.99,
-        "valor": 618.76
-      }
-    ],
-    "valor_total": 2949.96,
-    "situacao": "lançada"
-  },
-  {
-    "nota_id": null,
-    "chave": "35261174055489000148550010000439021423673626",
-    "numero": 43902,
-    "serie": 1,
-    "fornecedor_id": "F02",
-    "destino": "LJ-025",
-    "data_emissao": "2026-11-04",
-    "pedido_referenciado": "OC-2026-42853",
-    "canal_entrada": "SEFAZ",
-    "itens": [
-      {
-        "codigo_fornecedor": "F02-004",
-        "sku": "SKU-1008",
-        "descricao": "Água de coco 1 L",
-        "quantidade": 32,
-        "unidade": "UN",
-        "preco_unitario": 9.7,
-        "valor": 310.4
-      },
-      {
-        "codigo_fornecedor": "F02-002",
-        "sku": "SKU-1006",
-        "descricao": "Refrigerante cola 2 L",
-        "quantidade": 44,
-        "unidade": "UN",
-        "preco_unitario": 8.49,
-        "valor": 373.56
-      },
-      {
-        "codigo_fornecedor": "F02-003",
-        "sku": "SKU-1007",
-        "descricao": "Suco de uva integral 1 L",
-        "quantidade": 24,
-        "unidade": "UN",
-        "preco_unitario": 14.9,
-        "valor": 357.6
-      }
-    ],
-    "valor_total": 1041.56,
+    "valor_total": 1315.2,
     "situacao": "paga"
   },
   {
     "nota_id": null,
-    "chave": "35261100023027000111550010000480471401375459",
-    "numero": 48047,
+    "chave": "35261133214059000144550010000201561344062593",
+    "numero": 20156,
     "serie": 1,
     "fornecedor_id": "F04",
-    "destino": "CD-04",
-    "data_emissao": "2026-11-06",
-    "pedido_referenciado": "OC-2026-42892",
+    "destino": "LJ-019",
+    "data_emissao": "2026-11-04",
+    "pedido_referenciado": "OC-2026-42790",
     "canal_entrada": "SEFAZ",
     "itens": [
-      {
-        "codigo_fornecedor": "F04-003",
-        "sku": "SKU-1014",
-        "descricao": "Shampoo 350 ml",
-        "quantidade": 208,
-        "unidade": "UN",
-        "preco_unitario": 16.9,
-        "valor": 3515.2
-      },
       {
         "codigo_fornecedor": "F04-001",
         "sku": "SKU-1012",
         "descricao": "Sabonete em barra 85 g",
-        "quantidade": 1180,
+        "quantidade": 376,
         "unidade": "UN",
         "preco_unitario": 2.49,
-        "valor": 2938.2
+        "valor": 936.24
       },
       {
         "codigo_fornecedor": "F04-002",
         "sku": "SKU-1013",
         "descricao": "Creme dental 90 g",
-        "quantidade": 500,
+        "quantidade": 160,
         "unidade": "UN",
         "preco_unitario": 5.9,
-        "valor": 2950.0
+        "valor": 944.0
+      },
+      {
+        "codigo_fornecedor": "F04-003",
+        "sku": "SKU-1014",
+        "descricao": "Shampoo 350 ml",
+        "quantidade": 28,
+        "unidade": "UN",
+        "preco_unitario": 16.9,
+        "valor": 473.2
       }
     ],
-    "valor_total": 9403.4,
+    "valor_total": 2353.44,
     "situacao": "paga"
   },
   {
     "nota_id": null,
-    "chave": "35261154813096000149550010000706831115008414",
-    "numero": 70683,
+    "chave": "35261131810741000174550010000436641719035667",
+    "numero": 43664,
     "serie": 1,
-    "fornecedor_id": "F05",
-    "destino": "CD-02",
-    "data_emissao": "2026-11-04",
-    "pedido_referenciado": "OC-2026-42909",
+    "fornecedor_id": "F02",
+    "destino": "LJ-010",
+    "data_emissao": "2026-11-01",
+    "pedido_referenciado": "OC-2026-42806",
     "canal_entrada": "SEFAZ",
     "itens": [
       {
-        "codigo_fornecedor": "F05-004",
-        "sku": "SKU-1018",
-        "descricao": "Açúcar refinado 1 kg",
-        "quantidade": 552,
+        "codigo_fornecedor": "F02-001",
+        "sku": "SKU-1005",
+        "descricao": "Água mineral 1,5 L",
+        "quantidade": 56,
         "unidade": "UN",
-        "preco_unitario": 4.99,
-        "valor": 2754.48
+        "preco_unitario": 2.79,
+        "valor": 156.24
       },
       {
-        "codigo_fornecedor": "F05-003",
-        "sku": "SKU-1017",
-        "descricao": "Café torrado 500 g",
-        "quantidade": 92,
+        "codigo_fornecedor": "F02-003",
+        "sku": "SKU-1007",
+        "descricao": "Suco de uva integral 1 L",
+        "quantidade": 8,
         "unidade": "UN",
-        "preco_unitario": 19.9,
-        "valor": 1830.8
+        "preco_unitario": 14.9,
+        "valor": 119.2
       },
       {
-        "codigo_fornecedor": "F05-002",
-        "sku": "SKU-1016",
-        "descricao": "Feijão carioca 1 kg",
-        "quantidade": 300,
+        "codigo_fornecedor": "F02-004",
+        "sku": "SKU-1008",
+        "descricao": "Água de coco 1 L",
+        "quantidade": 28,
         "unidade": "UN",
-        "preco_unitario": 8.9,
-        "valor": 2670.0
+        "preco_unitario": 9.7,
+        "valor": 271.6
       }
     ],
-    "valor_total": 7255.28,
+    "valor_total": 547.04,
     "situacao": "paga"
   },
   {
     "nota_id": null,
-    "chave": "35261153194517000138550010000844661342604093",
-    "numero": 84466,
+    "chave": "35261175106807000115550010000721701132888514",
+    "numero": 72170,
     "serie": 1,
     "fornecedor_id": "F10",
-    "destino": "CD-03",
-    "data_emissao": "2026-11-04",
-    "pedido_referenciado": "OC-2026-42912",
+    "destino": "LJ-015",
+    "data_emissao": "2026-11-02",
+    "pedido_referenciado": "OC-2026-42833",
     "canal_entrada": "SEFAZ",
     "itens": [
-      {
-        "codigo_fornecedor": "F10-003",
-        "sku": "SKU-1031",
-        "descricao": "Água sanitária 2 L",
-        "quantidade": 868,
-        "unidade": "UN",
-        "preco_unitario": 6.49,
-        "valor": 5633.32
-      },
       {
         "codigo_fornecedor": "F10-002",
         "sku": "SKU-1030",
         "descricao": "Sabão em pó 1,6 kg",
-        "quantidade": 204,
+        "quantidade": 40,
         "unidade": "UN",
         "preco_unitario": 24.9,
-        "valor": 5079.6
+        "valor": 996.0
       },
       {
         "codigo_fornecedor": "F10-001",
         "sku": "SKU-1029",
         "descricao": "Detergente 500 ml",
-        "quantidade": 2256,
+        "quantidade": 260,
         "unidade": "UN",
         "preco_unitario": 2.69,
-        "valor": 6068.64
+        "valor": 699.4
+      },
+      {
+        "codigo_fornecedor": "F10-003",
+        "sku": "SKU-1031",
+        "descricao": "Água sanitária 2 L",
+        "quantidade": 196,
+        "unidade": "UN",
+        "preco_unitario": 6.49,
+        "valor": 1272.04
       }
     ],
-    "valor_total": 16781.56,
+    "valor_total": 2967.44,
     "situacao": "lançada"
   },
   {
     "nota_id": null,
-    "chave": "35261113769729000182550010000137731145340609",
-    "numero": 13773,
+    "chave": "35261133214059000144550010000201901714019190",
+    "numero": 20190,
     "serie": 1,
-    "fornecedor_id": "F07",
+    "fornecedor_id": "F04",
     "destino": "CD-02",
-    "data_emissao": "2026-11-01",
-    "pedido_referenciado": "OC-2026-42924",
+    "data_emissao": "2026-11-08",
+    "pedido_referenciado": "OC-2026-42866",
     "canal_entrada": "SEFAZ",
     "itens": [
       {
-        "codigo_fornecedor": "F07-001",
-        "sku": "SKU-1022",
-        "descricao": "Pão de forma 500 g",
-        "quantidade": 1012,
+        "codigo_fornecedor": "F04-001",
+        "sku": "SKU-1012",
+        "descricao": "Sabonete em barra 85 g",
+        "quantidade": 1916,
         "unidade": "UN",
-        "preco_unitario": 9.49,
-        "valor": 9603.88
+        "preco_unitario": 2.49,
+        "valor": 4770.84
       },
       {
-        "codigo_fornecedor": "F07-002",
-        "sku": "SKU-1023",
-        "descricao": "Bisnaguinha 300 g",
-        "quantidade": 836,
+        "codigo_fornecedor": "F04-002",
+        "sku": "SKU-1013",
+        "descricao": "Creme dental 90 g",
+        "quantidade": 860,
         "unidade": "UN",
-        "preco_unitario": 7.99,
-        "valor": 6679.64
+        "preco_unitario": 5.9,
+        "valor": 5074.0
+      },
+      {
+        "codigo_fornecedor": "F04-003",
+        "sku": "SKU-1014",
+        "descricao": "Shampoo 350 ml",
+        "quantidade": 200,
+        "unidade": "UN",
+        "preco_unitario": 16.9,
+        "valor": 3380.0
       }
     ],
-    "valor_total": 16283.52,
+    "valor_total": 13224.84,
     "situacao": "paga"
   },
   {
     "nota_id": null,
-    "chave": "35261147573594000106550010000131371591560338",
-    "numero": 13137,
-    "serie": 1,
-    "fornecedor_id": "F06",
-    "destino": "CD-02",
-    "data_emissao": "2026-11-05",
-    "pedido_referenciado": "OC-2026-42950",
-    "canal_entrada": "SEFAZ",
-    "itens": [
-      {
-        "codigo_fornecedor": "F06-002",
-        "sku": "SKU-1020",
-        "descricao": "Pizza congelada 460 g",
-        "quantidade": 1492,
-        "unidade": "UN",
-        "preco_unitario": 21.9,
-        "valor": 32674.8
-      },
-      {
-        "codigo_fornecedor": "F06-003",
-        "sku": "SKU-1021",
-        "descricao": "Sorvete 1,5 L",
-        "quantidade": 1788,
-        "unidade": "UN",
-        "preco_unitario": 26.9,
-        "valor": 48097.2
-      },
-      {
-        "codigo_fornecedor": "F06-001",
-        "sku": "SKU-1019",
-        "descricao": "Pão de queijo congelado 1 kg",
-        "quantidade": 1524,
-        "unidade": "UN",
-        "preco_unitario": 24.9,
-        "valor": 37947.6
-      }
-    ],
-    "valor_total": 118719.6,
-    "situacao": "lançada"
-  },
-  {
-    "nota_id": null,
-    "chave": "35261094433432000143550010000894741887149244",
-    "numero": 89474,
-    "serie": 1,
-    "fornecedor_id": "F03",
-    "destino": "CD-04",
-    "data_emissao": "2026-10-09",
-    "pedido_referenciado": "OC-2026-43184",
-    "canal_entrada": "SEFAZ",
-    "itens": [
-      {
-        "codigo_fornecedor": "F03-002",
-        "sku": "SKU-1010",
-        "descricao": "Tomate italiano kg",
-        "quantidade": 256,
-        "unidade": "UN",
-        "preco_unitario": 8.5,
-        "valor": 2176.0
-      },
-      {
-        "codigo_fornecedor": "F03-001",
-        "sku": "SKU-1009",
-        "descricao": "Banana prata kg",
-        "quantidade": 280,
-        "unidade": "UN",
-        "preco_unitario": 6.9,
-        "valor": 1932.0
-      },
-      {
-        "codigo_fornecedor": "F03-003",
-        "sku": "SKU-1011",
-        "descricao": "Alface crespa unidade",
-        "quantidade": 632,
-        "unidade": "UN",
-        "preco_unitario": 3.4,
-        "valor": 2148.8
-      }
-    ],
-    "valor_total": 6256.8,
-    "situacao": "paga"
-  },
-  {
-    "nota_id": null,
-    "chave": "35261026804190000106550010000728531297127627",
-    "numero": 72853,
+    "chave": "35261103317368000189550010000227591151036730",
+    "numero": 22759,
     "serie": 1,
     "fornecedor_id": "F01",
     "destino": "CD-03",
-    "data_emissao": "2026-10-27",
-    "pedido_referenciado": "OC-2026-43218",
+    "data_emissao": "2026-11-06",
+    "pedido_referenciado": "OC-2026-42873",
     "canal_entrada": "SEFAZ",
     "itens": [
       {
         "codigo_fornecedor": "F01-002",
         "sku": "SKU-1002",
         "descricao": "Iogurte natural 170 g",
-        "quantidade": 1052,
+        "quantidade": 1156,
         "unidade": "UN",
         "preco_unitario": 3.29,
-        "valor": 3461.08
+        "valor": 3803.24
       },
       {
-        "codigo_fornecedor": "F01-003",
-        "sku": "SKU-1003",
-        "descricao": "Queijo muçarela fatiado 150 g",
-        "quantidade": 292,
+        "codigo_fornecedor": "F01-004",
+        "sku": "SKU-1004",
+        "descricao": "Manteiga com sal 200 g",
+        "quantidade": 240,
         "unidade": "UN",
-        "preco_unitario": 9.9,
-        "valor": 2890.8
+        "preco_unitario": 12.4,
+        "valor": 2976.0
       },
       {
         "codigo_fornecedor": "F01-001",
         "sku": "SKU-1001",
         "descricao": "Leite integral 1 L",
-        "quantidade": 392,
+        "quantidade": 748,
         "unidade": "UN",
         "preco_unitario": 4.89,
-        "valor": 1916.88
+        "valor": 3657.72
       }
     ],
-    "valor_total": 8268.76,
-    "situacao": "paga"
+    "valor_total": 10436.96,
+    "situacao": "lançada"
   },
   {
     "nota_id": null,
-    "chave": "35261094433432000143550010000894911392487171",
-    "numero": 89491,
+    "chave": "35261183618255000153550010000212121555469920",
+    "numero": 21212,
     "serie": 1,
-    "fornecedor_id": "F03",
-    "destino": "LJ-025",
-    "data_emissao": "2026-10-24",
-    "pedido_referenciado": "OC-2026-43227",
-    "canal_entrada": "SEFAZ",
-    "itens": [
-      {
-        "codigo_fornecedor": "F03-002",
-        "sku": "SKU-1010",
-        "descricao": "Tomate italiano kg",
-        "quantidade": 92,
-        "unidade": "UN",
-        "preco_unitario": 8.5,
-        "valor": 782.0
-      },
-      {
-        "codigo_fornecedor": "F03-001",
-        "sku": "SKU-1009",
-        "descricao": "Banana prata kg",
-        "quantidade": 224,
-        "unidade": "UN",
-        "preco_unitario": 6.9,
-        "valor": 1545.6
-      },
-      {
-        "codigo_fornecedor": "F03-003",
-        "sku": "SKU-1011",
-        "descricao": "Alface crespa unidade",
-        "quantidade": 384,
-        "unidade": "UN",
-        "preco_unitario": 3.4,
-        "valor": 1305.6
-      }
-    ],
-    "valor_total": 3633.2,
-    "situacao": "paga"
-  },
-  {
-    "nota_id": null,
-    "chave": "35261100023027000111550010000481051305284759",
-    "numero": 48105,
-    "serie": 1,
-    "fornecedor_id": "F04",
-    "destino": "LJ-024",
-    "data_emissao": "2026-11-04",
-    "pedido_referenciado": "OC-2026-43237",
-    "canal_entrada": "SEFAZ",
-    "itens": [
-      {
-        "codigo_fornecedor": "F04-001",
-        "sku": "SKU-1012",
-        "descricao": "Sabonete em barra 85 g",
-        "quantidade": 192,
-        "unidade": "UN",
-        "preco_unitario": 2.49,
-        "valor": 478.08
-      },
-      {
-        "codigo_fornecedor": "F04-002",
-        "sku": "SKU-1013",
-        "descricao": "Creme dental 90 g",
-        "quantidade": 108,
-        "unidade": "UN",
-        "preco_unitario": 5.9,
-        "valor": 637.2
-      },
-      {
-        "codigo_fornecedor": "F04-003",
-        "sku": "SKU-1014",
-        "descricao": "Shampoo 350 ml",
-        "quantidade": 48,
-        "unidade": "UN",
-        "preco_unitario": 16.9,
-        "valor": 811.2
-      }
-    ],
-    "valor_total": 1926.48,
-    "situacao": "paga"
-  },
-  {
-    "nota_id": null,
-    "chave": "35261074055489000148550010000440041151782426",
-    "numero": 44004,
-    "serie": 1,
-    "fornecedor_id": "F02",
-    "destino": "CD-04",
-    "data_emissao": "2026-10-06",
-    "pedido_referenciado": "OC-2026-43254",
-    "canal_entrada": "SEFAZ",
-    "itens": [
-      {
-        "codigo_fornecedor": "F02-003",
-        "sku": "SKU-1007",
-        "descricao": "Suco de uva integral 1 L",
-        "quantidade": 452,
-        "unidade": "UN",
-        "preco_unitario": 14.9,
-        "valor": 6734.8
-      },
-      {
-        "codigo_fornecedor": "F02-001",
-        "sku": "SKU-1005",
-        "descricao": "Água mineral 1,5 L",
-        "quantidade": 2792,
-        "unidade": "UN",
-        "preco_unitario": 2.79,
-        "valor": 7789.68
-      },
-      {
-        "codigo_fornecedor": "F02-004",
-        "sku": "SKU-1008",
-        "descricao": "Água de coco 1 L",
-        "quantidade": 408,
-        "unidade": "UN",
-        "preco_unitario": 9.7,
-        "valor": 3957.6
-      }
-    ],
-    "valor_total": 18482.08,
-    "situacao": "paga"
-  },
-  {
-    "nota_id": null,
-    "chave": "35261000023027000111550010000481201758415528",
-    "numero": 48120,
-    "serie": 1,
-    "fornecedor_id": "F04",
-    "destino": "LJ-010",
-    "data_emissao": "2026-10-31",
-    "pedido_referenciado": "OC-2026-43272",
-    "canal_entrada": "SEFAZ",
-    "itens": [
-      {
-        "codigo_fornecedor": "F04-002",
-        "sku": "SKU-1013",
-        "descricao": "Creme dental 90 g",
-        "quantidade": 144,
-        "unidade": "UN",
-        "preco_unitario": 5.9,
-        "valor": 849.6
-      },
-      {
-        "codigo_fornecedor": "F04-001",
-        "sku": "SKU-1012",
-        "descricao": "Sabonete em barra 85 g",
-        "quantidade": 516,
-        "unidade": "UN",
-        "preco_unitario": 2.49,
-        "valor": 1284.84
-      },
-      {
-        "codigo_fornecedor": "F04-003",
-        "sku": "SKU-1014",
-        "descricao": "Shampoo 350 ml",
-        "quantidade": 96,
-        "unidade": "UN",
-        "preco_unitario": 16.9,
-        "valor": 1622.4
-      }
-    ],
-    "valor_total": 3756.84,
-    "situacao": "paga"
-  },
-  {
-    "nota_id": null,
-    "chave": "35261000023027000111550010000481441739326737",
-    "numero": 48144,
-    "serie": 1,
-    "fornecedor_id": "F04",
-    "destino": "LJ-004",
-    "data_emissao": "2026-10-10",
-    "pedido_referenciado": "OC-2026-43303",
-    "canal_entrada": "SEFAZ",
-    "itens": [
-      {
-        "codigo_fornecedor": "F04-002",
-        "sku": "SKU-1013",
-        "descricao": "Creme dental 90 g",
-        "quantidade": 100,
-        "unidade": "UN",
-        "preco_unitario": 5.9,
-        "valor": 590.0
-      },
-      {
-        "codigo_fornecedor": "F04-001",
-        "sku": "SKU-1012",
-        "descricao": "Sabonete em barra 85 g",
-        "quantidade": 272,
-        "unidade": "UN",
-        "preco_unitario": 2.49,
-        "valor": 677.28
-      },
-      {
-        "codigo_fornecedor": "F04-003",
-        "sku": "SKU-1014",
-        "descricao": "Shampoo 350 ml",
-        "quantidade": 68,
-        "unidade": "UN",
-        "preco_unitario": 16.9,
-        "valor": 1149.2
-      }
-    ],
-    "valor_total": 2416.48,
-    "situacao": "paga"
-  },
-  {
-    "nota_id": null,
-    "chave": "35261013769729000182550010000138211416996958",
-    "numero": 13821,
-    "serie": 1,
-    "fornecedor_id": "F07",
+    "fornecedor_id": "F11",
     "destino": "CD-03",
-    "data_emissao": "2026-10-24",
-    "pedido_referenciado": "OC-2026-43317",
+    "data_emissao": "2026-11-06",
+    "pedido_referenciado": "OC-2026-42894",
     "canal_entrada": "SEFAZ",
     "itens": [
       {
-        "codigo_fornecedor": "F07-001",
-        "sku": "SKU-1022",
-        "descricao": "Pão de forma 500 g",
-        "quantidade": 436,
+        "codigo_fornecedor": "F11-003",
+        "sku": "SKU-1034",
+        "descricao": "Biscoito recheado 140 g",
+        "quantidade": 772,
         "unidade": "UN",
-        "preco_unitario": 9.49,
-        "valor": 4137.64
+        "preco_unitario": 3.79,
+        "valor": 2925.88
       },
       {
-        "codigo_fornecedor": "F07-002",
-        "sku": "SKU-1023",
-        "descricao": "Bisnaguinha 300 g",
-        "quantidade": 256,
+        "codigo_fornecedor": "F11-002",
+        "sku": "SKU-1033",
+        "descricao": "Amendoim torrado 500 g",
+        "quantidade": 328,
         "unidade": "UN",
-        "preco_unitario": 7.99,
-        "valor": 2045.44
+        "preco_unitario": 13.9,
+        "valor": 4559.2
+      },
+      {
+        "codigo_fornecedor": "F11-001",
+        "sku": "SKU-1032",
+        "descricao": "Batata chips 120 g",
+        "quantidade": 424,
+        "unidade": "UN",
+        "preco_unitario": 11.9,
+        "valor": 5045.6
       }
     ],
-    "valor_total": 6183.08,
-    "situacao": "paga"
+    "valor_total": 12530.68,
+    "situacao": "lançada"
   },
   {
     "nota_id": null,
-    "chave": "35261096332932000113550010000306731614666166",
-    "numero": 30673,
-    "serie": 1,
-    "fornecedor_id": "F09",
-    "destino": "CD-04",
-    "data_emissao": "2026-10-08",
-    "pedido_referenciado": "OC-2026-43328",
-    "canal_entrada": "SEFAZ",
-    "itens": [
-      {
-        "codigo_fornecedor": "F09-002",
-        "sku": "SKU-1028",
-        "descricao": "Areia sanitária 4 kg",
-        "quantidade": 208,
-        "unidade": "UN",
-        "preco_unitario": 19.9,
-        "valor": 4139.2
-      },
-      {
-        "codigo_fornecedor": "F09-001",
-        "sku": "SKU-1027",
-        "descricao": "Ração para cães 10 kg",
-        "quantidade": 32,
-        "unidade": "UN",
-        "preco_unitario": 109.9,
-        "valor": 3516.8
-      }
-    ],
-    "valor_total": 7656.0,
-    "situacao": "paga"
-  },
-  {
-    "nota_id": null,
-    "chave": "35261062833783000154550010000375101806582273",
-    "numero": 37510,
+    "chave": "35261130036214000192550010000393561953742456",
+    "numero": 39356,
     "serie": 1,
     "fornecedor_id": "F08",
-    "destino": "CD-01",
-    "data_emissao": "2026-10-08",
-    "pedido_referenciado": "OC-2026-43332",
+    "destino": "CD-03",
+    "data_emissao": "2026-11-04",
+    "pedido_referenciado": "OC-2026-42914",
     "canal_entrada": "SEFAZ",
     "itens": [
       {
-        "codigo_fornecedor": "F08-001",
-        "sku": "SKU-1024",
-        "descricao": "Óleo de soja 900 ml",
-        "quantidade": 732,
+        "codigo_fornecedor": "F08-002",
+        "sku": "SKU-1025",
+        "descricao": "Macarrão espaguete 500 g",
+        "quantidade": 704,
         "unidade": "UN",
-        "preco_unitario": 7.89,
-        "valor": 5775.48
+        "preco_unitario": 4.69,
+        "valor": 3301.76
       },
       {
         "codigo_fornecedor": "F08-003",
         "sku": "SKU-1026",
         "descricao": "Molho de tomate 340 g",
-        "quantidade": 992,
+        "quantidade": 800,
         "unidade": "UN",
         "preco_unitario": 3.99,
-        "valor": 3958.08
+        "valor": 3192.0
       },
       {
-        "codigo_fornecedor": "F08-002",
-        "sku": "SKU-1025",
-        "descricao": "Macarrão espaguete 500 g",
-        "quantidade": 1276,
+        "codigo_fornecedor": "F08-001",
+        "sku": "SKU-1024",
+        "descricao": "Óleo de soja 900 ml",
+        "quantidade": 520,
         "unidade": "UN",
-        "preco_unitario": 4.69,
-        "valor": 5984.44
+        "preco_unitario": 7.89,
+        "valor": 4102.8
       }
     ],
-    "valor_total": 15718.0,
+    "valor_total": 10596.56,
     "situacao": "paga"
   },
   {
     "nota_id": null,
-    "chave": "35261154813096000149550010000707661871698779",
-    "numero": 70766,
+    "chave": "35261175106807000115550010000722021213003069",
+    "numero": 72202,
     "serie": 1,
-    "fornecedor_id": "F05",
+    "fornecedor_id": "F10",
+    "destino": "CD-01",
+    "data_emissao": "2026-11-05",
+    "pedido_referenciado": "OC-2026-42948",
+    "canal_entrada": "SEFAZ",
+    "itens": [
+      {
+        "codigo_fornecedor": "F10-001",
+        "sku": "SKU-1029",
+        "descricao": "Detergente 500 ml",
+        "quantidade": 13884,
+        "unidade": "UN",
+        "preco_unitario": 2.69,
+        "valor": 37347.96
+      },
+      {
+        "codigo_fornecedor": "F10-003",
+        "sku": "SKU-1031",
+        "descricao": "Água sanitária 2 L",
+        "quantidade": 8964,
+        "unidade": "UN",
+        "preco_unitario": 6.49,
+        "valor": 58176.36
+      },
+      {
+        "codigo_fornecedor": "F10-002",
+        "sku": "SKU-1030",
+        "descricao": "Sabão em pó 1,6 kg",
+        "quantidade": 1968,
+        "unidade": "UN",
+        "preco_unitario": 24.9,
+        "valor": 49003.2
+      }
+    ],
+    "valor_total": 144527.52,
+    "situacao": "lançada"
+  },
+  {
+    "nota_id": null,
+    "chave": "35261003317368000189550010000227851667997455",
+    "numero": 22785,
+    "serie": 1,
+    "fornecedor_id": "F01",
     "destino": "CD-04",
-    "data_emissao": "2026-11-03",
-    "pedido_referenciado": "OC-2026-43354",
+    "data_emissao": "2026-10-31",
+    "pedido_referenciado": "OC-2026-43164",
     "canal_entrada": "SEFAZ",
     "itens": [
       {
-        "codigo_fornecedor": "F05-004",
-        "sku": "SKU-1018",
-        "descricao": "Açúcar refinado 1 kg",
-        "quantidade": 472,
+        "codigo_fornecedor": "F01-002",
+        "sku": "SKU-1002",
+        "descricao": "Iogurte natural 170 g",
+        "quantidade": 1080,
         "unidade": "UN",
-        "preco_unitario": 4.99,
-        "valor": 2355.28
+        "preco_unitario": 3.29,
+        "valor": 3553.2
       },
       {
-        "codigo_fornecedor": "F05-002",
-        "sku": "SKU-1016",
-        "descricao": "Feijão carioca 1 kg",
-        "quantidade": 304,
+        "codigo_fornecedor": "F01-001",
+        "sku": "SKU-1001",
+        "descricao": "Leite integral 1 L",
+        "quantidade": 776,
         "unidade": "UN",
-        "preco_unitario": 8.9,
-        "valor": 2705.6
+        "preco_unitario": 4.89,
+        "valor": 3794.64
       },
       {
-        "codigo_fornecedor": "F05-003",
-        "sku": "SKU-1017",
-        "descricao": "Café torrado 500 g",
-        "quantidade": 76,
+        "codigo_fornecedor": "F01-004",
+        "sku": "SKU-1004",
+        "descricao": "Manteiga com sal 200 g",
+        "quantidade": 296,
         "unidade": "UN",
-        "preco_unitario": 19.9,
-        "valor": 1512.4
+        "preco_unitario": 12.4,
+        "valor": 3670.4
       }
     ],
-    "valor_total": 6573.28,
+    "valor_total": 11018.24,
     "situacao": "paga"
   },
   {
     "nota_id": null,
-    "chave": "35261054813096000149550010000707721935111844",
-    "numero": 70772,
-    "serie": 1,
-    "fornecedor_id": "F05",
-    "destino": "LJ-003",
-    "data_emissao": "2026-10-21",
-    "pedido_referenciado": "OC-2026-43391",
-    "canal_entrada": "SEFAZ",
-    "itens": [
-      {
-        "codigo_fornecedor": "F05-002",
-        "sku": "SKU-1016",
-        "descricao": "Feijão carioca 1 kg",
-        "quantidade": 120,
-        "unidade": "UN",
-        "preco_unitario": 8.9,
-        "valor": 1068.0
-      },
-      {
-        "codigo_fornecedor": "F05-004",
-        "sku": "SKU-1018",
-        "descricao": "Açúcar refinado 1 kg",
-        "quantidade": 284,
-        "unidade": "UN",
-        "preco_unitario": 4.99,
-        "valor": 1417.16
-      },
-      {
-        "codigo_fornecedor": "F05-001",
-        "sku": "SKU-1015",
-        "descricao": "Arroz tipo 1 5 kg",
-        "quantidade": 28,
-        "unidade": "UN",
-        "preco_unitario": 27.9,
-        "valor": 781.2
-      }
-    ],
-    "valor_total": 3266.36,
-    "situacao": "paga"
-  },
-  {
-    "nota_id": null,
-    "chave": "35261093339323000108550010000453741530340922",
-    "numero": 45374,
+    "chave": "35261083618255000153550010000212201907854567",
+    "numero": 21220,
     "serie": 1,
     "fornecedor_id": "F11",
-    "destino": "LJ-007",
-    "data_emissao": "2026-10-23",
-    "pedido_referenciado": "OC-2026-43431",
+    "destino": "CD-02",
+    "data_emissao": "2026-10-18",
+    "pedido_referenciado": "OC-2026-43169",
     "canal_entrada": "SEFAZ",
     "itens": [
       {
         "codigo_fornecedor": "F11-002",
         "sku": "SKU-1033",
         "descricao": "Amendoim torrado 500 g",
-        "quantidade": 92,
+        "quantidade": 460,
         "unidade": "UN",
         "preco_unitario": 13.9,
-        "valor": 1278.8
+        "valor": 6394.0
       },
       {
         "codigo_fornecedor": "F11-003",
         "sku": "SKU-1034",
         "descricao": "Biscoito recheado 140 g",
-        "quantidade": 232,
+        "quantidade": 1556,
         "unidade": "UN",
         "preco_unitario": 3.79,
-        "valor": 879.28
+        "valor": 5897.24
       },
       {
         "codigo_fornecedor": "F11-001",
         "sku": "SKU-1032",
         "descricao": "Batata chips 120 g",
-        "quantidade": 92,
+        "quantidade": 364,
         "unidade": "UN",
         "preco_unitario": 11.9,
-        "valor": 1094.8
+        "valor": 4331.6
       }
     ],
-    "valor_total": 3252.88,
+    "valor_total": 16622.84,
     "situacao": "paga"
   },
   {
     "nota_id": null,
-    "chave": "35261113769729000182550010000138481242833056",
-    "numero": 13848,
-    "serie": 1,
-    "fornecedor_id": "F07",
-    "destino": "LJ-004",
-    "data_emissao": "2026-11-03",
-    "pedido_referenciado": "OC-2026-43457",
-    "canal_entrada": "SEFAZ",
-    "itens": [
-      {
-        "codigo_fornecedor": "F07-001",
-        "sku": "SKU-1022",
-        "descricao": "Pão de forma 500 g",
-        "quantidade": 88,
-        "unidade": "UN",
-        "preco_unitario": 9.49,
-        "valor": 835.12
-      },
-      {
-        "codigo_fornecedor": "F07-002",
-        "sku": "SKU-1023",
-        "descricao": "Bisnaguinha 300 g",
-        "quantidade": 108,
-        "unidade": "UN",
-        "preco_unitario": 7.99,
-        "valor": 862.92
-      }
-    ],
-    "valor_total": 1698.04,
-    "situacao": "paga"
-  },
-  {
-    "nota_id": null,
-    "chave": "35261094433432000143550010000895011681703063",
-    "numero": 89501,
-    "serie": 1,
-    "fornecedor_id": "F03",
-    "destino": "LJ-009",
-    "data_emissao": "2026-10-23",
-    "pedido_referenciado": "OC-2026-43486",
-    "canal_entrada": "SEFAZ",
-    "itens": [
-      {
-        "codigo_fornecedor": "F03-003",
-        "sku": "SKU-1011",
-        "descricao": "Alface crespa unidade",
-        "quantidade": 104,
-        "unidade": "UN",
-        "preco_unitario": 3.4,
-        "valor": 353.6
-      },
-      {
-        "codigo_fornecedor": "F03-001",
-        "sku": "SKU-1009",
-        "descricao": "Banana prata kg",
-        "quantidade": 52,
-        "unidade": "UN",
-        "preco_unitario": 6.9,
-        "valor": 358.8
-      },
-      {
-        "codigo_fornecedor": "F03-002",
-        "sku": "SKU-1010",
-        "descricao": "Tomate italiano kg",
-        "quantidade": 64,
-        "unidade": "UN",
-        "preco_unitario": 8.5,
-        "valor": 544.0
-      }
-    ],
-    "valor_total": 1256.4,
-    "situacao": "paga"
-  },
-  {
-    "nota_id": null,
-    "chave": "35261047573594000106550010000131621610065663",
-    "numero": 13162,
+    "chave": "35261027276823000112550010000785211471962721",
+    "numero": 78521,
     "serie": 1,
     "fornecedor_id": "F06",
-    "destino": "LJ-026",
-    "data_emissao": "2026-10-28",
-    "pedido_referenciado": "OC-2026-43515",
+    "destino": "LJ-029",
+    "data_emissao": "2026-10-17",
+    "pedido_referenciado": "OC-2026-43190",
     "canal_entrada": "SEFAZ",
     "itens": [
-      {
-        "codigo_fornecedor": "F06-001",
-        "sku": "SKU-1019",
-        "descricao": "Pão de queijo congelado 1 kg",
-        "quantidade": 16,
-        "unidade": "UN",
-        "preco_unitario": 24.9,
-        "valor": 398.4
-      },
       {
         "codigo_fornecedor": "F06-003",
         "sku": "SKU-1021",
         "descricao": "Sorvete 1,5 L",
-        "quantidade": 20,
+        "quantidade": 32,
         "unidade": "UN",
         "preco_unitario": 26.9,
-        "valor": 538.0
+        "valor": 860.8
       },
       {
         "codigo_fornecedor": "F06-002",
         "sku": "SKU-1020",
         "descricao": "Pizza congelada 460 g",
-        "quantidade": 24,
+        "quantidade": 52,
         "unidade": "UN",
         "preco_unitario": 21.9,
-        "valor": 525.6
+        "valor": 1138.8
+      },
+      {
+        "codigo_fornecedor": "F06-001",
+        "sku": "SKU-1019",
+        "descricao": "Pão de queijo congelado 1 kg",
+        "quantidade": 44,
+        "unidade": "UN",
+        "preco_unitario": 24.9,
+        "valor": 1095.6
       }
     ],
-    "valor_total": 1462.0,
+    "valor_total": 3095.2,
     "situacao": "paga"
   },
   {
     "nota_id": null,
-    "chave": "35261094433432000143550010000895051978423627",
-    "numero": 89505,
+    "chave": "35261031810741000174550010000437221296904475",
+    "numero": 43722,
+    "serie": 1,
+    "fornecedor_id": "F02",
+    "destino": "LJ-013",
+    "data_emissao": "2026-10-25",
+    "pedido_referenciado": "OC-2026-43230",
+    "canal_entrada": "SEFAZ",
+    "itens": [
+      {
+        "codigo_fornecedor": "F02-004",
+        "sku": "SKU-1008",
+        "descricao": "Água de coco 1 L",
+        "quantidade": 84,
+        "unidade": "UN",
+        "preco_unitario": 9.7,
+        "valor": 814.8
+      },
+      {
+        "codigo_fornecedor": "F02-003",
+        "sku": "SKU-1007",
+        "descricao": "Suco de uva integral 1 L",
+        "quantidade": 80,
+        "unidade": "UN",
+        "preco_unitario": 14.9,
+        "valor": 1192.0
+      },
+      {
+        "codigo_fornecedor": "F02-001",
+        "sku": "SKU-1005",
+        "descricao": "Água mineral 1,5 L",
+        "quantidade": 232,
+        "unidade": "UN",
+        "preco_unitario": 2.79,
+        "valor": 647.28
+      }
+    ],
+    "valor_total": 2654.08,
+    "situacao": "paga"
+  },
+  {
+    "nota_id": null,
+    "chave": "35261012843758000183550010000596731216334873",
+    "numero": 59673,
     "serie": 1,
     "fornecedor_id": "F03",
-    "destino": "CD-02",
-    "data_emissao": "2026-10-23",
-    "pedido_referenciado": "OC-2026-43524",
+    "destino": "CD-03",
+    "data_emissao": "2026-10-27",
+    "pedido_referenciado": "OC-2026-43241",
     "canal_entrada": "SEFAZ",
     "itens": [
       {
         "codigo_fornecedor": "F03-001",
         "sku": "SKU-1009",
         "descricao": "Banana prata kg",
-        "quantidade": 796,
+        "quantidade": 260,
         "unidade": "UN",
         "preco_unitario": 6.9,
-        "valor": 5492.4
-      },
-      {
-        "codigo_fornecedor": "F03-003",
-        "sku": "SKU-1011",
-        "descricao": "Alface crespa unidade",
-        "quantidade": 1672,
-        "unidade": "UN",
-        "preco_unitario": 3.4,
-        "valor": 5684.8
+        "valor": 1794.0
       },
       {
         "codigo_fornecedor": "F03-002",
         "sku": "SKU-1010",
         "descricao": "Tomate italiano kg",
-        "quantidade": 824,
+        "quantidade": 280,
         "unidade": "UN",
         "preco_unitario": 8.5,
-        "valor": 7004.0
+        "valor": 2380.0
+      },
+      {
+        "codigo_fornecedor": "F03-003",
+        "sku": "SKU-1011",
+        "descricao": "Alface crespa unidade",
+        "quantidade": 604,
+        "unidade": "UN",
+        "preco_unitario": 3.4,
+        "valor": 2053.6
       }
     ],
-    "valor_total": 18181.2,
+    "valor_total": 6227.6,
     "situacao": "paga"
   },
   {
     "nota_id": null,
-    "chave": "35261162833783000154550010000375181606016878",
-    "numero": 37518,
+    "chave": "35261027276823000112550010000785251562904328",
+    "numero": 78525,
     "serie": 1,
-    "fornecedor_id": "F08",
-    "destino": "LJ-019",
-    "data_emissao": "2026-11-02",
-    "pedido_referenciado": "OC-2026-43539",
+    "fornecedor_id": "F06",
+    "destino": "CD-04",
+    "data_emissao": "2026-10-04",
+    "pedido_referenciado": "OC-2026-43249",
     "canal_entrada": "SEFAZ",
     "itens": [
       {
-        "codigo_fornecedor": "F08-001",
-        "sku": "SKU-1024",
-        "descricao": "Óleo de soja 900 ml",
-        "quantidade": 32,
+        "codigo_fornecedor": "F06-003",
+        "sku": "SKU-1021",
+        "descricao": "Sorvete 1,5 L",
+        "quantidade": 120,
         "unidade": "UN",
-        "preco_unitario": 7.89,
-        "valor": 252.48
+        "preco_unitario": 26.9,
+        "valor": 3228.0
       },
       {
-        "codigo_fornecedor": "F08-002",
-        "sku": "SKU-1025",
-        "descricao": "Macarrão espaguete 500 g",
-        "quantidade": 40,
+        "codigo_fornecedor": "F06-001",
+        "sku": "SKU-1019",
+        "descricao": "Pão de queijo congelado 1 kg",
+        "quantidade": 72,
         "unidade": "UN",
-        "preco_unitario": 4.69,
-        "valor": 187.6
+        "preco_unitario": 24.9,
+        "valor": 1792.8
       },
       {
-        "codigo_fornecedor": "F08-003",
-        "sku": "SKU-1026",
-        "descricao": "Molho de tomate 340 g",
-        "quantidade": 56,
+        "codigo_fornecedor": "F06-002",
+        "sku": "SKU-1020",
+        "descricao": "Pizza congelada 460 g",
+        "quantidade": 116,
         "unidade": "UN",
-        "preco_unitario": 3.99,
-        "valor": 223.44
+        "preco_unitario": 21.9,
+        "valor": 2540.4
       }
     ],
-    "valor_total": 663.52,
+    "valor_total": 7561.2,
     "situacao": "paga"
   },
   {
     "nota_id": null,
-    "chave": "35261026804190000106550010000728581473188355",
-    "numero": 72858,
+    "chave": "35261083618255000153550010000212241907765786",
+    "numero": 21224,
+    "serie": 1,
+    "fornecedor_id": "F11",
+    "destino": "CD-03",
+    "data_emissao": "2026-10-29",
+    "pedido_referenciado": "OC-2026-43265",
+    "canal_entrada": "SEFAZ",
+    "itens": [
+      {
+        "codigo_fornecedor": "F11-001",
+        "sku": "SKU-1032",
+        "descricao": "Batata chips 120 g",
+        "quantidade": 236,
+        "unidade": "UN",
+        "preco_unitario": 11.9,
+        "valor": 2808.4
+      },
+      {
+        "codigo_fornecedor": "F11-003",
+        "sku": "SKU-1034",
+        "descricao": "Biscoito recheado 140 g",
+        "quantidade": 924,
+        "unidade": "UN",
+        "preco_unitario": 3.79,
+        "valor": 3501.96
+      },
+      {
+        "codigo_fornecedor": "F11-002",
+        "sku": "SKU-1033",
+        "descricao": "Amendoim torrado 500 g",
+        "quantidade": 256,
+        "unidade": "UN",
+        "preco_unitario": 13.9,
+        "valor": 3558.4
+      }
+    ],
+    "valor_total": 9868.76,
+    "situacao": "paga"
+  },
+  {
+    "nota_id": null,
+    "chave": "35261077067000000146550010000512791182451552",
+    "numero": 51279,
+    "serie": 1,
+    "fornecedor_id": "F09",
+    "destino": "CD-04",
+    "data_emissao": "2026-10-08",
+    "pedido_referenciado": "OC-2026-43272",
+    "canal_entrada": "SEFAZ",
+    "itens": [
+      {
+        "codigo_fornecedor": "F09-001",
+        "sku": "SKU-1027",
+        "descricao": "Ração para cães 10 kg",
+        "quantidade": 64,
+        "unidade": "UN",
+        "preco_unitario": 109.9,
+        "valor": 7033.6
+      },
+      {
+        "codigo_fornecedor": "F09-002",
+        "sku": "SKU-1028",
+        "descricao": "Areia sanitária 4 kg",
+        "quantidade": 356,
+        "unidade": "UN",
+        "preco_unitario": 19.9,
+        "valor": 7084.4
+      }
+    ],
+    "valor_total": 14118.0,
+    "situacao": "paga"
+  },
+  {
+    "nota_id": null,
+    "chave": "35261103317368000189550010000228061528258591",
+    "numero": 22806,
     "serie": 1,
     "fornecedor_id": "F01",
-    "destino": "LJ-004",
-    "data_emissao": "2026-10-03",
-    "pedido_referenciado": "OC-2026-43548",
+    "destino": "LJ-016",
+    "data_emissao": "2026-11-01",
+    "pedido_referenciado": "OC-2026-43280",
     "canal_entrada": "SEFAZ",
     "itens": [
       {
-        "codigo_fornecedor": "F01-002",
-        "sku": "SKU-1002",
-        "descricao": "Iogurte natural 170 g",
-        "quantidade": 336,
+        "codigo_fornecedor": "F01-004",
+        "sku": "SKU-1004",
+        "descricao": "Manteiga com sal 200 g",
+        "quantidade": 132,
         "unidade": "UN",
-        "preco_unitario": 3.29,
-        "valor": 1105.44
+        "preco_unitario": 12.4,
+        "valor": 1636.8
       },
       {
         "codigo_fornecedor": "F01-001",
         "sku": "SKU-1001",
         "descricao": "Leite integral 1 L",
-        "quantidade": 312,
+        "quantidade": 228,
         "unidade": "UN",
         "preco_unitario": 4.89,
-        "valor": 1525.68
+        "valor": 1114.92
       },
       {
         "codigo_fornecedor": "F01-003",
@@ -1136,259 +734,679 @@
         "valor": 1069.2
       }
     ],
-    "valor_total": 3700.32,
+    "valor_total": 3820.92,
     "situacao": "paga"
   },
   {
     "nota_id": null,
-    "chave": "35261153194517000138550010000845351662917812",
-    "numero": 84535,
-    "serie": 1,
-    "fornecedor_id": "F10",
-    "destino": "CD-03",
-    "data_emissao": "2026-11-01",
-    "pedido_referenciado": "OC-2026-43572",
-    "canal_entrada": "SEFAZ",
-    "itens": [
-      {
-        "codigo_fornecedor": "F10-001",
-        "sku": "SKU-1029",
-        "descricao": "Detergente 500 ml",
-        "quantidade": 1248,
-        "unidade": "UN",
-        "preco_unitario": 2.69,
-        "valor": 3357.12
-      },
-      {
-        "codigo_fornecedor": "F10-002",
-        "sku": "SKU-1030",
-        "descricao": "Sabão em pó 1,6 kg",
-        "quantidade": 176,
-        "unidade": "UN",
-        "preco_unitario": 24.9,
-        "valor": 4382.4
-      },
-      {
-        "codigo_fornecedor": "F10-003",
-        "sku": "SKU-1031",
-        "descricao": "Água sanitária 2 L",
-        "quantidade": 468,
-        "unidade": "UN",
-        "preco_unitario": 6.49,
-        "valor": 3037.32
-      }
-    ],
-    "valor_total": 10776.84,
-    "situacao": "paga"
-  },
-  {
-    "nota_id": null,
-    "chave": "35261053194517000138550010000845431417526678",
-    "numero": 84543,
-    "serie": 1,
-    "fornecedor_id": "F10",
-    "destino": "CD-03",
-    "data_emissao": "2026-10-24",
-    "pedido_referenciado": "OC-2026-43599",
-    "canal_entrada": "SEFAZ",
-    "itens": [
-      {
-        "codigo_fornecedor": "F10-003",
-        "sku": "SKU-1031",
-        "descricao": "Água sanitária 2 L",
-        "quantidade": 812,
-        "unidade": "UN",
-        "preco_unitario": 6.49,
-        "valor": 5269.88
-      },
-      {
-        "codigo_fornecedor": "F10-002",
-        "sku": "SKU-1030",
-        "descricao": "Sabão em pó 1,6 kg",
-        "quantidade": 252,
-        "unidade": "UN",
-        "preco_unitario": 24.9,
-        "valor": 6274.8
-      },
-      {
-        "codigo_fornecedor": "F10-001",
-        "sku": "SKU-1029",
-        "descricao": "Detergente 500 ml",
-        "quantidade": 2000,
-        "unidade": "UN",
-        "preco_unitario": 2.69,
-        "valor": 5380.0
-      }
-    ],
-    "valor_total": 16924.68,
-    "situacao": "paga"
-  },
-  {
-    "nota_id": null,
-    "chave": "35261074055489000148550010000440161786683827",
-    "numero": 44016,
+    "chave": "35261031810741000174550010000437481255331483",
+    "numero": 43748,
     "serie": 1,
     "fornecedor_id": "F02",
-    "destino": "LJ-019",
-    "data_emissao": "2026-10-21",
-    "pedido_referenciado": "OC-2026-43604",
+    "destino": "LJ-030",
+    "data_emissao": "2026-10-16",
+    "pedido_referenciado": "OC-2026-43289",
     "canal_entrada": "SEFAZ",
     "itens": [
+      {
+        "codigo_fornecedor": "F02-003",
+        "sku": "SKU-1007",
+        "descricao": "Suco de uva integral 1 L",
+        "quantidade": 80,
+        "unidade": "UN",
+        "preco_unitario": 14.9,
+        "valor": 1192.0
+      },
       {
         "codigo_fornecedor": "F02-001",
         "sku": "SKU-1005",
         "descricao": "Água mineral 1,5 L",
-        "quantidade": 236,
+        "quantidade": 480,
         "unidade": "UN",
         "preco_unitario": 2.79,
-        "valor": 658.44
+        "valor": 1339.2
       },
+      {
+        "codigo_fornecedor": "F02-004",
+        "sku": "SKU-1008",
+        "descricao": "Água de coco 1 L",
+        "quantidade": 104,
+        "unidade": "UN",
+        "preco_unitario": 9.7,
+        "valor": 1008.8
+      }
+    ],
+    "valor_total": 3540.0,
+    "situacao": "paga"
+  },
+  {
+    "nota_id": null,
+    "chave": "35261100436633000150550010000479971606093135",
+    "numero": 47997,
+    "serie": 1,
+    "fornecedor_id": "F05",
+    "destino": "CD-02",
+    "data_emissao": "2026-11-03",
+    "pedido_referenciado": "OC-2026-43315",
+    "canal_entrada": "SEFAZ",
+    "itens": [
+      {
+        "codigo_fornecedor": "F05-002",
+        "sku": "SKU-1016",
+        "descricao": "Feijão carioca 1 kg",
+        "quantidade": 364,
+        "unidade": "UN",
+        "preco_unitario": 8.9,
+        "valor": 3239.6
+      },
+      {
+        "codigo_fornecedor": "F05-004",
+        "sku": "SKU-1018",
+        "descricao": "Açúcar refinado 1 kg",
+        "quantidade": 560,
+        "unidade": "UN",
+        "preco_unitario": 4.99,
+        "valor": 2794.4
+      },
+      {
+        "codigo_fornecedor": "F05-003",
+        "sku": "SKU-1017",
+        "descricao": "Café torrado 500 g",
+        "quantidade": 160,
+        "unidade": "UN",
+        "preco_unitario": 19.9,
+        "valor": 3184.0
+      }
+    ],
+    "valor_total": 9218.0,
+    "situacao": "paga"
+  },
+  {
+    "nota_id": null,
+    "chave": "35261033214059000144550010000202561587557951",
+    "numero": 20256,
+    "serie": 1,
+    "fornecedor_id": "F04",
+    "destino": "LJ-029",
+    "data_emissao": "2026-10-20",
+    "pedido_referenciado": "OC-2026-43350",
+    "canal_entrada": "SEFAZ",
+    "itens": [
+      {
+        "codigo_fornecedor": "F04-003",
+        "sku": "SKU-1014",
+        "descricao": "Shampoo 350 ml",
+        "quantidade": 36,
+        "unidade": "UN",
+        "preco_unitario": 16.9,
+        "valor": 608.4
+      },
+      {
+        "codigo_fornecedor": "F04-001",
+        "sku": "SKU-1012",
+        "descricao": "Sabonete em barra 85 g",
+        "quantidade": 296,
+        "unidade": "UN",
+        "preco_unitario": 2.49,
+        "valor": 737.04
+      },
+      {
+        "codigo_fornecedor": "F04-002",
+        "sku": "SKU-1013",
+        "descricao": "Creme dental 90 g",
+        "quantidade": 100,
+        "unidade": "UN",
+        "preco_unitario": 5.9,
+        "valor": 590.0
+      }
+    ],
+    "valor_total": 1935.44,
+    "situacao": "paga"
+  },
+  {
+    "nota_id": null,
+    "chave": "35261031810741000174550010000437521555760847",
+    "numero": 43752,
+    "serie": 1,
+    "fornecedor_id": "F02",
+    "destino": "LJ-027",
+    "data_emissao": "2026-10-17",
+    "pedido_referenciado": "OC-2026-43377",
+    "canal_entrada": "SEFAZ",
+    "itens": [
       {
         "codigo_fornecedor": "F02-002",
         "sku": "SKU-1006",
         "descricao": "Refrigerante cola 2 L",
-        "quantidade": 152,
+        "quantidade": 60,
         "unidade": "UN",
         "preco_unitario": 8.49,
-        "valor": 1290.48
+        "valor": 509.4
+      },
+      {
+        "codigo_fornecedor": "F02-004",
+        "sku": "SKU-1008",
+        "descricao": "Água de coco 1 L",
+        "quantidade": 76,
+        "unidade": "UN",
+        "preco_unitario": 9.7,
+        "valor": 737.2
+      },
+      {
+        "codigo_fornecedor": "F02-001",
+        "sku": "SKU-1005",
+        "descricao": "Água mineral 1,5 L",
+        "quantidade": 284,
+        "unidade": "UN",
+        "preco_unitario": 2.79,
+        "valor": 792.36
+      }
+    ],
+    "valor_total": 2038.96,
+    "situacao": "paga"
+  },
+  {
+    "nota_id": null,
+    "chave": "35261131810741000174550010000437781786431027",
+    "numero": 43778,
+    "serie": 1,
+    "fornecedor_id": "F02",
+    "destino": "LJ-002",
+    "data_emissao": "2026-11-01",
+    "pedido_referenciado": "OC-2026-43410",
+    "canal_entrada": "SEFAZ",
+    "itens": [
+      {
+        "codigo_fornecedor": "F02-004",
+        "sku": "SKU-1008",
+        "descricao": "Água de coco 1 L",
+        "quantidade": 116,
+        "unidade": "UN",
+        "preco_unitario": 9.7,
+        "valor": 1125.2
       },
       {
         "codigo_fornecedor": "F02-003",
         "sku": "SKU-1007",
         "descricao": "Suco de uva integral 1 L",
-        "quantidade": 40,
+        "quantidade": 56,
         "unidade": "UN",
         "preco_unitario": 14.9,
-        "valor": 596.0
+        "valor": 834.4
+      },
+      {
+        "codigo_fornecedor": "F02-002",
+        "sku": "SKU-1006",
+        "descricao": "Refrigerante cola 2 L",
+        "quantidade": 76,
+        "unidade": "UN",
+        "preco_unitario": 8.49,
+        "valor": 645.24
       }
     ],
-    "valor_total": 2544.92,
+    "valor_total": 2604.84,
     "situacao": "paga"
   },
   {
     "nota_id": null,
-    "chave": "35261054813096000149550010000707781551944365",
-    "numero": 70778,
+    "chave": "35261003317368000189550010000228361786911089",
+    "numero": 22836,
     "serie": 1,
-    "fornecedor_id": "F05",
-    "destino": "LJ-028",
-    "data_emissao": "2026-10-20",
-    "pedido_referenciado": "OC-2026-43622",
+    "fornecedor_id": "F01",
+    "destino": "LJ-026",
+    "data_emissao": "2026-10-09",
+    "pedido_referenciado": "OC-2026-43420",
     "canal_entrada": "SEFAZ",
     "itens": [
       {
-        "codigo_fornecedor": "F05-003",
-        "sku": "SKU-1017",
-        "descricao": "Café torrado 500 g",
-        "quantidade": 60,
+        "codigo_fornecedor": "F01-004",
+        "sku": "SKU-1004",
+        "descricao": "Manteiga com sal 200 g",
+        "quantidade": 112,
         "unidade": "UN",
-        "preco_unitario": 19.9,
-        "valor": 1194.0
+        "preco_unitario": 12.4,
+        "valor": 1388.8
       },
       {
-        "codigo_fornecedor": "F05-001",
-        "sku": "SKU-1015",
-        "descricao": "Arroz tipo 1 5 kg",
-        "quantidade": 36,
+        "codigo_fornecedor": "F01-003",
+        "sku": "SKU-1003",
+        "descricao": "Queijo muçarela fatiado 150 g",
+        "quantidade": 116,
         "unidade": "UN",
-        "preco_unitario": 27.9,
-        "valor": 1004.4
+        "preco_unitario": 9.9,
+        "valor": 1148.4
       },
       {
-        "codigo_fornecedor": "F05-002",
-        "sku": "SKU-1016",
-        "descricao": "Feijão carioca 1 kg",
-        "quantidade": 124,
+        "codigo_fornecedor": "F01-001",
+        "sku": "SKU-1001",
+        "descricao": "Leite integral 1 L",
+        "quantidade": 268,
         "unidade": "UN",
-        "preco_unitario": 8.9,
-        "valor": 1103.6
+        "preco_unitario": 4.89,
+        "valor": 1310.52
       }
     ],
-    "valor_total": 3302.0,
+    "valor_total": 3847.72,
     "situacao": "paga"
   },
   {
     "nota_id": null,
-    "chave": "35261047573594000106550010000131791563832008",
-    "numero": 13179,
+    "chave": "35261127276823000112550010000785311318241138",
+    "numero": 78531,
     "serie": 1,
     "fornecedor_id": "F06",
-    "destino": "LJ-014",
-    "data_emissao": "2026-10-08",
-    "pedido_referenciado": "OC-2026-43634",
+    "destino": "CD-01",
+    "data_emissao": "2026-11-03",
+    "pedido_referenciado": "OC-2026-43440",
     "canal_entrada": "SEFAZ",
     "itens": [
+      {
+        "codigo_fornecedor": "F06-003",
+        "sku": "SKU-1021",
+        "descricao": "Sorvete 1,5 L",
+        "quantidade": 116,
+        "unidade": "UN",
+        "preco_unitario": 26.9,
+        "valor": 3120.4
+      },
+      {
+        "codigo_fornecedor": "F06-002",
+        "sku": "SKU-1020",
+        "descricao": "Pizza congelada 460 g",
+        "quantidade": 260,
+        "unidade": "UN",
+        "preco_unitario": 21.9,
+        "valor": 5694.0
+      },
       {
         "codigo_fornecedor": "F06-001",
         "sku": "SKU-1019",
         "descricao": "Pão de queijo congelado 1 kg",
+        "quantidade": 244,
+        "unidade": "UN",
+        "preco_unitario": 24.9,
+        "valor": 6075.6
+      }
+    ],
+    "valor_total": 14890.0,
+    "situacao": "paga"
+  },
+  {
+    "nota_id": null,
+    "chave": "35261031810741000174550010000438061525543821",
+    "numero": 43806,
+    "serie": 1,
+    "fornecedor_id": "F02",
+    "destino": "LJ-001",
+    "data_emissao": "2026-10-20",
+    "pedido_referenciado": "OC-2026-43471",
+    "canal_entrada": "SEFAZ",
+    "itens": [
+      {
+        "codigo_fornecedor": "F02-004",
+        "sku": "SKU-1008",
+        "descricao": "Água de coco 1 L",
+        "quantidade": 104,
+        "unidade": "UN",
+        "preco_unitario": 9.7,
+        "valor": 1008.8
+      },
+      {
+        "codigo_fornecedor": "F02-001",
+        "sku": "SKU-1005",
+        "descricao": "Água mineral 1,5 L",
+        "quantidade": 384,
+        "unidade": "UN",
+        "preco_unitario": 2.79,
+        "valor": 1071.36
+      },
+      {
+        "codigo_fornecedor": "F02-002",
+        "sku": "SKU-1006",
+        "descricao": "Refrigerante cola 2 L",
+        "quantidade": 140,
+        "unidade": "UN",
+        "preco_unitario": 8.49,
+        "valor": 1188.6
+      }
+    ],
+    "valor_total": 3268.76,
+    "situacao": "paga"
+  },
+  {
+    "nota_id": null,
+    "chave": "35261012843758000183550010000596751879479195",
+    "numero": 59675,
+    "serie": 1,
+    "fornecedor_id": "F03",
+    "destino": "LJ-005",
+    "data_emissao": "2026-10-23",
+    "pedido_referenciado": "OC-2026-43484",
+    "canal_entrada": "SEFAZ",
+    "itens": [
+      {
+        "codigo_fornecedor": "F03-002",
+        "sku": "SKU-1010",
+        "descricao": "Tomate italiano kg",
+        "quantidade": 52,
+        "unidade": "UN",
+        "preco_unitario": 8.5,
+        "valor": 442.0
+      },
+      {
+        "codigo_fornecedor": "F03-001",
+        "sku": "SKU-1009",
+        "descricao": "Banana prata kg",
+        "quantidade": 64,
+        "unidade": "UN",
+        "preco_unitario": 6.9,
+        "valor": 441.6
+      },
+      {
+        "codigo_fornecedor": "F03-003",
+        "sku": "SKU-1011",
+        "descricao": "Alface crespa unidade",
+        "quantidade": 120,
+        "unidade": "UN",
+        "preco_unitario": 3.4,
+        "valor": 408.0
+      }
+    ],
+    "valor_total": 1291.6,
+    "situacao": "paga"
+  },
+  {
+    "nota_id": null,
+    "chave": "35261000436633000150550010000480011235179303",
+    "numero": 48001,
+    "serie": 1,
+    "fornecedor_id": "F05",
+    "destino": "LJ-027",
+    "data_emissao": "2026-10-26",
+    "pedido_referenciado": "OC-2026-43501",
+    "canal_entrada": "SEFAZ",
+    "itens": [
+      {
+        "codigo_fornecedor": "F05-002",
+        "sku": "SKU-1016",
+        "descricao": "Feijão carioca 1 kg",
+        "quantidade": 40,
+        "unidade": "UN",
+        "preco_unitario": 8.9,
+        "valor": 356.0
+      },
+      {
+        "codigo_fornecedor": "F05-003",
+        "sku": "SKU-1017",
+        "descricao": "Café torrado 500 g",
+        "quantidade": 12,
+        "unidade": "UN",
+        "preco_unitario": 19.9,
+        "valor": 238.8
+      },
+      {
+        "codigo_fornecedor": "F05-004",
+        "sku": "SKU-1018",
+        "descricao": "Açúcar refinado 1 kg",
+        "quantidade": 48,
+        "unidade": "UN",
+        "preco_unitario": 4.99,
+        "valor": 239.52
+      }
+    ],
+    "valor_total": 834.32,
+    "situacao": "paga"
+  },
+  {
+    "nota_id": null,
+    "chave": "35261175106807000115550010000722741380811992",
+    "numero": 72274,
+    "serie": 1,
+    "fornecedor_id": "F10",
+    "destino": "LJ-007",
+    "data_emissao": "2026-11-04",
+    "pedido_referenciado": "OC-2026-43515",
+    "canal_entrada": "SEFAZ",
+    "itens": [
+      {
+        "codigo_fornecedor": "F10-002",
+        "sku": "SKU-1030",
+        "descricao": "Sabão em pó 1,6 kg",
         "quantidade": 28,
         "unidade": "UN",
         "preco_unitario": 24.9,
         "valor": 697.2
       },
       {
-        "codigo_fornecedor": "F06-002",
-        "sku": "SKU-1020",
-        "descricao": "Pizza congelada 460 g",
-        "quantidade": 60,
+        "codigo_fornecedor": "F10-003",
+        "sku": "SKU-1031",
+        "descricao": "Água sanitária 2 L",
+        "quantidade": 108,
         "unidade": "UN",
-        "preco_unitario": 21.9,
-        "valor": 1314.0
+        "preco_unitario": 6.49,
+        "valor": 700.92
       },
       {
-        "codigo_fornecedor": "F06-003",
-        "sku": "SKU-1021",
-        "descricao": "Sorvete 1,5 L",
-        "quantidade": 32,
+        "codigo_fornecedor": "F10-001",
+        "sku": "SKU-1029",
+        "descricao": "Detergente 500 ml",
+        "quantidade": 296,
         "unidade": "UN",
-        "preco_unitario": 26.9,
-        "valor": 860.8
+        "preco_unitario": 2.69,
+        "valor": 796.24
       }
     ],
-    "valor_total": 2872.0,
+    "valor_total": 2194.36,
     "situacao": "paga"
   },
   {
     "nota_id": null,
-    "chave": "35261093339323000108550010000453971550977857",
-    "numero": 45397,
+    "chave": "35261083618255000153550010000212461545041954",
+    "numero": 21246,
     "serie": 1,
     "fornecedor_id": "F11",
-    "destino": "LJ-018",
-    "data_emissao": "2026-10-26",
-    "pedido_referenciado": "OC-2026-43652",
+    "destino": "CD-02",
+    "data_emissao": "2026-10-04",
+    "pedido_referenciado": "OC-2026-43535",
     "canal_entrada": "SEFAZ",
     "itens": [
-      {
-        "codigo_fornecedor": "F11-002",
-        "sku": "SKU-1033",
-        "descricao": "Amendoim torrado 500 g",
-        "quantidade": 96,
-        "unidade": "UN",
-        "preco_unitario": 13.9,
-        "valor": 1334.4
-      },
       {
         "codigo_fornecedor": "F11-003",
         "sku": "SKU-1034",
         "descricao": "Biscoito recheado 140 g",
-        "quantidade": 320,
+        "quantidade": 1592,
         "unidade": "UN",
         "preco_unitario": 3.79,
-        "valor": 1212.8
+        "valor": 6033.68
       },
       {
         "codigo_fornecedor": "F11-001",
         "sku": "SKU-1032",
         "descricao": "Batata chips 120 g",
-        "quantidade": 80,
+        "quantidade": 316,
         "unidade": "UN",
         "preco_unitario": 11.9,
-        "valor": 952.0
+        "valor": 3760.4
+      },
+      {
+        "codigo_fornecedor": "F11-002",
+        "sku": "SKU-1033",
+        "descricao": "Amendoim torrado 500 g",
+        "quantidade": 492,
+        "unidade": "UN",
+        "preco_unitario": 13.9,
+        "valor": 6838.8
       }
     ],
-    "valor_total": 3499.2,
+    "valor_total": 16632.88,
+    "situacao": "paga"
+  },
+  {
+    "nota_id": null,
+    "chave": "35261003317368000189550010000228621212978300",
+    "numero": 22862,
+    "serie": 1,
+    "fornecedor_id": "F01",
+    "destino": "LJ-023",
+    "data_emissao": "2026-10-06",
+    "pedido_referenciado": "OC-2026-43575",
+    "canal_entrada": "SEFAZ",
+    "itens": [
+      {
+        "codigo_fornecedor": "F01-003",
+        "sku": "SKU-1003",
+        "descricao": "Queijo muçarela fatiado 150 g",
+        "quantidade": 20,
+        "unidade": "UN",
+        "preco_unitario": 9.9,
+        "valor": 198.0
+      },
+      {
+        "codigo_fornecedor": "F01-004",
+        "sku": "SKU-1004",
+        "descricao": "Manteiga com sal 200 g",
+        "quantidade": 24,
+        "unidade": "UN",
+        "preco_unitario": 12.4,
+        "valor": 297.6
+      },
+      {
+        "codigo_fornecedor": "F01-001",
+        "sku": "SKU-1001",
+        "descricao": "Leite integral 1 L",
+        "quantidade": 64,
+        "unidade": "UN",
+        "preco_unitario": 4.89,
+        "valor": 312.96
+      }
+    ],
+    "valor_total": 808.56,
+    "situacao": "paga"
+  },
+  {
+    "nota_id": null,
+    "chave": "35261031810741000174550010000438351267185390",
+    "numero": 43835,
+    "serie": 1,
+    "fornecedor_id": "F02",
+    "destino": "CD-03",
+    "data_emissao": "2026-10-18",
+    "pedido_referenciado": "OC-2026-43605",
+    "canal_entrada": "SEFAZ",
+    "itens": [
+      {
+        "codigo_fornecedor": "F02-002",
+        "sku": "SKU-1006",
+        "descricao": "Refrigerante cola 2 L",
+        "quantidade": 680,
+        "unidade": "UN",
+        "preco_unitario": 8.49,
+        "valor": 5773.2
+      },
+      {
+        "codigo_fornecedor": "F02-001",
+        "sku": "SKU-1005",
+        "descricao": "Água mineral 1,5 L",
+        "quantidade": 2032,
+        "unidade": "UN",
+        "preco_unitario": 2.79,
+        "valor": 5669.28
+      },
+      {
+        "codigo_fornecedor": "F02-003",
+        "sku": "SKU-1007",
+        "descricao": "Suco de uva integral 1 L",
+        "quantidade": 308,
+        "unidade": "UN",
+        "preco_unitario": 14.9,
+        "valor": 4589.2
+      }
+    ],
+    "valor_total": 16031.68,
+    "situacao": "paga"
+  },
+  {
+    "nota_id": null,
+    "chave": "35261003317368000189550010000228921142398299",
+    "numero": 22892,
+    "serie": 1,
+    "fornecedor_id": "F01",
+    "destino": "LJ-024",
+    "data_emissao": "2026-10-30",
+    "pedido_referenciado": "OC-2026-43627",
+    "canal_entrada": "SEFAZ",
+    "itens": [
+      {
+        "codigo_fornecedor": "F01-001",
+        "sku": "SKU-1001",
+        "descricao": "Leite integral 1 L",
+        "quantidade": 168,
+        "unidade": "UN",
+        "preco_unitario": 4.89,
+        "valor": 821.52
+      },
+      {
+        "codigo_fornecedor": "F01-004",
+        "sku": "SKU-1004",
+        "descricao": "Manteiga com sal 200 g",
+        "quantidade": 72,
+        "unidade": "UN",
+        "preco_unitario": 12.4,
+        "valor": 892.8
+      },
+      {
+        "codigo_fornecedor": "F01-003",
+        "sku": "SKU-1003",
+        "descricao": "Queijo muçarela fatiado 150 g",
+        "quantidade": 100,
+        "unidade": "UN",
+        "preco_unitario": 9.9,
+        "valor": 990.0
+      }
+    ],
+    "valor_total": 2704.32,
+    "situacao": "paga"
+  },
+  {
+    "nota_id": null,
+    "chave": "35261033214059000144550010000202801715796989",
+    "numero": 20280,
+    "serie": 1,
+    "fornecedor_id": "F04",
+    "destino": "LJ-028",
+    "data_emissao": "2026-10-10",
+    "pedido_referenciado": "OC-2026-43633",
+    "canal_entrada": "SEFAZ",
+    "itens": [
+      {
+        "codigo_fornecedor": "F04-001",
+        "sku": "SKU-1012",
+        "descricao": "Sabonete em barra 85 g",
+        "quantidade": 372,
+        "unidade": "UN",
+        "preco_unitario": 2.49,
+        "valor": 926.28
+      },
+      {
+        "codigo_fornecedor": "F04-003",
+        "sku": "SKU-1014",
+        "descricao": "Shampoo 350 ml",
+        "quantidade": 40,
+        "unidade": "UN",
+        "preco_unitario": 16.9,
+        "valor": 676.0
+      },
+      {
+        "codigo_fornecedor": "F04-002",
+        "sku": "SKU-1013",
+        "descricao": "Creme dental 90 g",
+        "quantidade": 228,
+        "unidade": "UN",
+        "preco_unitario": 5.9,
+        "valor": 1345.2
+      }
+    ],
+    "valor_total": 2947.48,
     "situacao": "paga"
   }
 ]

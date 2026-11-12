@@ -2,84 +2,84 @@
   {
     "fornecedor_id": "F01",
     "razao_social": "Laticínios Serra Azul Ltda.",
-    "cnpj": "26.804.190/0001-06",
+    "cnpj": "03.317.368/0001-89",
     "bloqueado": false,
     "motivo_bloqueio": ""
   },
   {
     "fornecedor_id": "F02",
     "razao_social": "Bebidas Rio Claro S.A.",
-    "cnpj": "74.055.489/0001-48",
+    "cnpj": "31.810.741/0001-74",
     "bloqueado": false,
     "motivo_bloqueio": ""
   },
   {
     "fornecedor_id": "F03",
     "razao_social": "Hortifruti Vale Verde Ltda.",
-    "cnpj": "94.433.432/0001-43",
+    "cnpj": "12.843.758/0001-83",
     "bloqueado": false,
     "motivo_bloqueio": ""
   },
   {
     "fornecedor_id": "F04",
     "razao_social": "Higiene Lume Indústria Ltda.",
-    "cnpj": "00.023.027/0001-11",
+    "cnpj": "33.214.059/0001-44",
     "bloqueado": false,
     "motivo_bloqueio": ""
   },
   {
     "fornecedor_id": "F05",
     "razao_social": "Mercearia Atlântica Distribuidora Ltda.",
-    "cnpj": "54.813.096/0001-49",
+    "cnpj": "00.436.633/0001-50",
     "bloqueado": false,
     "motivo_bloqueio": ""
   },
   {
     "fornecedor_id": "F06",
     "razao_social": "Congelados Polar Sul Ltda.",
-    "cnpj": "47.573.594/0001-06",
+    "cnpj": "27.276.823/0001-12",
     "bloqueado": false,
     "motivo_bloqueio": ""
   },
   {
     "fornecedor_id": "F07",
     "razao_social": "Padaria Trigo Bom Ltda.",
-    "cnpj": "13.769.729/0001-82",
+    "cnpj": "72.821.167/0001-37",
     "bloqueado": false,
     "motivo_bloqueio": ""
   },
   {
     "fornecedor_id": "F08",
     "razao_social": "Distribuidora Cerrado Alimentos Ltda.",
-    "cnpj": "62.833.783/0001-54",
+    "cnpj": "30.036.214/0001-92",
     "bloqueado": false,
     "motivo_bloqueio": ""
   },
   {
     "fornecedor_id": "F09",
     "razao_social": "Pet Amigo Comércio Ltda.",
-    "cnpj": "96.332.932/0001-13",
+    "cnpj": "77.067.000/0001-46",
     "bloqueado": false,
     "motivo_bloqueio": ""
   },
   {
     "fornecedor_id": "F10",
     "razao_social": "Limpeza Brilho Produtos Ltda.",
-    "cnpj": "53.194.517/0001-38",
+    "cnpj": "75.106.807/0001-15",
     "bloqueado": false,
     "motivo_bloqueio": ""
   },
   {
     "fornecedor_id": "F11",
     "razao_social": "Snacks Crocante Ltda.",
-    "cnpj": "93.339.323/0001-08",
+    "cnpj": "83.618.255/0001-53",
     "bloqueado": false,
     "motivo_bloqueio": ""
   },
   {
     "fornecedor_id": "F12",
     "razao_social": "Café Monte Alto Ltda.",
-    "cnpj": "09.891.615/0001-33",
+    "cnpj": "63.616.210/0001-32",
     "bloqueado": true,
     "motivo_bloqueio": "Pagamentos bloqueados pela diretoria até revisão de contrato"
   }
