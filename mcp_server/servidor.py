@@ -1,14 +1,16 @@
 """Servidor MCP do caso Já Chegou: as tools do agente de check antecipado.
 
 Leitura: notas pendentes, ordens, recebimentos, cadastro, fornecedores, notas já lançadas,
-pagamentos fora do fluxo e a régua de alçadas.
+pagamentos fora do fluxo e a régua de alçadas. Mais `comparar_itens`, que põe nota, ordem e contagem
+da doca lado a lado, item a item, e não classifica.
 Escrita: só `registrar_proposta`, que grava a proposta do agente em saidas/propostas.jsonl.
 
 Não existe tool para aprovar, pagar, baixar ou escrever no ERP. A trava fica no sistema, não só
 nas instruções do agente: `registrar_proposta` recusa encaminhamento abaixo do que a régua exige.
 
 Rodar sozinho (stdio):  uv run python mcp_server/servidor.py
-No Claude Code: o arquivo .mcp.json na raiz já aponta para este servidor.
+No Claude Code: o arquivo .mcp.json na raiz já aponta para este servidor, e o subagente
+`check-antecipado` (.claude/agents/) usa só as tools dele.
 """
 
 from __future__ import annotations
@@ -25,6 +27,7 @@ sys.path.insert(0, str(RAIZ))
 from mcp.server.mcpserver import MCPServer  # noqa: E402
 
 from jachegou.base import ACOES, CLASSIFICACOES, NIVEIS, Base  # noqa: E402
+from jachegou.comparar import comparar  # noqa: E402
 
 base = Base()
 SAIDAS = Path(os.environ.get("FDE_SAIDAS") or RAIZ / "saidas")
@@ -130,6 +133,19 @@ def buscar_notas_lancadas(fornecedor_id: str, numero: int | None = None, pedido:
 def buscar_pagamentos_fora_do_fluxo(fornecedor_id: str, destino: str | None = None) -> list[dict]:
     """Pagamentos feitos fora do fluxo do contas a pagar (pix ou boleto avulso das lojas), ainda sem nota vinculada."""
     return base.pagamentos_fora_do_fluxo(fornecedor_id, destino)
+
+
+@servidor.tool()
+def comparar_itens(nota_id: str) -> str:
+    """Põe lado a lado a nota, a ordem que ela cita e a contagem da doca (ou da loja), item a item.
+
+    Para cada código do fornecedor: quantidade e preço na nota, na ordem e na contagem, com as diferenças
+    de quantidade (nota − ordem, nota − doca) e de valor (nota − ordem). Mostra o fato e não classifica:
+    não converte caixa em unidade, não procura ordem quando a nota não cita pedido e não sugere ação."""
+    try:
+        return comparar(nota_id, base)
+    except KeyError as erro:
+        return erro.args[0]
 
 
 @servidor.tool()

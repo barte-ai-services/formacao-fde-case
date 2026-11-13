@@ -118,13 +118,29 @@ O kit de domingo já está aqui, menos o gabarito, que entra no domingo de manh�
 | `templates/` | Os modelos dos entregáveis dos checkpoints. |
 | `teams/` | Uma pasta por grupo, com nome, integrantes e o link do fork líder. |
 | `DOMINGO.md` | Como funciona o kit de domingo: o agente, as três skills, as tools e o eval. |
-| `agente/` | O agente de domingo: instruções, as três skills no formato Agent Skills (`agente/plugin/skills/`) e o script que roda no Claude Agent SDK. Veja o `DOMINGO.md` para editar e rodar. |
+| `.claude/agents/`, `.claude/skills/` | O agente de domingo, um subagente do Claude Code (`check-antecipado`), e as três skills dele no formato Agent Skills. Veja o `DOMINGO.md` para editar e rodar. |
 | `mcp_server/`, `jachegou/` | As tools do agente, expostas por MCP, e o acesso à base. |
 | `dados/` | A base sintética de domingo. O gabarito (`dados/gabarito/`) chega no domingo de manhã. |
 | `baseline/`, `eval/` | Regras simples sem IA para comparar, e o eval contra o gabarito. |
 | `saidas/` | Onde o agente e o baseline gravam as propostas. |
 | `scripts/` | Utilitários, como o verificador de setup `scripts/check_setup.py`. |
 | `tests/` | Os testes automáticos do repositório (`uv run pytest`). |
+
+## O agente de domingo
+
+O agente é um subagente do Claude Code e roda com o login da sua conta no Claude Code, sem chave da API. Numa nota, abra o Claude Code na raiz do repositório e peça:
+
+```
+use o subagente check-antecipado na nota NF-001
+```
+
+Nas 80 notas, peça ao Claude que use o subagente em cada nota pendente, ou rode um laço no terminal com `claude -p --agent check-antecipado`. A proposta de cada nota vai para `saidas/propostas.jsonl`, e o eval continua o mesmo:
+
+```bash
+uv run python eval/avaliar.py saidas/propostas.jsonl --comparar saidas/baseline.jsonl --erros
+```
+
+O passo a passo, com o laço, está no [`DOMINGO.md`](DOMINGO.md#como-rodar).
 
 ## Comandos do dia a dia
 

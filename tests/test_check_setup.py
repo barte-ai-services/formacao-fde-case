@@ -190,14 +190,14 @@ def test_default_runner_returns_output_or_none():
     assert check_setup.run_command(["formacao-fde-no-such-command"]) is None
 
 
-def test_env_file_is_ignored_and_example_declares_the_variables():
-    """#15/AC-5: .gitignore ignores .env and .env.example declares ANTHROPIC_API_KEY and AGENT_MODEL."""
+def test_env_file_is_ignored_and_example_asks_for_no_key():
+    """#15/AC-5: .gitignore ignores .env; the agent runs with the Claude Code login, so .env.example declares no variable."""
     ignored = (ROOT / ".gitignore").read_text(encoding="utf-8").splitlines()
     assert ".env" in [line.strip() for line in ignored]
 
     example = (ROOT / ".env.example").read_text(encoding="utf-8").splitlines()
     keys = {line.split("=", 1)[0] for line in example if "=" in line and not line.startswith("#")}
-    assert {"ANTHROPIC_API_KEY", "AGENT_MODEL"} <= keys
+    assert keys == set()
 
 
 def test_every_setup_section_the_checker_points_to_exists():
@@ -215,10 +215,8 @@ def test_every_setup_section_the_checker_points_to_exists():
     assert pointers <= headings, pointers - headings
 
 
-def test_suite_runs_offline_without_an_api_key(monkeypatch):
+def test_suite_runs_offline_without_an_api_key():
     """#15/AC-1: pytest collects only tests/, no test imports anthropic at module level, and no key is needed."""
-    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
-
     pyproject = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     assert pyproject["tool"]["pytest"]["ini_options"]["testpaths"] == ["tests"]
 

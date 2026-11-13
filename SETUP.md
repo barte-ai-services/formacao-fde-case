@@ -147,7 +147,7 @@ Depois, crie o seu arquivo de configuração local a partir do exemplo:
 cp .env.example .env
 ```
 
-O `.env` guarda a chave da API (`ANTHROPIC_API_KEY`) e o modelo do agente (`AGENT_MODEL`). Os organizadores vão passar as orientações de como obter a chave. **Nunca** coloque o `.env` num commit: ele já está no `.gitignore`.
+O agente de domingo não precisa de chave da API: ele roda dentro do Claude Code, com o login da sua conta. O `.env` fica para alguma credencial que o seu grupo precise guardar. **Nunca** coloque o `.env` num commit: ele já está no `.gitignore`.
 
 Para conferir que o projeto está de pé, rode os testes:
 

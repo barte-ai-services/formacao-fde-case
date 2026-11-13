@@ -9,7 +9,22 @@ Ponto de partida. O grupo completa esta skill com a camada de contexto de sábad
 
 ## Objetivo
 
-Dizer se a nota bate com a ordem e com o que chegou (`match`) ou em qual das 8 exceções ela cai. Os códigos estão em [references/excecoes.md](references/excecoes.md).
+Dizer se a nota bate com a ordem e com o que chegou (`match`) ou em qual das 8 exceções ela cai.
+
+## As 8 exceções
+
+| Código | Exceção |
+| --- | --- |
+| E1 | Falta física |
+| E2 | Item trocado |
+| E3 | Quantidade menor |
+| E4 | Unidade de medida |
+| E5 | Nota sem ordem |
+| E6 | Duplicidade |
+| E7 | Pago fora do fluxo |
+| E8 | Item sem cadastro |
+
+<!-- A completar pelo grupo: o que cada exceção quer dizer na Já Chegou, com um exemplo da base. -->
 
 ## Como decidir
 
@@ -17,11 +32,7 @@ Dizer se a nota bate com a ordem e com o que chegou (`match`) ou em qual das 8 e
 - Compare a nota com a contagem da doca ou da loja.
 - Escolha uma classificação só.
 
-Para ver os itens lado a lado, rode o comparador na nota em análise (troque `NF-001` pelo `nota_id` dela). Ele mostra o fato (nota, ordem e contagem, com as diferenças de quantidade e valor) e não classifica:
-
-```bash
-uv run python ${CLAUDE_SKILL_DIR}/scripts/comparar_itens.py NF-001
-```
+Para ver os itens lado a lado, chame a tool `comparar_itens` do `ja-chegou` com o `nota_id` da nota em análise. Ela mostra o fato (nota, ordem e contagem, com as diferenças de quantidade e valor) e não classifica.
 
 <!-- A completar pelo grupo:
 - o que conta como "mesma compra" para a duplicidade;

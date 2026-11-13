@@ -1,4 +1,4 @@
-"""Testes da base de domingo e do servidor MCP. Offline: não chamam a API. O agente está em test_agente.py."""
+"""Testes da base de domingo e do servidor MCP. Offline: não chamam a API. O subagente e as skills estão em test_subagente.py."""
 
 from __future__ import annotations
 
@@ -82,7 +82,7 @@ def test_servidor_mcp_expoe_as_tools_e_trava_a_regua(tmp_path, monkeypatch):
     async def rodar():
         async with Client(mod.servidor) as c:
             nomes = {t.name for t in (await c.list_tools()).tools}
-            assert {"ler_nota", "ler_ordem", "ler_recebimento", "consultar_cadastro", "registrar_proposta"} <= nomes
+            assert {"ler_nota", "ler_ordem", "ler_recebimento", "consultar_cadastro", "comparar_itens", "registrar_proposta"} <= nomes
             assert not any(p in n for n in nomes for p in ("aprovar", "pagar", "baixar"))
             nota = json.loads((await c.call_tool("ler_nota", {"nota_id": "NF-001"})).content[0].text)
             assert nota["nota_id"] == "NF-001"

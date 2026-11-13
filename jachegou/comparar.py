@@ -1,27 +1,15 @@
 """Põe lado a lado a nota, a ordem e a contagem da doca de uma nota, item a item.
 
-Mostra o fato e não classifica: imprime, para cada código do fornecedor, a quantidade e o preço
-na nota, na ordem e na contagem, com as diferenças de quantidade e de valor. Não converte caixa
-em unidade e não sugere ação. Lê só a base operacional em `dados/` (por `jachegou.base`), nunca
-o gabarito.
+Mostra o fato e não classifica: para cada código do fornecedor, a quantidade e o preço na nota, na
+ordem e na contagem, com as diferenças de quantidade e de valor. Não converte caixa em unidade e não
+sugere ação. Lê só a base operacional (por `jachegou.base`), nunca o gabarito.
 
-A raiz do repositório é a primeira pasta acima com `jachegou/`, ou a pasta atual; assim o plugin
-pode ser copiado para outro lugar (`--skills <pasta>`, no DOMINGO.md) e o script roda da raiz.
-
-Uso:
-    uv run python agente/plugin/skills/classificar/scripts/comparar_itens.py NF-001
+O agente usa isto pela tool `comparar_itens` do servidor MCP `ja-chegou`.
 """
 
 from __future__ import annotations
 
-import argparse
-import sys
-from pathlib import Path
-
-RAIZ = next((p for p in Path(__file__).resolve().parents if (p / "jachegou").is_dir()), Path.cwd())
-sys.path.insert(0, str(RAIZ))
-
-from jachegou.base import Base  # noqa: E402
+from jachegou.base import Base
 
 VAZIO = "—"
 OUTRA_UNIDADE = "unidades diferentes"
@@ -123,6 +111,7 @@ def formatar(nota: dict, rotulo_ordem: str, recebimento: dict | None, linhas: li
 
 
 def comparar(nota_id: str, base: Base | None = None) -> str:
+    """A tabela item a item da nota. Levanta KeyError se a nota não existe."""
     base = base or Base()
     nota = base.notas.get(nota_id)
     if nota is None:
@@ -130,19 +119,3 @@ def comparar(nota_id: str, base: Base | None = None) -> str:
     recebimento = base.recebimento_da_nota(nota)
     ordem, rotulo = localizar_ordem(base, nota, recebimento)
     return formatar(nota, rotulo, recebimento, linhas_por_item(nota, ordem, recebimento))
-
-
-def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="Nota, ordem e contagem da doca lado a lado, item a item")
-    ap.add_argument("nota_id", help="a nota, por exemplo NF-001")
-    args = ap.parse_args(argv)
-    try:
-        print(comparar(args.nota_id))
-    except KeyError as erro:
-        print(erro.args[0], file=sys.stderr)
-        return 1
-    return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())

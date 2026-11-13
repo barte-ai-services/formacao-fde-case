@@ -8,8 +8,9 @@ Um agente com três skills no check antecipado da Já Chegou: ele confronta a no
 | --- | --- |
 | `dados/` | Base sintética: 80 notas pendentes, ordens, recebimentos, cadastro, fornecedores, notas já lançadas, pagamentos fora do fluxo e a régua de alçadas |
 | `dados/gabarito/` | A resposta certa de cada nota, usada só pelo eval. Chega no domingo de manhã |
-| `mcp_server/` | As tools do agente, expostas por MCP |
-| `agente/` | O agente: as instruções (`instrucoes.md`), as três skills (`plugin/skills/`) e o script que roda no Claude Agent SDK (`rodar_agente.py`) |
+| `mcp_server/` | As tools do agente, expostas por MCP (o servidor `ja-chegou`) |
+| `.claude/agents/check-antecipado.md` | O agente: um subagente do Claude Code. O frontmatter diz as tools e as skills; o corpo é o prompt de sistema |
+| `.claude/skills/` | As três skills, no formato Agent Skills |
 | `baseline/` | Regras simples, sem IA, para comparar |
 | `eval/` | Mede as propostas contra o gabarito |
 
@@ -25,45 +26,83 @@ As skills são um ponto de partida. O trabalho do grupo é completá-las com a c
 
 ### Onde ficam e como editar
 
-Cada skill segue o formato [Agent Skills](https://code.claude.com/docs/en/skills) da Anthropic: uma pasta com um `SKILL.md`, e ao lado o que ela usa sob demanda. As três vivem num plugin local, `agente/plugin/`, que o agente carrega por caminho explícito:
+Cada skill segue o formato [Agent Skills](https://code.claude.com/docs/en/skills) da Anthropic: uma pasta com um `SKILL.md`. As três ficam nas skills do projeto, em `.claude/skills/`:
 
 ```
-agente/plugin/
-├── .claude-plugin/plugin.json          # o plugin "domingo"
+.claude/
+├── agents/
+│   └── check-antecipado.md         # o subagente: frontmatter + prompt de sistema
 └── skills/
-    ├── classificar/
-    │   ├── SKILL.md
-    │   ├── references/excecoes.md      # os códigos das 8 exceções
-    │   └── scripts/comparar_itens.py   # nota, ordem e contagem da doca lado a lado
+    ├── classificar/SKILL.md
     ├── propor-acao-na-doca/SKILL.md
     └── encaminhar/SKILL.md
 ```
 
-- O `SKILL.md` abre com um frontmatter YAML: `name` (o nome da pasta) e `description`. O modelo só vê o nome e a descrição de cada skill até decidir usar uma; aí carrega o `SKILL.md` inteiro. Por isso a descrição diz o que a skill faz e quando usar.
-- O corpo do `SKILL.md` é a regra que vocês escrevem. O que for longo (tabelas, exemplos, casos-limite) vai para `references/`, citado no `SKILL.md`, e o modelo lê quando precisa.
-- O que é cálculo e não julgamento vai para `scripts/`. O comparador da skill `classificar` mostra o fato e não classifica; rode-o sozinho para ver o que o agente vê:
+- O `SKILL.md` abre com um frontmatter YAML: `name` (o nome da pasta) e `description`, que diz o que a skill faz e quando usar. O corpo é a regra que vocês escrevem.
+- O subagente carrega as três já no começo, pelo campo `skills` do frontmatter: o conteúdo inteiro de cada `SKILL.md` entra no contexto dele.
+- O subagente não tem `Read` nem `Bash`. Por isso tudo o que a skill precisa saber fica no próprio `SKILL.md`: uma pasta `references/` ao lado não seria lida.
+- O que é cálculo e não julgamento vira tool do `ja-chegou`. A `comparar_itens` põe nota, ordem e contagem da doca lado a lado, item a item, com as diferenças de quantidade e valor. Ela mostra o fato e não classifica.
 
-```bash
-uv run python agente/plugin/skills/classificar/scripts/comparar_itens.py NF-001
-```
+### O agente
 
-Para testar outra versão sem apagar a de vocês, copie `agente/plugin/` para outra pasta e rode com `--skills <pasta>`.
+O agente é o arquivo `.claude/agents/check-antecipado.md`, um [subagente do Claude Code](https://code.claude.com/docs/en/sub-agents):
+
+- **O corpo é o prompt de sistema.** Para mudar como o agente trabalha, editem o texto depois do frontmatter.
+- **`tools` libera só as tools do `ja-chegou`** (`mcp__ja-chegou__*`). Sem `Read`, `Bash`, `Write`, `Edit`, `Glob` e `Grep`, o agente não abre arquivo nenhum, nem `dados/gabarito/`. A única escrita é `registrar_proposta`.
+- **`skills` carrega as três skills.** O agente não tem a tool `Skill`, então não invoca outras skills do projeto, da sua conta ou dos plugins.
+- **`model` é o modelo do agente** (`sonnet`).
+
+Não deixem de fora nenhum desses campos ao editar: é o frontmatter que segura os guardrails.
 
 ## Como rodar
 
-```bash
-cp .env.example .env                     # preencha ANTHROPIC_API_KEY
-uv sync
+Tudo roda com o **login da sua conta no Claude Code**: não há chave da API para configurar. Rode os comandos na raiz do repositório.
 
-uv run python baseline/regras.py          # 1. o que regras simples conseguem
-uv run python agente/rodar_agente.py --nota NF-001 --verbose      # 2. o agente numa nota (mostra cada tool e cada skill invocada)
-uv run python agente/rodar_agente.py --todas --origem grupo-1     # 3. nas 80 notas
+Antes de tudo, o baseline, para saber o número a bater:
+
+```bash
+uv sync
+uv run python baseline/regras.py
+```
+
+### O agente numa nota
+
+Abra o Claude Code na raiz do repositório (`claude`). Na primeira vez, ele pergunta se pode usar o servidor `ja-chegou` do `.mcp.json`: aprove. Depois peça:
+
+```
+use o subagente check-antecipado na nota NF-001
+```
+
+O Claude despacha o subagente, que lê a nota pelas tools do `ja-chegou`, aplica as três skills e termina com `registrar_proposta`. Quando ele pedir permissão para usar uma tool do `ja-chegou`, aprove. Para conferir o que o subagente tem, rode `/agents`.
+
+### O agente nas 80 notas
+
+De dentro do Claude Code, peça:
+
+```
+liste as notas pendentes com listar_notas_pendentes e use o subagente check-antecipado em cada uma, uma nota por vez
+```
+
+Ou, no terminal, um laço com `claude -p --agent check-antecipado`. Cada nota roda numa sessão própria, com o subagente no lugar do Claude Code. `--allowedTools` libera as tools do `ja-chegou` sem perguntar, já que no `-p` não há ninguém para aprovar:
+
+```bash
+for nota in $(uv run python -c "from jachegou.base import Base; print(*Base().notas)"); do
+  claude -p --agent check-antecipado --allowedTools "mcp__ja-chegou__*" \
+    "Faça o check antecipado da nota $nota e registre a proposta com registrar_proposta."
+done
+```
+
+Para testar antes num pedaço, troque `print(*Base().notas)` por `print(*list(Base().notas)[:10])`.
+
+### Medir
+
+`registrar_proposta` grava cada proposta em `saidas/propostas.jsonl`. O eval e o baseline são os mesmos de sempre:
+
+```bash
 uv run python eval/avaliar.py saidas/propostas.jsonl --comparar saidas/baseline.jsonl --erros
 ```
 
-O agente roda no [Claude Agent SDK](https://code.claude.com/docs/en/agent-sdk/overview) (`claude-agent-sdk`): o mesmo laço do Claude Code, com `agente/instrucoes.md` como prompt de sistema, o servidor MCP `ja-chegou` por stdio e as três skills do plugin. O modelo vem de `AGENT_MODEL` (padrão `claude-sonnet-5-5`). As opções `--limite`, `--saida`, `--origem` e `--skills` continuam valendo.
-
-No Claude Code, o `.mcp.json` da raiz já registra o servidor `ja-chegou`: dá para conversar com os dados e testar uma skill antes de rodar o lote.
+O arquivo acumula: se a mesma nota tiver mais de uma proposta, vale a última. Para medir uma versão nova das skills do zero, renomeie ou apague `saidas/propostas.jsonl` antes de rodar o lote.
 
 ## A base
 
@@ -97,6 +136,5 @@ As regras simples acertam falta, troca e quantidade menor. Erram onde o sentido 
 - Não existe tool para aprovar, pagar, baixar ou escrever no ERP. A única escrita é `registrar_proposta`.
 - `registrar_proposta` recusa encaminhamento abaixo do que a régua exige para a classificação informada. A trava fica no sistema, não só no prompt. A recusa não diz qual é o mínimo, e fica gravada no arquivo de propostas: o eval mostra o encaminhamento na primeira tentativa, e não só no que passou depois de recusado.
 - O servidor nunca lê `dados/gabarito/`.
-- O agente roda isolado do repositório: `setting_sources=[]` não carrega o `.claude/settings.json` (nem os plugins que ele habilita) nem o `CLAUDE.md`, e o MCP é só o `ja-chegou` (`strict_mcp_config`). As skills entram por caminho explícito, pelo plugin local.
-- As ferramentas do agente são só as tools do `ja-chegou`, `Skill`, `Read` e `Bash`, sem pedir permissão a ninguém (`permission_mode="dontAsk"`): o que não está liberado é negado.
-- Um hook `PreToolUse` em `agente/rodar_agente.py` nega por padrão: do disco, o agente só lê os arquivos do plugin (as references das skills), e os dados chegam pelas tools do `ja-chegou`. Assim nem `dados/gabarito/` nem o `.env` são lidos, nem pelo `Bash`, que só roda o comparador de itens numa nota. Escrita, só em `saidas/`.
+- As ferramentas do subagente são só as tools do `ja-chegou` (`tools: mcp__ja-chegou__*`). Sem `Read`, `Bash`, `Write`, `Edit`, `Glob` e `Grep`, ele não lê `dados/gabarito/` nem o `.env`, e não escreve fora de `saidas/`.
+- As skills entram pelo campo `skills` do frontmatter. Sem a tool `Skill`, o subagente não carrega as outras skills do projeto, da sua conta ou dos plugins do `.claude/settings.json`.

@@ -123,25 +123,6 @@ wheels = [
 ]
 
 [[package]]
-name = "claude-agent-sdk"
-version = "0.2.181"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "anyio" },
-    { name = "jsonschema" },
-    { name = "mcp" },
-    { name = "sniffio" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/74/65/ce3634d2d84dc03d0212ee6f4fc86f67be714e2ad836a1791c5d488f0e4f/claude_agent_sdk-0.2.181.tar.gz", hash = "sha256:1d99a9903a37eaf5c8b0ce0a3f7aab218e68011283d74b13091b54d1e0de0877", size = 405842, upload-time = "2026-11-12T23:09:43.05Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/0b/35/e9c185a64268d69a6066555f79d29096c8f3ee7c260dfb7023f6a927625f/claude_agent_sdk-0.2.181-py3-none-macosx_11_0_arm64.whl", hash = "sha256:3cd4a8fdb9115369142a1eef68fdb0f5e590c64eda374880cb1eeac59f8a28ea", size = 148446429, upload-time = "2026-11-12T23:09:50.182Z" },
-    { url = "https://files.pythonhosted.org/packages/b5/7c/5eaf92b1b1a649fe85a2db18bee7fdb250513a5f182abafea5aabccfe1fc/claude_agent_sdk-0.2.181-py3-none-macosx_11_0_x86_64.whl", hash = "sha256:5da8b0a4d3e70c49d5bf404999913e0e3f0dd36155f2b583f24f7ed94919b332", size = 156047728, upload-time = "2026-11-12T23:09:57.881Z" },
-    { url = "https://files.pythonhosted.org/packages/32/85/e614179d85ee9c20bf03715d183995bc24ea61d58b76467f629ad1c4b626/claude_agent_sdk-0.2.181-py3-none-manylinux_2_17_aarch64.whl", hash = "sha256:5047fd13b58659aa07c1128d5a44798a65df39dafc53e2d793c0fdd16bfb91b0", size = 159628324, upload-time = "2026-11-12T23:10:06.067Z" },
-    { url = "https://files.pythonhosted.org/packages/6c/c5/0920f34ef64781c452772021b94f11d96a88953497f2e98c64deb62a0033/claude_agent_sdk-0.2.181-py3-none-manylinux_2_17_x86_64.whl", hash = "sha256:9fad1f5cca72daaf4b6585e8e47e5f8f74b01a10564b742f9f10bf0003b0f6a1", size = 159978948, upload-time = "2026-11-12T23:10:13.866Z" },
-    { url = "https://files.pythonhosted.org/packages/c3/f6/3497ce1e99350d2cd06ae02137a620c7830571691c533a2912dc9659b071/claude_agent_sdk-0.2.181-py3-none-win_amd64.whl", hash = "sha256:254d6361e9f698bd5382c2ecd03778602ae0a6be4a09d1f309c71c2a04674367", size = 162415390, upload-time = "2026-11-12T23:10:21.927Z" },
-]
-
-[[package]]
 name = "click"
 version = "8.5.1"
 source = { registry = "https://pypi.org/simple" }
@@ -227,9 +208,7 @@ name = "formacao-fde-case"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "claude-agent-sdk" },
     { name = "mcp" },
-    { name = "python-dotenv" },
 ]
 
 [package.dev-dependencies]
@@ -238,11 +217,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "claude-agent-sdk", specifier = ">=0.2.181" },
-    { name = "mcp", specifier = ">=2.3" },
-    { name = "python-dotenv", specifier = ">=1.2.4" },
-]
+requires-dist = [{ name = "mcp", specifier = ">=2.3" }]
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest", specifier = ">=9.2.0" }]
@@ -581,15 +556,6 @@ wheels = [
 ]
 
 [[package]]
-name = "python-dotenv"
-version = "1.2.4"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/74/26/2fbeedb218a787a5eea551c7532cac4e009f83d689dd2faa0d0353473f86/python_dotenv-1.2.4.tar.gz", hash = "sha256:f0d53e69935a851c0dcc78f3ab7aaccd8cabef0b92382b576b824212902873c0", size = 60824, upload-time = "2026-10-01T05:36:10Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/60/d1/38f3a3405989a89ac18390803e70c6ad7c7760da4f9b83cbeca0c44a0c72/python_dotenv-1.2.4-py3-none-any.whl", hash = "sha256:42269a8a5b3fd54ffa6f3d84b18abed50064717576b4ecf03dc4a55d8aa04fdc", size = 23266, upload-time = "2026-10-01T05:36:08.633Z" },
-]
-
-[[package]]
 name = "python-multipart"
 version = "0.0.33"
 source = { registry = "https://pypi.org/simple" }
@@ -737,15 +703,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/ba/a5/9672e532fe02cd3b92c78cfd8743abca939d96853006c63835009a1ecb6f/rpds_py-2026.9.1-pp312-pypy312_pp73-musllinux_1_2_x86_64.whl", hash = "sha256:6b9bf3135b4ad5981df9a73d71a35272d650a2985ae9c2746357b24d59de2448", size = 591126, upload-time = "2026-10-04T16:32:29.274Z" },
     { url = "https://files.pythonhosted.org/packages/80/ef/3a9f8e4279c7920af561deed4cb7ebebed2794a8f608cf404d5eef14a105/rpds_py-2026.9.1-pp312-pypy312_pp80-macosx_10_12_x86_64.whl", hash = "sha256:56c6952a9b15047466d0c2347c446a761d4527f89976156341e68f0ce5cc08b0", size = 357108, upload-time = "2026-10-04T16:32:31.641Z" },
     { url = "https://files.pythonhosted.org/packages/b7/55/4b2fa381a583760aea5c92841e4e928a358e1c6511b129219e9c2826a226/rpds_py-2026.9.1-pp312-pypy312_pp80-macosx_11_0_arm64.whl", hash = "sha256:b242c27c8f836305a4a72df9cdd564386ac57b807bd252a063223331c9316b37", size = 346877, upload-time = "2026-10-04T16:32:34.061Z" },
-]
-
-[[package]]
-name = "sniffio"
-version = "1.3.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/a2/87/a6771e1546d97e7e041b6ae58d80074f81b7d5121207425c964ddf5cfdbd/sniffio-1.3.1.tar.gz", hash = "sha256:f4324edc670a0f49750a81b895f35c3adb843cca46f0530f79fc1babb23789dc", size = 20372, upload-time = "2024-02-25T23:20:04.057Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/e9/44/75a9c9421471a6c4805dbf2356f7c181a29c1879239abab1ea2cc8f38b40/sniffio-1.3.1-py3-none-any.whl", hash = "sha256:2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2", size = 10235, upload-time = "2024-02-25T23:20:01.196Z" },
 ]
 
 [[package]]
