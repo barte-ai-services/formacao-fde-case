@@ -89,6 +89,26 @@ def test_agente_nao_carrega_os_claude_md():
     assert campos.get("omitClaudeMd") == "true"
 
 
+LACO = (
+    'claude -p "Use o subagente auditor-de-notas para fazer o check antecipado da nota $nota e registrar a proposta." \\\n'
+    '    --allowedTools "Agent(auditor-de-notas)" "mcp__ja-chegou__*"'
+)
+
+
+def test_laco_despacha_o_subagente_de_uma_sessao_normal():
+    """O laço usa o caminho documentado: a sessão despacha o subagente, com o pedido antes do --allowedTools."""
+    texto = (RAIZ / "DOMINGO.md").read_text(encoding="utf-8")
+    assert LACO in texto
+    comando = LACO.replace("\\\n", " ")
+    assert comando.index('-p "') < comando.index("--allowedTools"), "--allowedTools aceita uma lista e engoliria o pedido"
+
+
+@pytest.mark.parametrize("arquivo", ["DOMINGO.md", "README.md"])
+def test_documentacao_nao_roda_o_agente_como_sessao_principal(arquivo):
+    """Com --agent, o preload das skills na sessão principal não está documentado; o laço não depende dele."""
+    assert "--agent" not in (RAIZ / arquivo).read_text(encoding="utf-8")
+
+
 def test_mcp_json_passa_origem_e_arquivo_ao_servidor():
     """O laço do DOMINGO.md troca o rótulo e o arquivo das propostas por variável de ambiente."""
     import json

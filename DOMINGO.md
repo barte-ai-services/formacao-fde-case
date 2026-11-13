@@ -51,7 +51,7 @@ O agente é o arquivo `.claude/agents/auditor-de-notas.md`, um [subagente do Cla
 - **`tools` libera só as tools do `ja-chegou`** (`mcp__ja-chegou__*`). Sem `Read`, `Bash`, `Write`, `Edit`, `Glob` e `Grep`, o agente não abre arquivo nenhum, nem `dados/gabarito/`. A única escrita é `registrar_proposta`.
 - **`skills` carrega as três skills.** O agente não tem a tool `Skill`, então não invoca outras skills do projeto, da sua conta ou dos plugins.
 - **`model` é o modelo do agente** (`sonnet`).
-- **`omitClaudeMd: true`** deixa de fora do contexto do subagente o `CLAUDE.md` do repositório e o da sua conta.
+- **`omitClaudeMd: true`** deixa de fora do contexto do subagente, quando ele é despachado, o `CLAUDE.md` do repositório e o da sua conta.
 
 Não deixem de fora nenhum desses campos ao editar: é o frontmatter que segura os guardrails.
 
@@ -76,21 +76,22 @@ use o subagente auditor-de-notas na nota NF-001
 
 O Claude despacha o subagente, que lê a nota pelas tools do `ja-chegou`, aplica as três skills e termina com `registrar_proposta`. Quando ele pedir permissão para usar uma tool do `ja-chegou`, aprove. Para conferir o que o subagente tem, rode `/agents`: ele deve mostrar as tools do `ja-chegou` e as três skills.
 
-Este caminho é para explorar uma nota. Quem escreve o pedido ao subagente é a sessão principal do Claude Code, que lê arquivos, inclusive `dados/gabarito/` quando ele estiver no repositório. Para medir, use o laço abaixo.
+Quem escreve o pedido ao subagente é a sessão principal do Claude Code, que lê arquivos, inclusive `dados/gabarito/` quando ele estiver no repositório. O subagente só recebe esse pedido.
 
 ### O agente nas 80 notas
 
-No terminal, um laço com `claude -p --agent auditor-de-notas`. Cada nota roda numa sessão própria, e a sessão inteira é o subagente: as mesmas tools, as mesmas skills e o mesmo prompt. É este o caminho que vale para o eval.
+No terminal, um laço com `claude -p`. Cada nota roda numa sessão própria, e cada sessão despacha o subagente `auditor-de-notas` uma vez, do mesmo jeito que na conversa. É este o caminho que vale para o eval.
 
 ```bash
 for nota in $(uv run python -c "from jachegou.base import Base; print(*Base().notas)"); do
-  claude -p "Faça o check antecipado da nota $nota e registre a proposta com registrar_proposta." \
-    --agent auditor-de-notas --allowedTools "mcp__ja-chegou__*"
+  claude -p "Use o subagente auditor-de-notas para fazer o check antecipado da nota $nota e registrar a proposta." \
+    --allowedTools "Agent(auditor-de-notas)" "mcp__ja-chegou__*"
 done
 ```
 
 - **O pedido vem logo depois do `-p`.** `--allowedTools` aceita uma lista; o que vier depois dele seria lido como mais uma tool.
-- **`--allowedTools` libera as tools do `ja-chegou` sem perguntar**, já que no `-p` não há ninguém para aprovar.
+- **`Agent(auditor-de-notas)` libera sem perguntar o despacho deste subagente**, e de nenhum outro. No `-p` não há ninguém para aprovar: o que pede aprovação e não está na lista é negado.
+- **`mcp__ja-chegou__*` libera as tools do `ja-chegou` sem perguntar**, para o subagente ler a nota e registrar a proposta.
 - **No `-p`, o Claude Code carrega o servidor `ja-chegou` do `.mcp.json` sem pedir aprovação.**
 - **Para testar antes num pedaço**, troque `print(*Base().notas)` por `print(*list(Base().notas)[:10])`.
 - **Para rotular as propostas ou gravar noutro arquivo**, ponha as variáveis antes do laço: `export FDE_ORIGEM=grupo-1 FDE_ARQUIVO_PROPOSTAS=propostas-v2.jsonl`. O `.mcp.json` as repassa ao servidor.
@@ -141,5 +142,6 @@ As regras simples acertam falta, troca e quantidade menor. Erram onde o sentido 
 - O servidor nunca lê `dados/gabarito/`.
 - As ferramentas do subagente são só as tools do `ja-chegou` (`tools: mcp__ja-chegou__*`). Sem `Read`, `Bash`, `Write`, `Edit`, `Glob` e `Grep`, ele não lê `dados/gabarito/` nem o `.env`, e não escreve fora de `saidas/`.
 - As skills entram pelo campo `skills` do frontmatter. Sem a tool `Skill`, o subagente não carrega as outras skills do projeto, da sua conta ou dos plugins do `.claude/settings.json`.
-- Despachado de dentro do Claude Code, o subagente começa sem os `CLAUDE.md` (`omitClaudeMd: true`). No laço com `--agent`, esse campo não vale: o `CLAUDE.md` do repositório e o da sua conta entram no contexto.
-- Só o laço com `--agent` mede o agente sozinho. Na conversa, a sessão principal tem as ferramentas de arquivo e escreve o pedido ao subagente.
+- O subagente começa sem os `CLAUDE.md` (`omitClaudeMd: true`), na conversa e no laço: nos dois, ele é despachado por uma sessão principal.
+- A sessão principal não é o subagente. Ela carrega o `CLAUDE.md` do repositório e o da sua conta, os plugins do `.claude/settings.json` e as tools dela, lê arquivos sem pedir aprovação e escreve o pedido ao subagente. O que o eval mede é o subagente com o pedido que essa sessão escreveu, e não o subagente sozinho.
+- No laço, a sessão principal também pode usar as tools do `ja-chegou`, porque `--allowedTools` as libera. O pedido manda usar o subagente, mas nada no laço obriga a sessão a fazer isso.
