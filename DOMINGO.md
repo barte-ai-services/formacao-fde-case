@@ -99,4 +99,4 @@ As regras simples acertam falta, troca e quantidade menor. Erram onde o sentido 
 - O servidor nunca lê `dados/gabarito/`.
 - O agente roda isolado do repositório: `setting_sources=[]` não carrega o `.claude/settings.json` (nem os plugins que ele habilita) nem o `CLAUDE.md`, e o MCP é só o `ja-chegou` (`strict_mcp_config`). As skills entram por caminho explícito, pelo plugin local.
 - As ferramentas do agente são só as tools do `ja-chegou`, `Skill`, `Read` e `Bash`, sem pedir permissão a ninguém (`permission_mode="dontAsk"`): o que não está liberado é negado.
-- Um hook `PreToolUse` em `agente/rodar_agente.py` nega qualquer leitura de `dados/gabarito/` e do `.env` (inclusive pelo `Bash`), qualquer escrita fora de `saidas/`, e qualquer `Bash` que não seja o comparador de itens numa nota.
+- Um hook `PreToolUse` em `agente/rodar_agente.py` nega por padrão: do disco, o agente só lê os arquivos do plugin (as references das skills), e os dados chegam pelas tools do `ja-chegou`. Assim nem `dados/gabarito/` nem o `.env` são lidos, nem pelo `Bash`, que só roda o comparador de itens numa nota. Escrita, só em `saidas/`.

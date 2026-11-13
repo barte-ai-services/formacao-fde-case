@@ -15,7 +15,9 @@ import argparse
 import sys
 from pathlib import Path
 
-RAIZ = Path(__file__).resolve().parents[5]
+# A raiz do repositório é a primeira pasta acima com jachegou/; assim o plugin pode ser copiado
+# para outro lugar (DOMINGO.md, "--skills <pasta>") e o script roda da raiz do repositório.
+RAIZ = next((p for p in Path(__file__).resolve().parents if (p / "jachegou").is_dir()), Path.cwd())
 sys.path.insert(0, str(RAIZ))
 
 from jachegou.base import Base  # noqa: E402
@@ -39,16 +41,15 @@ def _centavos(valor: float) -> float:
 
 
 def localizar_ordem(base: Base, nota: dict, recebimento: dict | None) -> tuple[dict | None, str]:
-    """A ordem citada pela nota ou, sem ela, a ordem ligada ao recebimento. Não procura outras."""
+    """Só a ordem que a nota cita. Sem pedido na nota, não compara com ordem nenhuma: diz o fato."""
     pedido = nota.get("pedido_referenciado")
     if pedido:
         ordem = base.ordens.get(pedido)
         return ordem, f"{pedido} (citada na nota)" if ordem else f"{pedido} (citada na nota, não encontrada)"
-    if recebimento and recebimento.get("ordem_id"):
-        ordem = base.ordens.get(recebimento["ordem_id"])
-        if ordem:
-            return ordem, f"{recebimento['ordem_id']} (ligada ao recebimento; a nota não cita pedido)"
-    return None, "nenhuma (a nota não cita pedido e o recebimento não aponta ordem)"
+    aponta = (recebimento or {}).get("ordem_id")
+    if aponta:
+        return None, f"a nota não cita pedido (o recebimento registra {aponta}; não comparado)"
+    return None, "a nota não cita pedido (o recebimento não registra ordem)"
 
 
 def linhas_por_item(nota: dict, ordem: dict | None, recebimento: dict | None) -> list[dict]:

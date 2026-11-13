@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import json
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -28,8 +29,6 @@ PLUGIN = RAIZ / "agente" / "plugin"
 SKILLS = ["classificar", "propor-acao-na-doca", "encaminhar"]
 COMPARADOR = PLUGIN / "skills" / "classificar" / "scripts" / "comparar_itens.py"
 
-
-# ---------- as skills ----------
 
 def _frontmatter(caminho: Path) -> dict[str, str]:
     texto = caminho.read_text(encoding="utf-8")
@@ -59,8 +58,6 @@ def test_plugin_tem_manifesto_e_so_as_tres_skills():
     assert not (RAIZ / "agente" / "skills").exists(), "as skills antigas em .md soltas foram removidas"
 
 
-# ---------- o comparador ----------
-
 def _comparar(nota_id: str) -> subprocess.CompletedProcess:
     return subprocess.run([sys.executable, str(COMPARADOR), nota_id], capture_output=True, text=True, cwd=RAIZ, check=False)
 
@@ -84,6 +81,24 @@ def test_comparador_nao_converte_unidade_nem_classifica():
     assert not re.search(r"\b(E[1-8]|match|receber|recusar|regra|analista|coordenacao|diretoria|bloqueio)\b", r.stdout)
 
 
+def test_comparador_sem_pedido_na_nota_nao_compara_com_ordem():
+    """O que fazer quando a nota não cita o pedido é do grupo: o comparador só diz o fato."""
+    r = _comparar("NF-007")
+    assert r.returncode == 0, r.stderr
+    assert "Ordem: a nota não cita pedido" in r.stdout
+    assert all("| — |" in x for x in r.stdout.splitlines() if x.startswith("| F"))
+
+
+def test_comparador_roda_de_uma_copia_do_plugin(tmp_path):
+    """DOMINGO.md sugere copiar o plugin para testar outra versão: o script acha a raiz mesmo assim."""
+    copia = tmp_path / "plugin-v2"
+    shutil.copytree(PLUGIN, copia)
+    script = copia / "skills" / "classificar" / "scripts" / "comparar_itens.py"
+    r = subprocess.run([sys.executable, str(script), "NF-002"], capture_output=True, text=True, cwd=RAIZ, check=False)
+    assert r.returncode == 0, r.stderr
+    assert "Ordem: OC-2026-41937" in r.stdout
+
+
 def test_comparador_recusa_nota_inexistente():
     r = _comparar("NF-999")
     assert r.returncode == 1
@@ -93,8 +108,6 @@ def test_comparador_recusa_nota_inexistente():
 def test_comparador_nao_le_o_gabarito():
     assert "gabarito/" not in COMPARADOR.read_text(encoding="utf-8")
 
-
-# ---------- as opções do SDK ----------
 
 def test_opcoes_do_sdk_tem_as_tres_skills_o_mcp_e_nenhuma_setting_do_disco():
     """#40/AC-3 e AC-4: plugin local com as três skills, MCP ja-chegou por stdio, setting_sources=[]."""
@@ -113,7 +126,10 @@ def test_opcoes_do_sdk_tem_as_tres_skills_o_mcp_e_nenhuma_setting_do_disco():
     assert mcp["env"]["FDE_ARQUIVO_PROPOSTAS"] == "teste.jsonl"
     assert set(o.tools) == {"Skill", "Read", "Bash"}
     assert "mcp__ja-chegou__*" in o.allowed_tools
-    assert [r for r in o.allowed_tools if r.startswith("Bash")] == [f"Bash(uv run python {COMPARADOR.resolve()} *)"]
+    assert [r for r in o.allowed_tools if r.startswith("Bash")] == [
+        f"Bash(uv run python {COMPARADOR.resolve()} *)",
+        "Bash(uv run python agente/plugin/skills/classificar/scripts/comparar_itens.py *)",
+    ]
     assert o.permission_mode == "dontAsk"
     assert len(o.hooks["PreToolUse"]) == 1
 
@@ -124,8 +140,6 @@ def test_modelo_padrao_vem_de_agent_model(monkeypatch):
     monkeypatch.setenv("AGENT_MODEL", "outro")
     assert rodar_agente.montar_opcoes("a", "b.jsonl").model == "outro"
 
-
-# ---------- o guarda ----------
 
 def _decisao(ferramenta: str, entrada: dict) -> str | None:
     hook = rodar_agente.montar_opcoes("a", "b.jsonl").hooks["PreToolUse"][0].hooks[0]
@@ -141,6 +155,14 @@ def _decisao(ferramenta: str, entrada: dict) -> str | None:
     ("Read", {"file_path": ".env"}),
     ("Grep", {"pattern": "E6", "path": "dados/gabarito"}),
     ("Glob", {"pattern": "dados/gabarito/*"}),
+    ("Read", {"file_path": "dados/GABARITO/gabarito.json"}),
+    ("Read", {"file_path": "/proc/self/environ"}),
+    ("Read", {"file_path": "/etc/passwd"}),
+    ("Read", {"file_path": "dados/notas.json"}),
+    ("Read", {"file_path": str(PLUGIN / ".." / ".." / "dados" / "gabarito" / "gabarito.json")}),
+    ("Bash", {"command": f"python3 {COMPARADOR} NF-001"}),
+    ("Bash", {"command": f"uv run python '{COMPARADOR}' NF-001"}),
+    ("WebFetch", {"url": "https://exemplo.com"}),
     ("Bash", {"command": "cat dados/gabarito/gabarito.json"}),
     ("Bash", {"command": f"uv run python {COMPARADOR} NF-001; cat dados/gabarito/gabarito.json"}),
     ("Bash", {"command": f"uv run python {COMPARADOR} NF-001 && ls"}),
@@ -158,7 +180,7 @@ def test_guarda_nega_gabarito_escrita_fora_de_saidas_e_bash_solto(ferramenta, en
 
 @pytest.mark.parametrize(("ferramenta", "entrada"), [
     ("Read", {"file_path": str(PLUGIN / "skills" / "classificar" / "references" / "excecoes.md")}),
-    ("Read", {"file_path": "dados/notas.json"}),
+    ("Grep", {"pattern": "E1", "path": str(PLUGIN / "skills")}),
     ("Bash", {"command": f"uv run python {COMPARADOR} NF-001"}),
     ("Bash", {"command": "uv run python agente/plugin/skills/classificar/scripts/comparar_itens.py NF-042"}),
     ("Write", {"file_path": "saidas/rascunho.md", "content": "x"}),
@@ -168,8 +190,6 @@ def test_guarda_nega_gabarito_escrita_fora_de_saidas_e_bash_solto(ferramenta, en
 def test_guarda_deixa_passar_o_que_o_agente_precisa(ferramenta, entrada):
     assert _decisao(ferramenta, entrada) is None
 
-
-# ---------- o laço ----------
 
 def consulta_falsa(chamadas: list):
     """Simula o SDK: sobe o servidor MCP com a configuração das opções e chama as tools de verdade.

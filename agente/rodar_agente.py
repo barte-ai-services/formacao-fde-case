@@ -21,7 +21,6 @@ import asyncio
 import json
 import os
 import re
-import shlex
 import sys
 from collections.abc import AsyncIterator, Callable
 from pathlib import Path
@@ -33,6 +32,7 @@ sys.path.insert(0, str(RAIZ))
 from claude_agent_sdk import (  # noqa: E402
     AssistantMessage,
     ClaudeAgentOptions,
+    HookCallback,
     HookMatcher,
     ResultMessage,
     ToolResultBlock,
@@ -47,19 +47,18 @@ SKILLS = ("classificar", "propor-acao-na-doca", "encaminhar")
 SERVIDOR_MCP = "ja-chegou"
 REGISTRAR = f"mcp__{SERVIDOR_MCP}__registrar_proposta"
 
-GABARITO = RAIZ / "dados" / "gabarito"
 SAIDAS = RAIZ / "saidas"
-SEGREDOS = RAIZ / ".env"
 FERRAMENTAS_DE_ESCRITA = {"Write", "Edit", "MultiEdit", "NotebookEdit"}
+FERRAMENTAS_DE_LEITURA = {"Read", "Glob", "Grep"}
+FERRAMENTAS_LIVRES = {"Skill"}
 
 Consulta = Callable[..., AsyncIterator[Any]]
+Mostrar = Callable[[ToolUseBlock], None]
 
 
 def comparador(pasta_plugin: Path = PLUGIN) -> Path:
     return pasta_plugin / "skills" / "classificar" / "scripts" / "comparar_itens.py"
 
-
-# ---------- o guarda ----------
 
 def _dentro(caminho: Path, pasta: Path) -> bool:
     return caminho == pasta or pasta in caminho.parents
@@ -70,51 +69,48 @@ def _resolver(bruto: str) -> Path:
     return (caminho if caminho.is_absolute() else RAIZ / caminho).resolve()
 
 
-def _proibido_ler(caminho: Path) -> bool:
-    return _dentro(caminho, GABARITO.resolve()) or caminho == SEGREDOS.resolve()
+def formas_do_comparador(script: Path) -> list[str]:
+    """Os comandos aceitos para o comparador: o caminho absoluto e, dentro do repositório, o relativo."""
+    absoluto = script.resolve()
+    formas = [f"uv run python {absoluto}"]
+    if _dentro(absoluto, RAIZ):
+        formas.append(f"uv run python {absoluto.relative_to(RAIZ)}")
+    return formas
 
 
 def _bash_permitido(comando: str, script: Path) -> bool:
-    """Só o comparador de itens, numa nota, sem encadear outro comando."""
-    if re.search(r"[;&|`$<>\n]", comando):
+    """Só o comparador de itens numa nota, sem encadear outro comando."""
+    if re.search(r"[;&|`$<>\n\\'\"]", comando):
         return False
-    try:
-        partes = shlex.split(comando)
-    except ValueError:
-        return False
-    prefixos = (["uv", "run", "python"], ["python"], ["python3"])
-    for prefixo in prefixos:
-        if partes[: len(prefixo)] == prefixo and len(partes) == len(prefixo) + 2:
-            alvo, nota = partes[len(prefixo)], partes[-1]
-            return _resolver(alvo) == script.resolve() and re.fullmatch(r"NF-\d{3}", nota) is not None
-    return False
+    prefixo, _, nota = comando.strip().rpartition(" ")
+    return prefixo in formas_do_comparador(script) and re.fullmatch(r"NF-\d{3}", nota) is not None
 
 
-def decidir(ferramenta: str, entrada: dict, script: Path) -> str | None:
-    """Devolve o motivo da recusa, ou None se a chamada pode seguir."""
+def decidir(ferramenta: str, entrada: dict, plugin: Path) -> str | None:
+    """Devolve o motivo da recusa, ou None se a chamada pode seguir. Nega por padrão."""
+    if ferramenta in FERRAMENTAS_LIVRES or ferramenta.startswith(f"mcp__{SERVIDOR_MCP}__"):
+        return None
     if ferramenta in FERRAMENTAS_DE_ESCRITA:
         alvo = entrada.get("file_path") or entrada.get("notebook_path") or ""
-        if not alvo or not _dentro(_resolver(alvo), SAIDAS.resolve()):
-            return "o agente só escreve em saidas/"
-        return None
+        return None if alvo and _dentro(_resolver(alvo), SAIDAS.resolve()) else "o agente só escreve em saidas/"
     if ferramenta == "Bash":
-        comando = entrada.get("command", "")
-        if "gabarito" in comando or not _bash_permitido(comando, script):
-            return "o Bash só roda o comparador de itens da skill classificar, numa nota"
-        return None
-    for chave in ("file_path", "path", "notebook_path"):
-        if entrada.get(chave) and _proibido_ler(_resolver(entrada[chave])):
-            return "o gabarito e o .env não são lidos pelo agente"
-    if "gabarito" in json.dumps(entrada, ensure_ascii=False) and ferramenta in {"Read", "Glob", "Grep"}:
-        return "o gabarito não é lido pelo agente"
-    return None
+        if _bash_permitido(entrada.get("command", ""), comparador(plugin)):
+            return None
+        return "o Bash só roda o comparador de itens da skill classificar, numa nota"
+    if ferramenta in FERRAMENTAS_DE_LEITURA:
+        # Os dados vêm pelo MCP; do disco, o agente só lê o plugin (as references das skills).
+        alvo = entrada.get("file_path") or entrada.get("path") or ""
+        if alvo and _dentro(_resolver(alvo), plugin.resolve()) and "gabarito" not in alvo.lower():
+            return None
+        return "o agente só lê os arquivos das skills; os dados vêm pelas tools do ja-chegou"
+    return f"a ferramenta {ferramenta} não está liberada para o agente"
 
 
-def criar_guarda(script: Path):
-    """Hook PreToolUse: nega leitura do gabarito, escrita fora de saidas/ e Bash fora do comparador."""
+def criar_guarda(plugin: Path) -> HookCallback:
+    """Hook PreToolUse: nega o que não é das skills, do MCP, do comparador ou escrita em saidas/."""
 
     async def guarda(entrada_hook: dict, tool_use_id: str | None, contexto: Any) -> dict:
-        motivo = decidir(entrada_hook.get("tool_name", ""), entrada_hook.get("tool_input") or {}, script)
+        motivo = decidir(entrada_hook.get("tool_name", ""), entrada_hook.get("tool_input") or {}, plugin)
         if motivo is None:
             return {}
         return {"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny",
@@ -122,8 +118,6 @@ def criar_guarda(script: Path):
 
     return guarda
 
-
-# ---------- as opções do SDK ----------
 
 def montar_opcoes(origem: str, saida: str, modelo: str | None = None, pasta_plugin: Path | None = None) -> ClaudeAgentOptions:
     plugin = (pasta_plugin or PLUGIN).resolve()
@@ -135,7 +129,8 @@ def montar_opcoes(origem: str, saida: str, modelo: str | None = None, pasta_plug
         model=modelo or os.environ.get("AGENT_MODEL", "claude-sonnet-5-5"),
         system_prompt=(RAIZ / "agente" / "instrucoes.md").read_text(encoding="utf-8"),
         cwd=str(RAIZ),
-        # Nada do disco: nem .claude/settings.json (e os plugins que ele habilita), nem CLAUDE.md.
+        # formacao-fde-ops#41: nada do disco, nem .claude/settings.json (e os plugins do Ahrena que
+        # ele habilita) nem CLAUDE.md. As skills entram só pelo plugin local.
         setting_sources=[],
         strict_mcp_config=True,
         plugins=[{"type": "local", "path": str(plugin)}],
@@ -143,14 +138,13 @@ def montar_opcoes(origem: str, saida: str, modelo: str | None = None, pasta_plug
         mcp_servers={SERVIDOR_MCP: {"type": "stdio", "command": sys.executable,
                                      "args": [str(RAIZ / "mcp_server" / "servidor.py")], "env": ambiente_mcp}},
         tools=["Skill", "Read", "Bash"],
-        allowed_tools=[f"mcp__{SERVIDOR_MCP}__*", "Read", f"Bash(uv run python {comparador(plugin)} *)"],
+        allowed_tools=[f"mcp__{SERVIDOR_MCP}__*", "Read",
+                       *(f"Bash({forma} *)" for forma in formas_do_comparador(comparador(plugin)))],
         permission_mode="dontAsk",
-        hooks={"PreToolUse": [HookMatcher(matcher=None, hooks=[criar_guarda(comparador(plugin))])]},
+        hooks={"PreToolUse": [HookMatcher(matcher=None, hooks=[criar_guarda(plugin)])]},
         max_turns=MAX_TURNOS,
     )
 
-
-# ---------- o laço ----------
 
 def _texto(conteudo: Any) -> str:
     if isinstance(conteudo, str):
@@ -177,7 +171,22 @@ def _mostrar(bloco: ToolUseBlock) -> None:
               f"({json.dumps(bloco.input, ensure_ascii=False)[:90]})")
 
 
-async def analisar_nota(consulta: Consulta, opcoes: ClaudeAgentOptions, nota_id: str, verbose: bool = False) -> dict | None:
+def _ids_de_registro(mensagem: AssistantMessage) -> set[str]:
+    return {b.id for b in mensagem.content if isinstance(b, ToolUseBlock) and b.name == REGISTRAR}
+
+
+def _proposta_em(mensagem: UserMessage, registros: set[str]) -> dict | None:
+    if not isinstance(mensagem.content, list):
+        return None
+    resultados = [b for b in mensagem.content if isinstance(b, ToolResultBlock) and b.tool_use_id in registros]
+    return next((p for p in (_proposta_do_resultado(b.content) for b in resultados) if p), None)
+
+
+def _calado(bloco: ToolUseBlock) -> None:
+    return None
+
+
+async def analisar_nota(consulta: Consulta, opcoes: ClaudeAgentOptions, nota_id: str, mostrar: Mostrar = _calado) -> dict | None:
     """Roda o agente numa nota. Devolve a proposta que `registrar_proposta` aceitou, ou None."""
     pedido = (f"Faça o check antecipado da nota {nota_id}. Use as tools para reunir as evidências, "
               "aplique as três skills e termine registrando a proposta com registrar_proposta.")
@@ -187,15 +196,11 @@ async def analisar_nota(consulta: Consulta, opcoes: ClaudeAgentOptions, nota_id:
         if isinstance(mensagem, AssistantMessage):
             for bloco in mensagem.content:
                 if isinstance(bloco, ToolUseBlock):
-                    if verbose:
-                        _mostrar(bloco)
-                    if bloco.name == REGISTRAR:
-                        registros.add(bloco.id)
-        elif isinstance(mensagem, UserMessage) and isinstance(mensagem.content, list):
-            for bloco in mensagem.content:
-                if isinstance(bloco, ToolResultBlock) and bloco.tool_use_id in registros:
-                    proposta = _proposta_do_resultado(bloco.content) or proposta
-        elif isinstance(mensagem, ResultMessage) and verbose and mensagem.is_error:
+                    mostrar(bloco)
+            registros |= _ids_de_registro(mensagem)
+        elif isinstance(mensagem, UserMessage):
+            proposta = _proposta_em(mensagem, registros) or proposta
+        elif isinstance(mensagem, ResultMessage) and mensagem.is_error:
             print(f"  ! o agente terminou com erro: {mensagem.subtype}")
     return proposta
 
@@ -206,13 +211,13 @@ def _notas_pendentes(limite: int | None) -> list[str]:
     return notas[:limite] if limite else notas
 
 
-async def principal(args, consulta: Consulta) -> int:
+async def principal(args: argparse.Namespace, consulta: Consulta) -> int:
     opcoes = montar_opcoes(args.origem, args.saida, pasta_plugin=args.skills)
     notas = _notas_pendentes(args.limite) if args.todas else [args.nota]
     sem_proposta = 0
     for nota_id in notas:
         print(f"{nota_id}…")
-        p = await analisar_nota(consulta, opcoes, nota_id, verbose=args.verbose)
+        p = await analisar_nota(consulta, opcoes, nota_id, mostrar=_mostrar if args.verbose else _calado)
         if p:
             print(f"  {p['classificacao']} · {p['acao_doca']} · {p['encaminhamento']}")
         else:
@@ -222,7 +227,7 @@ async def principal(args, consulta: Consulta) -> int:
     return 1 if sem_proposta else 0
 
 
-def main(argv=None, consulta: Consulta | None = None) -> int:
+def main(argv: list[str] | None = None, consulta: Consulta | None = None) -> int:
     """`consulta` é o ponto de injeção para teste sem rede: por padrão, `claude_agent_sdk.query`."""
     ap = argparse.ArgumentParser(description="Agente de check antecipado da Já Chegou")
     grupo = ap.add_mutually_exclusive_group(required=True)

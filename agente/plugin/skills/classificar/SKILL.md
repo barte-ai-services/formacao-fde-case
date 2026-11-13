@@ -17,7 +17,7 @@ Dizer se a nota bate com a ordem e com o que chegou (`match`) ou em qual das 8 e
 - Compare a nota com a contagem da doca ou da loja.
 - Escolha uma classificação só.
 
-Para ver os itens lado a lado, rode o comparador. Ele mostra o fato (nota, ordem e contagem, com as diferenças de quantidade e valor) e não classifica:
+Para ver os itens lado a lado, rode o comparador na nota em análise (troque `NF-001` pelo `nota_id` dela). Ele mostra o fato (nota, ordem e contagem, com as diferenças de quantidade e valor) e não classifica:
 
 ```bash
 uv run python ${CLAUDE_SKILL_DIR}/scripts/comparar_itens.py NF-001
