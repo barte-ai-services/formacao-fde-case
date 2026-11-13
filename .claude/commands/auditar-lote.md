@@ -41,4 +41,5 @@ Lote concluído · <propostas gravadas> de <notas despachadas> notas com propost
 Sem proposta: <cada nota_id com o Motivo, ou "nenhuma">
 As propostas estão em saidas/propostas.jsonl (ou no arquivo de FDE_ARQUIVO_PROPOSTAS). Para medir, rode no terminal:
 uv run python eval/avaliar.py saidas/propostas.jsonl --comparar saidas/baseline.jsonl --erros
+Se gravou noutro arquivo com FDE_ARQUIVO_PROPOSTAS, troque saidas/propostas.jsonl pelo nome dele no comando.
 ```

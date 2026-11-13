@@ -71,7 +71,7 @@ uv run python baseline/regras.py
 
 ### O agente numa nota
 
-Abra o Claude Code na raiz do repositório. Na primeira vez, ele pergunta se pode usar o servidor `ja-chegou` do `.mcp.json`: aprove. Depois peça:
+Abra o Claude Code na raiz do repositório (`claude` no terminal, ou o app apontado para a pasta). Na primeira vez, ele pergunta se pode usar o servidor `ja-chegou` do `.mcp.json`: aprove. Depois peça:
 
 ```
 use o subagente auditor-de-notas na nota NF-001
@@ -90,11 +90,11 @@ Na mesma sessão, rode o comando do projeto:
 /auditar-lote
 ```
 
-Ele lista as notas pendentes com `listar_notas_pendentes`, despacha o subagente `auditor-de-notas` numa nota por vez e, no fim, diz quantas propostas foram gravadas em `saidas/` e qual comando de eval rodar. Para testar antes num pedaço, passe um limite: `/auditar-lote 5` roda só as cinco primeiras. O comando está em `.claude/commands/auditar-lote.md`: o corpo é o prompt que a sessão principal segue.
+Ele lista as notas pendentes com `listar_notas_pendentes`, despacha o subagente `auditor-de-notas` numa nota por vez e, no fim, diz quantas propostas foram gravadas em `saidas/` e qual comando de eval rodar. Para testar antes num pedaço, passe um limite: `/auditar-lote 5` roda só as cinco primeiras. Cada `/auditar-lote` começa do início da lista e grava no mesmo arquivo: antes do lote completo, apague `saidas/propostas.jsonl` ou ponha outro `FDE_ARQUIVO_PROPOSTAS`, para a primeira tentativa de cada nota medir a versão atual. O comando está em `.claude/commands/auditar-lote.md`: o corpo é o prompt que a sessão principal segue.
 
 Para não aprovar cada chamada no meio do lote, rode antes uma nota sozinha e, para cada tool do `ja-chegou` que o subagente pedir, escolha a opção de não perguntar de novo.
 
-Para rotular as propostas ou gravar noutro arquivo, ponha as variáveis no terminal antes de abrir o Claude Code: `export FDE_ORIGEM=grupo-1 FDE_ARQUIVO_PROPOSTAS=propostas-v2.jsonl`. O `.mcp.json` as repassa ao servidor.
+Para rotular as propostas ou gravar noutro arquivo, ponha as variáveis no terminal antes de abrir o Claude Code: `export FDE_ORIGEM=grupo-1 FDE_ARQUIVO_PROPOSTAS=propostas-v2.jsonl`, e depois abra o Claude Code nesse mesmo terminal (`claude`). O `.mcp.json` as repassa ao servidor.
 
 ### Medir
 

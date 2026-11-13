@@ -5,7 +5,6 @@ from __future__ import annotations
 import asyncio
 import re
 import sys
-import tomllib
 from pathlib import Path
 
 import pytest
@@ -158,11 +157,6 @@ def test_comando_despacha_o_subagente_e_nao_audita():
     assert not RESPOSTA.search(corpo.replace("registrar_proposta", "")), "o comando não dá resposta"
 
 
-def test_agente_nao_carrega_o_comando():
-    campos, _ = _frontmatter(AGENTE)
-    assert "auditar-lote" not in _lista(campos.get("skills"))
-
-
 def test_agente_carrega_as_tres_skills():
     campos, _ = _frontmatter(AGENTE)
     assert _lista(campos.get("skills")) == SKILLS
@@ -203,10 +197,8 @@ def test_classificar_divergencia_cita_a_tool_e_nao_um_script():
 
 
 def test_o_harness_antigo_saiu():
-    """O agente roda dentro do Claude Code: não há script nem SDK do agente no projeto."""
-    assert not (RAIZ / "agente").exists()
-    pyproject = tomllib.loads((RAIZ / "pyproject.toml").read_text(encoding="utf-8"))
-    assert not [d for d in pyproject["project"]["dependencies"] if d.startswith(("claude", "anthropic"))]
+    """O agente roda dentro do Claude Code: não há script do agente no projeto."""
+    assert not (RAIZ / "agente").exists(), "as dependências proibidas ficam em test_autocontido.py"
 
 
 def _comparar(nota_id: str) -> str:
