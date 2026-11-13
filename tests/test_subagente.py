@@ -47,8 +47,6 @@ def _lista(valor: str | list[str] | None) -> list[str]:
     return valor if isinstance(valor, list) else [v.strip() for v in valor.split(",") if v.strip()]
 
 
-# ---------- o subagente ----------
-
 def test_agente_tem_nome_descricao_e_corpo():
     campos, corpo = _frontmatter(AGENTE)
     assert campos["name"] == "auditor-de-notas"
@@ -110,8 +108,6 @@ def test_agente_nao_cita_o_gabarito():
     assert "gabarito" not in AGENTE.read_text(encoding="utf-8").lower()
 
 
-# ---------- as skills ----------
-
 @pytest.mark.parametrize("skill", SKILLS)
 def test_skill_no_formato_agent_skills(skill):
     """#40/AC-1: cada skill é uma pasta com SKILL.md e frontmatter name e description."""
@@ -146,8 +142,6 @@ def test_o_harness_antigo_saiu():
     pyproject = tomllib.loads((RAIZ / "pyproject.toml").read_text(encoding="utf-8"))
     assert not [d for d in pyproject["project"]["dependencies"] if d.startswith(("claude", "anthropic"))]
 
-
-# ---------- a tool comparar_itens ----------
 
 def _comparar(nota_id: str) -> str:
     """Chama a tool pelo cliente MCP, como o agente chama."""

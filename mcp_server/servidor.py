@@ -142,10 +142,9 @@ def comparar_itens(nota_id: str) -> str:
     Para cada código do fornecedor: quantidade e preço na nota, na ordem e na contagem, com as diferenças
     de quantidade (nota − ordem, nota − doca) e de valor (nota − ordem). Mostra o fato e não classifica:
     não converte caixa em unidade, não procura ordem quando a nota não cita pedido e não sugere ação."""
-    try:
-        return comparar(nota_id, base)
-    except KeyError as erro:
-        return erro.args[0]
+    if nota_id not in base.notas:
+        return f"nota {nota_id} não encontrada"
+    return comparar(nota_id, base)
 
 
 @servidor.tool()
