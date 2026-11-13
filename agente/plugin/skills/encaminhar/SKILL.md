@@ -1,4 +1,9 @@
-# Skill 3 · Encaminhar
+---
+name: encaminhar
+description: Decide quem decide o caso de uma nota fiscal da Já Chegou (regra, analista, coordenacao, diretoria ou bloqueio) a partir da régua de alçadas, do fornecedor e do valor da nota. Use por último, depois de classificar e de propor a ação na doca, antes de registrar a proposta.
+---
+
+# Encaminhar
 
 Ponto de partida. A régua completa está na tool `ler_regua`.
 

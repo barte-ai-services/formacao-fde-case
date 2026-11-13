@@ -1,4 +1,9 @@
-# Skill 2 · Propor a ação na doca
+---
+name: propor-acao-na-doca
+description: Propõe o que a doca (ou a loja) da Já Chegou faz com a mercadoria de uma nota fiscal já classificada, entre receber, receber_parcial e recusar. Use depois de classificar a nota e antes de encaminhar o caso.
+---
+
+# Propor a ação na doca
 
 Ponto de partida. O grupo completa esta skill a partir do dossiê e da camada de contexto.
 

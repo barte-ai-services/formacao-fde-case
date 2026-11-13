@@ -118,7 +118,7 @@ O kit de domingo já está aqui, menos o gabarito, que entra no domingo de manh�
 | `templates/` | Os modelos dos entregáveis dos checkpoints. |
 | `teams/` | Uma pasta por grupo, com nome, integrantes e o link do fork líder. |
 | `DOMINGO.md` | Como funciona o kit de domingo: o agente, as três skills, as tools e o eval. |
-| `agente/` | O agente de domingo: instruções, as três skills e o script que roda. |
+| `agente/` | O agente de domingo: instruções, as três skills no formato Agent Skills (`agente/plugin/skills/`) e o script que roda no Claude Agent SDK. Veja o `DOMINGO.md` para editar e rodar. |
 | `mcp_server/`, `jachegou/` | As tools do agente, expostas por MCP, e o acesso à base. |
 | `dados/` | A base sintética de domingo. O gabarito (`dados/gabarito/`) chega no domingo de manhã. |
 | `baseline/`, `eval/` | Regras simples sem IA para comparar, e o eval contra o gabarito. |
