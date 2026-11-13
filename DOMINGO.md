@@ -11,6 +11,7 @@ Um agente com três skills no check antecipado da Já Chegou: ele confronta a no
 | `mcp_server/` | As tools do agente, expostas por MCP (o servidor `ja-chegou`) |
 | `.claude/agents/auditor-de-notas.md` | O agente: um subagente do Claude Code. O frontmatter diz as tools e as skills; o corpo é o prompt de sistema |
 | `.claude/skills/` | As três skills, no formato Agent Skills |
+| `.claude/commands/auditar-lote.md` | O comando `/auditar-lote`, que roda o subagente nas notas pendentes, uma por vez |
 | `baseline/` | Regras simples, sem IA, para comparar |
 | `eval/` | Mede as propostas contra o gabarito |
 
@@ -32,6 +33,8 @@ Cada skill segue o formato [Agent Skills](https://code.claude.com/docs/en/skills
 .claude/
 ├── agents/
 │   └── auditor-de-notas.md         # o subagente: frontmatter + prompt de sistema
+├── commands/
+│   └── auditar-lote.md             # o comando /auditar-lote, para o lote
 └── skills/
     ├── classificar-divergencia/SKILL.md
     ├── decidir-recebimento/SKILL.md
@@ -57,7 +60,7 @@ Não deixem de fora nenhum desses campos ao editar: é o frontmatter que segura 
 
 ## Como rodar
 
-Tudo roda com o **login da sua conta no Claude Code**: não há chave da API nem outra credencial para configurar. Rode os comandos na raiz do repositório.
+O kit roda inteiro dentro do Claude Code: o agente, as três skills, as tools do `ja-chegou` e o comando `/auditar-lote`. Nada no repositório chama a API nem o `claude` pela linha de comando. O único requisito é o seu Claude Code, com a conta que você já usa nele. Rode os comandos na raiz do repositório.
 
 Antes de tudo, o baseline, para saber o número a bater:
 
@@ -68,7 +71,7 @@ uv run python baseline/regras.py
 
 ### O agente numa nota
 
-Abra o Claude Code na raiz do repositório (`claude`). Na primeira vez, ele pergunta se pode usar o servidor `ja-chegou` do `.mcp.json`: aprove. Depois peça:
+Abra o Claude Code na raiz do repositório. Na primeira vez, ele pergunta se pode usar o servidor `ja-chegou` do `.mcp.json`: aprove. Depois peça:
 
 ```
 use o subagente auditor-de-notas na nota NF-001
@@ -76,38 +79,26 @@ use o subagente auditor-de-notas na nota NF-001
 
 O Claude despacha o subagente, que lê a nota pelas tools do `ja-chegou`, aplica as três skills e termina com `registrar_proposta`. Quando ele pedir permissão para usar uma tool do `ja-chegou`, aprove. A proposta vai para `saidas/propostas.jsonl`. Para conferir o que o subagente tem, rode `/agents`: ele deve mostrar as tools do `ja-chegou` e as três skills.
 
-- **O servidor e o agente entram quando a sessão começa.** O Claude Code lê o `.mcp.json` e o `.claude/agents/` ao abrir. Quem acabou de dar `git pull`, ou editou o agente ou uma skill, abre uma sessão nova antes de medir.
+- **O servidor, o agente e o comando entram quando a sessão começa.** O Claude Code lê o `.mcp.json`, o `.claude/agents/` e o `.claude/commands/` ao abrir. Quem acabou de dar `git pull`, ou editou o agente, uma skill ou o comando, abre uma sessão nova antes de medir.
 - **Quem escreve o pedido ao subagente é a sessão principal do Claude Code**, que lê arquivos, inclusive `dados/gabarito/` quando ele estiver no repositório. O subagente só recebe esse pedido.
 
 ### O agente nas 80 notas
 
-Na mesma sessão, peça ao Claude que despache o subagente nota por nota:
+Na mesma sessão, rode o comando do projeto:
 
 ```
-liste as notas pendentes e use o subagente auditor-de-notas em cada uma, uma por vez
+/auditar-lote
 ```
 
-Ou em lote, alguns subagentes de cada vez. Para testar antes num pedaço, peça só as dez primeiras. Para não aprovar cada chamada, rode antes uma nota e, para cada tool do `ja-chegou` que ele pedir, escolha a opção de não perguntar de novo. Faça isso antes do lote: subagentes em paralelo podem ter a tool negada em vez de perguntar.
+Ele lista as notas pendentes com `listar_notas_pendentes`, despacha o subagente `auditor-de-notas` numa nota por vez e, no fim, diz quantas propostas foram gravadas em `saidas/` e qual comando de eval rodar. Para testar antes num pedaço, passe um limite: `/auditar-lote 5` roda só as cinco primeiras. O comando está em `.claude/commands/auditar-lote.md`: o corpo é o prompt que a sessão principal segue.
 
-Para rotular as propostas ou gravar noutro arquivo, ponha as variáveis antes de abrir o Claude Code: `export FDE_ORIGEM=grupo-1 FDE_ARQUIVO_PROPOSTAS=propostas-v2.jsonl`, e depois `claude`. O `.mcp.json` as repassa ao servidor.
+Para não aprovar cada chamada no meio do lote, rode antes uma nota sozinha e, para cada tool do `ja-chegou` que o subagente pedir, escolha a opção de não perguntar de novo.
 
-### Opcional: um laço no terminal
-
-Quem prefere uma sessão por nota pode rodar um laço com `claude -p`. Ele usa o mesmo login do Claude Code, sem chave da API nem outra credencial (desde que não haja `ANTHROPIC_API_KEY` exportada no terminal: se houver, o `claude -p` usa a chave). Não é pré-requisito: o caminho acima basta.
-
-```bash
-for nota in $(uv run python -c "from jachegou.base import Base; print(*Base().notas)"); do
-  claude -p "Use o subagente auditor-de-notas para fazer o check antecipado da nota $nota e registrar a proposta." \
-    --allowedTools "Agent" "mcp__ja-chegou__*"
-done
-```
-
-- **O pedido vem logo depois do `-p`.** `--allowedTools` aceita uma lista; o que vier depois dele seria lido como mais uma tool.
-- **Confira numa nota antes do lote.** Ainda não está confirmado que a liberação de `--allowedTools` chega às chamadas do subagente. Rode uma nota com `--output-format stream-json --verbose`: a chamada a `registrar_proposta` tem de vir com `parent_tool_use_id` preenchido, e o resultado não pode listar nada em `permission_denials`.
+Para rotular as propostas ou gravar noutro arquivo, ponha as variáveis no terminal antes de abrir o Claude Code: `export FDE_ORIGEM=grupo-1 FDE_ARQUIVO_PROPOSTAS=propostas-v2.jsonl`. O `.mcp.json` as repassa ao servidor.
 
 ### Medir
 
-`registrar_proposta` grava cada proposta em `saidas/propostas.jsonl` (ou no arquivo de `FDE_ARQUIVO_PROPOSTAS`). O eval e o baseline são os mesmos de sempre:
+`registrar_proposta` grava cada proposta em `saidas/propostas.jsonl` (ou no arquivo de `FDE_ARQUIVO_PROPOSTAS`). O eval é Python puro e não chama modelo nenhum: ele lê as propostas em `saidas/` e as compara com o gabarito e com o baseline. O comando é o mesmo de sempre:
 
 ```bash
 uv run python eval/avaliar.py saidas/propostas.jsonl --comparar saidas/baseline.jsonl --erros
@@ -151,4 +142,4 @@ As regras simples acertam falta, troca e quantidade menor. Erram onde o sentido 
 - As skills entram pelo campo `skills` do frontmatter. Sem a tool `Skill`, o subagente não carrega as outras skills do projeto, da sua conta ou dos plugins do `.claude/settings.json`.
 - O subagente começa sem os `CLAUDE.md` (`omitClaudeMd: true`): quem o despacha é sempre uma sessão principal.
 - A sessão principal não é o subagente. Ela carrega o `CLAUDE.md` do repositório e o da sua conta, os plugins do `.claude/settings.json` e as tools dela, lê arquivos sem pedir aprovação e escreve o pedido ao subagente. O que o eval mede é o subagente com o pedido que essa sessão escreveu, e não o subagente sozinho.
-- A sessão principal também alcança as tools do `ja-chegou`. O pedido manda usar o subagente, mas nada obriga a sessão a fazer isso: numa ou duas notas, confira na conversa que a chamada a `registrar_proposta` aparece dentro do subagente (`ctrl+o` mostra o detalhe).
+- A sessão principal também alcança as tools do `ja-chegou`. O pedido e o `/auditar-lote` mandam usar o subagente, mas nada obriga a sessão a fazer isso: numa ou duas notas, confira na conversa que a chamada a `registrar_proposta` aparece dentro do subagente (`ctrl+o` mostra o detalhe).

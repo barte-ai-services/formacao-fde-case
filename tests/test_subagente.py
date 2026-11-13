@@ -90,46 +90,33 @@ def test_agente_nao_carrega_os_claude_md():
 
 
 PEDIDO = "use o subagente auditor-de-notas na nota NF-001"
-PEDIDO_LOTE = "liste as notas pendentes e use o subagente auditor-de-notas em cada uma, uma por vez"
+LOTE = "/auditar-lote"
 EVAL = "uv run python eval/avaliar.py saidas/propostas.jsonl --comparar saidas/baseline.jsonl --erros"
 
 
 @pytest.mark.parametrize("arquivo", ["DOMINGO.md", "README.md"])
-def test_caminho_principal_e_pedir_na_sessao_interativa(arquivo):
-    """O aluno pede ao Claude Code dele, na raiz do repositório, que use o subagente; o eval é o de sempre."""
+def test_caminho_e_pedir_na_sessao_do_claude_code(arquivo):
+    """Uma nota pelo pedido, o lote pelo /auditar-lote, o eval de sempre e a sessão nova depois do pull."""
     texto = (RAIZ / arquivo).read_text(encoding="utf-8")
     assert f"```\n{PEDIDO}\n```" in texto
+    assert f"```\n{LOTE}\n```" in texto
+    assert texto.index(PEDIDO) < texto.index(f"```\n{LOTE}\n```")
     assert "na raiz do repositório" in texto
     assert EVAL in texto
     assert "saidas/propostas.jsonl" in texto
-    assert "sessão nova" in texto, "o .mcp.json e o agente só entram quando a sessão começa"
-    assert "sem chave da API" in texto
+    assert "sessão nova" in texto, "o .mcp.json, o agente e o comando só entram quando a sessão começa"
+    assert "o único requisito é o seu claude code" in texto.lower()
 
 
-def test_domingo_tem_o_pedido_das_80_notas_na_mesma_sessao():
-    """Nas 80 notas, o caminho principal é pedir na mesma sessão, antes da seção do laço opcional."""
+def test_domingo_diz_que_o_eval_nao_chama_modelo():
     texto = (RAIZ / "DOMINGO.md").read_text(encoding="utf-8")
-    assert f"```\n{PEDIDO_LOTE}\n```" in texto
-    assert texto.index(PEDIDO_LOTE) < texto.index("### Opcional: um laço no terminal")
+    assert "O eval é Python puro e não chama modelo nenhum" in texto
+    assert "`/auditar-lote 5`" in texto, "o limite para testar num pedaço"
 
 
-LACO = (
-    'claude -p "Use o subagente auditor-de-notas para fazer o check antecipado da nota $nota e registrar a proposta." \\\n'
-    '    --allowedTools "Agent" "mcp__ja-chegou__*"'
-)
-
-
-def test_laco_e_opcional_e_so_usa_o_login():
-    """O laço com claude -p fica numa seção opcional, depois do caminho principal, e não pede credencial."""
+def test_domingo_mantem_a_conferencia_do_registrar_proposta_no_subagente():
     texto = (RAIZ / "DOMINGO.md").read_text(encoding="utf-8")
-    assert "### Opcional: um laço no terminal" in texto
-    secao = texto.split("### Opcional: um laço no terminal")[1].split("### Medir")[0]
-    assert LACO in secao
-    assert texto.count("claude -p") == secao.count("claude -p"), "claude -p só aparece na seção opcional"
-    assert "mesmo login do Claude Code, sem chave da API nem outra credencial" in secao
-    assert "Não é pré-requisito" in secao
-    comando = LACO.replace("\\\n", " ")
-    assert comando.index('-p "') < comando.index("--allowedTools"), "--allowedTools aceita uma lista e engoliria o pedido"
+    assert "confira na conversa que a chamada a `registrar_proposta` aparece dentro do subagente" in texto
 
 
 @pytest.mark.parametrize("arquivo", ["DOMINGO.md", "README.md"])
@@ -144,6 +131,36 @@ def test_mcp_json_passa_origem_e_arquivo_ao_servidor():
 
     env = json.loads((RAIZ / ".mcp.json").read_text(encoding="utf-8"))["mcpServers"][SERVIDOR]["env"]
     assert env == {"FDE_ORIGEM": "${FDE_ORIGEM:-agente}", "FDE_ARQUIVO_PROPOSTAS": "${FDE_ARQUIVO_PROPOSTAS:-propostas.jsonl}"}
+
+
+COMANDO = RAIZ / ".claude" / "commands" / "auditar-lote.md"
+
+
+def test_comando_auditar_lote_tem_frontmatter_minimo():
+    """O /auditar-lote roda na sessão principal, só quando chamado, e pré-aprova só o que precisa."""
+    campos, corpo = _frontmatter(COMANDO)
+    descricao = campos["description"]
+    assert isinstance(descricao, str) and "/auditar-lote 5" in descricao
+    assert ": " not in descricao, "dois-pontos com espaço quebra o YAML do frontmatter"
+    assert campos["argument-hint"] == '"[limite]"'
+    assert campos["disable-model-invocation"] == "true"
+    assert _lista(campos["allowed-tools"]) == ["Agent", f"mcp__{SERVIDOR}__listar_notas_pendentes"]
+    assert "$ARGUMENTS" in corpo
+
+
+def test_comando_despacha_o_subagente_e_nao_audita():
+    _, corpo = _frontmatter(COMANDO)
+    assert "`subagent_type` igual a `auditor-de-notas`" in corpo
+    assert "uma nota por vez" in corpo
+    assert EVAL in corpo
+    assert "saidas/propostas.jsonl" in corpo
+    assert "gabarito/" in corpo, "o corpo proíbe ler o gabarito"
+    assert not RESPOSTA.search(corpo.replace("registrar_proposta", "")), "o comando não dá resposta"
+
+
+def test_agente_nao_carrega_o_comando():
+    campos, _ = _frontmatter(AGENTE)
+    assert "auditar-lote" not in _lista(campos.get("skills"))
 
 
 def test_agente_carrega_as_tres_skills():
