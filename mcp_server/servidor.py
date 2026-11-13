@@ -10,7 +10,7 @@ nas instruções do agente: `registrar_proposta` recusa encaminhamento abaixo do
 
 Rodar sozinho (stdio):  uv run python mcp_server/servidor.py
 No Claude Code: o arquivo .mcp.json na raiz já aponta para este servidor, e o subagente
-`check-antecipado` (.claude/agents/) usa só as tools dele.
+`auditor-de-notas` (.claude/agents/) usa só as tools dele.
 """
 
 from __future__ import annotations

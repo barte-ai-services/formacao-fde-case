@@ -1,9 +1,9 @@
 ---
-name: classificar
-description: Classifica uma nota fiscal de mercadoria da Já Chegou como match ou numa das 8 exceções (E1 a E8), confrontando a nota com a ordem de compra e com a contagem da doca ou da loja. Use no check antecipado de uma nota, antes de propor a ação na doca e o encaminhamento.
+name: classificar-divergencia
+description: O que há de errado com esta nota fiscal de mercadoria da Já Chegou? Responde se a nota bate com a ordem de compra e com a contagem da doca ou da loja (match) ou em qual das 8 exceções (E1 a E8) ela cai. Use primeiro no check antecipado de cada nota, antes de decidir-recebimento e de definir-aprovador.
 ---
 
-# Classificar
+# Skill 1 — Classificar a divergência
 
 Ponto de partida. O grupo completa esta skill com a camada de contexto de sábado: o que cada termo quer dizer na Já Chegou, as regras e os casos-limite.
 

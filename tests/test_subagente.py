@@ -13,9 +13,9 @@ import pytest
 RAIZ = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ))
 
-AGENTE = RAIZ / ".claude" / "agents" / "check-antecipado.md"
+AGENTE = RAIZ / ".claude" / "agents" / "auditor-de-notas.md"
 SKILLS_DIR = RAIZ / ".claude" / "skills"
-SKILLS = ["classificar", "propor-acao-na-doca", "encaminhar"]
+SKILLS = ["classificar-divergencia", "decidir-recebimento", "definir-aprovador"]
 SERVIDOR = "ja-chegou"
 FERRAMENTAS_DE_DISCO = {"Read", "Bash", "Write", "Edit", "MultiEdit", "NotebookEdit", "Glob", "Grep", "LSP", "PowerShell"}
 RESPOSTA = re.compile(r"\b(E[1-8]|match|receber|receber_parcial|recusar|regra|analista|coordenacao|diretoria|bloqueio)\b")
@@ -51,11 +51,28 @@ def _lista(valor: str | list[str] | None) -> list[str]:
 
 def test_agente_tem_nome_descricao_e_corpo():
     campos, corpo = _frontmatter(AGENTE)
-    assert campos["name"] == "check-antecipado"
+    assert campos["name"] == "auditor-de-notas"
     descricao = campos["description"]
     assert isinstance(descricao, str) and "Use " in descricao and len(descricao) > 60
     assert ": " not in descricao, "dois-pontos com espaço quebra o YAML do frontmatter"
     assert "registrar_proposta" in corpo, "o prompt de sistema é o corpo do arquivo"
+
+
+SECOES = ["O que este agente é", "Antes de começar", "Entradas", "Procedimento", "Quando terminou",
+          "Quando bloqueado", "Saída", "O que não faz", "Exemplo"]
+
+
+def test_prompt_segue_o_esqueleto_de_agente():
+    """O corpo tem as seções do esqueleto, nesta ordem, e o resumo de três linhas num template literal."""
+    _, corpo = _frontmatter(AGENTE)
+    assert re.findall(r"^## (.+)$", corpo, re.M) == SECOES
+    assert "Você é o auditor de notas do check antecipado do contas a pagar da Já Chegou" in corpo
+    for skill in SKILLS:
+        assert f"`{skill}`" in corpo.split("## Entradas")[0], f"{skill} fora de antes de começar"
+    blocos = re.findall(r"```text\n(.*?)\n```", corpo.split("## Saída")[1].split("## O que não faz")[0], re.S)
+    assert [b.count("\n") + 1 for b in blocos] == [3, 3]
+    assert blocos[0].startswith("Proposta registrada · ") and blocos[1].startswith("Proposta não registrada · ")
+    assert corpo.count("<example>") >= 1
 
 
 def test_agente_so_usa_as_tools_do_ja_chegou():
@@ -103,7 +120,9 @@ def test_skill_no_formato_agent_skills(skill):
     descricao = campos.get("description", "")
     assert isinstance(descricao, str) and len(descricao) > 60, "a descrição diz o que a skill faz e quando usar"
     assert "Use " in descricao
+    assert descricao.split("?")[0] != descricao, "a description abre com a pergunta que a skill responde"
     assert corpo.strip()
+    assert re.search(r"^# Skill [123] — ", corpo, re.M), "o título numerado fica"
 
 
 def test_so_as_tres_skills_e_nada_que_o_agente_nao_consiga_ler():
@@ -113,8 +132,8 @@ def test_so_as_tres_skills_e_nada_que_o_agente_nao_consiga_ler():
         assert [p.name for p in (SKILLS_DIR / skill).iterdir()] == ["SKILL.md"]
 
 
-def test_classificar_cita_a_tool_e_nao_um_script():
-    texto = (SKILLS_DIR / "classificar" / "SKILL.md").read_text(encoding="utf-8")
+def test_classificar_divergencia_cita_a_tool_e_nao_um_script():
+    texto = (SKILLS_DIR / "classificar-divergencia" / "SKILL.md").read_text(encoding="utf-8")
     assert "`comparar_itens`" in texto
     assert "uv run" not in texto and "scripts/" not in texto
     for codigo in ("E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8"):
