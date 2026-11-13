@@ -120,7 +120,7 @@ def test_skill_no_formato_agent_skills(skill):
     descricao = campos.get("description", "")
     assert isinstance(descricao, str) and len(descricao) > 60, "a descrição diz o que a skill faz e quando usar"
     assert "Use " in descricao
-    assert descricao.split("?")[0] != descricao, "a description abre com a pergunta que a skill responde"
+    assert re.match(r"^[^.?]*\?", descricao), "a description abre com a pergunta que a skill responde"
     assert corpo.strip()
     assert re.search(r"^# Skill [123] — ", corpo, re.M), "o título numerado fica"
 
