@@ -1,4 +1,4 @@
-"""Testes da base de domingo, do servidor MCP e do laço do agente. Offline: não chamam a API."""
+"""Testes da base de domingo e do servidor MCP. Offline: não chamam a API. O agente está em test_agente.py."""
 
 from __future__ import annotations
 
@@ -8,7 +8,6 @@ import re
 import sys
 from collections import Counter
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 
@@ -96,41 +95,6 @@ def test_servidor_mcp_expoe_as_tools_e_trava_a_regua(tmp_path, monkeypatch):
     asyncio.run(rodar())
     linhas = [json.loads(x) for x in (tmp_path / "propostas.jsonl").read_text(encoding="utf-8").splitlines()]
     assert [(x["encaminhamento"], x.get("recusada")) for x in linhas] == [("regra", "regua"), ("bloqueio", None)]
-
-
-class LLMFalso:
-    """Simula o modelo: lê a nota e registra uma proposta. Testa o laço, não a inteligência."""
-
-    def __init__(self):
-        self.messages = self
-        self.chamadas = 0
-
-    def create(self, **kw):
-        self.chamadas += 1
-        nota_id = re.search(r"NF-\d{3}", kw["messages"][0]["content"]).group(0)
-        if self.chamadas % 2 == 1:
-            bloco = {"type": "tool_use", "id": f"t{self.chamadas}", "name": "ler_nota", "input": {"nota_id": nota_id}}
-        else:
-            bloco = {"type": "tool_use", "id": f"t{self.chamadas}", "name": "registrar_proposta",
-                     "input": {"nota_id": nota_id, "classificacao": "E6", "acao_doca": "recusar",
-                               "encaminhamento": "bloqueio", "justificativa": "simulação do laço do agente"}}
-        return SimpleNamespace(content=[bloco], stop_reason="tool_use")
-
-
-def test_laco_do_agente_registra_proposta_via_mcp(tmp_path, monkeypatch):
-    monkeypatch.setenv("FDE_SAIDAS", str(tmp_path))
-    from agente import rodar_agente
-    codigo = rodar_agente.main(["--todas", "--limite", "2", "--saida", "teste.jsonl"], llm=LLMFalso())
-    assert codigo == 0
-    linhas = (tmp_path / "teste.jsonl").read_text(encoding="utf-8").splitlines()
-    assert len(linhas) == 2
-
-
-def test_sistema_inclui_as_tres_skills():
-    from agente.rodar_agente import montar_sistema
-    s = montar_sistema()
-    for titulo in ("Skill 1", "Skill 2", "Skill 3"):
-        assert titulo in s
 
 
 def test_recusa_da_regua_nao_revela_o_nivel(base, monkeypatch, tmp_path):
