@@ -8,6 +8,7 @@
     }
   },
   "enabledPlugins": {
+    "ahrena-engineering-development@ahrena": true,
     "ahrena-engineering-delivery@ahrena": true,
     "ahrena-engineering-frontend@ahrena": true,
     "ahrena-engineering-backend@ahrena": true,
