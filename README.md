@@ -134,7 +134,7 @@ O agente é um subagente do Claude Code e roda com o login da sua conta no Claud
 use o subagente auditor-de-notas na nota NF-001
 ```
 
-Nas 80 notas, peça ao Claude que use o subagente em cada nota pendente, ou rode um laço no terminal em que cada `claude -p` despacha o subagente numa nota. A proposta de cada nota vai para `saidas/propostas.jsonl`, e o eval continua o mesmo:
+Nas 80 notas, peça ao Claude que use o subagente em cada nota pendente, ou rode um laço no terminal em que cada `claude -p` pede ao Claude que use o subagente numa nota. A proposta de cada nota vai para `saidas/propostas.jsonl`, e o eval continua o mesmo:
 
 ```bash
 uv run python eval/avaliar.py saidas/propostas.jsonl --comparar saidas/baseline.jsonl --erros

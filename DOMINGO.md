@@ -80,18 +80,18 @@ Quem escreve o pedido ao subagente é a sessão principal do Claude Code, que l�
 
 ### O agente nas 80 notas
 
-No terminal, um laço com `claude -p`. Cada nota roda numa sessão própria, e cada sessão despacha o subagente `auditor-de-notas` uma vez, do mesmo jeito que na conversa. É este o caminho que vale para o eval.
+No terminal, um laço com `claude -p`. Cada nota roda numa sessão própria, e o pedido manda essa sessão despachar o subagente `auditor-de-notas`, como na conversa. É este o caminho que vale para o eval.
 
 ```bash
 for nota in $(uv run python -c "from jachegou.base import Base; print(*Base().notas)"); do
   claude -p "Use o subagente auditor-de-notas para fazer o check antecipado da nota $nota e registrar a proposta." \
-    --allowedTools "Agent(auditor-de-notas)" "mcp__ja-chegou__*"
+    --allowedTools "Agent" "mcp__ja-chegou__*"
 done
 ```
 
 - **O pedido vem logo depois do `-p`.** `--allowedTools` aceita uma lista; o que vier depois dele seria lido como mais uma tool.
-- **`Agent(auditor-de-notas)` libera sem perguntar o despacho deste subagente**, e de nenhum outro. No `-p` não há ninguém para aprovar: o que pede aprovação e não está na lista é negado.
-- **`mcp__ja-chegou__*` libera as tools do `ja-chegou` sem perguntar**, para o subagente ler a nota e registrar a proposta.
+- **`Agent` é a tool que despacha o subagente.** Ela não pede aprovação: a entrada só deixa explícito o que a sessão usa e não restringe nada: a sessão pode despachar outro subagente, como o `general-purpose`, que tem `Read`.
+- **`mcp__ja-chegou__*` libera as tools do `ja-chegou` sem perguntar**, para o subagente ler a nota e registrar a proposta. Que a liberação da sessão chega às chamadas do subagente se confere numa nota, como diz o último guardrail.
 - **No `-p`, o Claude Code carrega o servidor `ja-chegou` do `.mcp.json` sem pedir aprovação.**
 - **Para testar antes num pedaço**, troque `print(*Base().notas)` por `print(*list(Base().notas)[:10])`.
 - **Para rotular as propostas ou gravar noutro arquivo**, ponha as variáveis antes do laço: `export FDE_ORIGEM=grupo-1 FDE_ARQUIVO_PROPOSTAS=propostas-v2.jsonl`. O `.mcp.json` as repassa ao servidor.
@@ -145,3 +145,4 @@ As regras simples acertam falta, troca e quantidade menor. Erram onde o sentido 
 - O subagente começa sem os `CLAUDE.md` (`omitClaudeMd: true`), na conversa e no laço: nos dois, ele é despachado por uma sessão principal.
 - A sessão principal não é o subagente. Ela carrega o `CLAUDE.md` do repositório e o da sua conta, os plugins do `.claude/settings.json` e as tools dela, lê arquivos sem pedir aprovação e escreve o pedido ao subagente. O que o eval mede é o subagente com o pedido que essa sessão escreveu, e não o subagente sozinho.
 - No laço, a sessão principal também pode usar as tools do `ja-chegou`, porque `--allowedTools` as libera. O pedido manda usar o subagente, mas nada no laço obriga a sessão a fazer isso.
+- Para conferir numa nota que a proposta veio do subagente, rode-a com `--output-format stream-json --verbose`: a chamada a `registrar_proposta` tem de vir com `parent_tool_use_id` preenchido, e o resultado final não pode listar nada em `permission_denials`.

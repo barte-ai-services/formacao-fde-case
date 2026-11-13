@@ -91,7 +91,7 @@ def test_agente_nao_carrega_os_claude_md():
 
 LACO = (
     'claude -p "Use o subagente auditor-de-notas para fazer o check antecipado da nota $nota e registrar a proposta." \\\n'
-    '    --allowedTools "Agent(auditor-de-notas)" "mcp__ja-chegou__*"'
+    '    --allowedTools "Agent" "mcp__ja-chegou__*"'
 )
 
 
