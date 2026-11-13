@@ -2,7 +2,6 @@
 description: Roda o subagente auditor-de-notas nas notas pendentes da Já Chegou, uma nota por vez, e diz quantas propostas foram gravadas em saidas/. Aceita um limite opcional, como /auditar-lote 5.
 argument-hint: "[limite]"
 allowed-tools: Agent, mcp__ja-chegou__listar_notas_pendentes
-disable-model-invocation: true
 ---
 
 # Auditar o lote de notas pendentes

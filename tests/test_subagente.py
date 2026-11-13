@@ -136,13 +136,13 @@ COMANDO = RAIZ / ".claude" / "commands" / "auditar-lote.md"
 
 
 def test_comando_auditar_lote_tem_frontmatter_minimo():
-    """O /auditar-lote roda na sessão principal, só quando chamado, e pré-aprova só o que precisa."""
+    """O /auditar-lote roda na sessão principal, digitado ou pedido em palavras, e pré-aprova só o que precisa."""
     campos, corpo = _frontmatter(COMANDO)
     descricao = campos["description"]
     assert isinstance(descricao, str) and "/auditar-lote 5" in descricao
     assert ": " not in descricao, "dois-pontos com espaço quebra o YAML do frontmatter"
     assert campos["argument-hint"] == '"[limite]"'
-    assert campos["disable-model-invocation"] == "true"
+    assert "disable-model-invocation" not in campos
     assert _lista(campos["allowed-tools"]) == ["Agent", f"mcp__{SERVIDOR}__listar_notas_pendentes"]
     assert "$ARGUMENTS" in corpo
 
