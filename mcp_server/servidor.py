@@ -1,14 +1,16 @@
 """Servidor MCP do caso Já Chegou: as tools do agente de check antecipado.
 
 Leitura: notas pendentes, ordens, recebimentos, cadastro, fornecedores, notas já lançadas,
-pagamentos fora do fluxo e a régua de alçadas.
+pagamentos fora do fluxo e a régua de alçadas. Mais `comparar_itens`, que põe nota, ordem e contagem
+da doca lado a lado, item a item, e não classifica.
 Escrita: só `registrar_proposta`, que grava a proposta do agente em saidas/propostas.jsonl.
 
 Não existe tool para aprovar, pagar, baixar ou escrever no ERP. A trava fica no sistema, não só
 nas instruções do agente: `registrar_proposta` recusa encaminhamento abaixo do que a régua exige.
 
 Rodar sozinho (stdio):  uv run python mcp_server/servidor.py
-No Claude Code: o arquivo .mcp.json na raiz já aponta para este servidor.
+No Claude Code: o arquivo .mcp.json na raiz já aponta para este servidor, e o subagente
+`auditor-de-notas` (.claude/agents/) usa só as tools dele.
 """
 
 from __future__ import annotations
@@ -25,6 +27,7 @@ sys.path.insert(0, str(RAIZ))
 from mcp.server.mcpserver import MCPServer  # noqa: E402
 
 from jachegou.base import ACOES, CLASSIFICACOES, NIVEIS, Base  # noqa: E402
+from jachegou.comparar import comparar  # noqa: E402
 
 base = Base()
 SAIDAS = Path(os.environ.get("FDE_SAIDAS") or RAIZ / "saidas")
@@ -133,6 +136,18 @@ def buscar_pagamentos_fora_do_fluxo(fornecedor_id: str, destino: str | None = No
 
 
 @servidor.tool()
+def comparar_itens(nota_id: str) -> str:
+    """Põe lado a lado a nota, a ordem que ela cita e a contagem da doca (ou da loja), item a item.
+
+    Para cada código do fornecedor: quantidade e preço na nota, na ordem e na contagem, com as diferenças
+    de quantidade (nota − ordem, nota − doca) e de valor (nota − ordem). Mostra o fato e não classifica:
+    não converte caixa em unidade, não procura ordem quando a nota não cita pedido e não sugere ação."""
+    if nota_id not in base.notas:
+        return f"nota {nota_id} não encontrada"
+    return comparar(nota_id, base)
+
+
+@servidor.tool()
 def ler_regua() -> dict:
     """Régua de alçadas e tolerâncias vigentes: quem decide cada caso e o que o agente pode fazer."""
     return base.regua
@@ -178,7 +193,7 @@ def registrar_proposta(nota_id: str, classificacao: str, acao_doca: str, encamin
         return {"registrada": False, "erro": "; ".join(problemas)}
     proposta = {"nota_id": nota_id, "classificacao": classificacao, "acao_doca": acao_doca,
                 "encaminhamento": encaminhamento, "valor_em_risco": valor_em_risco,
-                "justificativa": justificativa.strip(), "origem": os.environ.get("FDE_ORIGEM", "agente"),
+                "justificativa": justificativa.strip(), "origem": os.environ.get("FDE_ORIGEM") or "agente",
                 "registrado_em": datetime.now().isoformat(timespec="seconds")}
     if NIVEIS.index(encaminhamento) < NIVEIS.index(nivel_minimo(classificacao, nota)):
         gravar({**proposta, "recusada": "regua"})
@@ -190,7 +205,7 @@ def registrar_proposta(nota_id: str, classificacao: str, acao_doca: str, encamin
 
 def gravar(linha: dict) -> None:
     SAIDAS.mkdir(parents=True, exist_ok=True)
-    with open(SAIDAS / os.environ.get("FDE_ARQUIVO_PROPOSTAS", "propostas.jsonl"), "a", encoding="utf-8") as f:
+    with open(SAIDAS / (os.environ.get("FDE_ARQUIVO_PROPOSTAS") or "propostas.jsonl"), "a", encoding="utf-8") as f:
         f.write(json.dumps(linha, ensure_ascii=False) + "\n")
 
 

@@ -14,7 +14,7 @@ Os alunos da Formação FDE fazem fork dele. Por isso:
 - **Os três ficam no repositório privado [`formacao-fde-ops`](https://github.com/barte-ai-services/formacao-fde-ops), em `kit-domingo/`.**
 - **A base de domingo não se edita à mão.** Ela sai do gerador no ops, com a semente padrão dele, e chega aqui copiada.
 - **Nenhum nome de cliente real** no texto nem nos dados. Os testes guardam a lista do que é proibido.
-- **Nada de segredo.** A chave da API fica no `.env`, que não entra no git.
+- **Nada de segredo.** O kit não precisa de credencial: roda dentro do Claude Code. Se um grupo precisar guardar alguma, ela fica no `.env`, que não entra no git.
 
 ## Issues
 

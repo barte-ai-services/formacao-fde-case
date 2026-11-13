@@ -1,9 +1,9 @@
 ---
-name: propor-acao-na-doca
-description: Propõe o que a doca (ou a loja) da Já Chegou faz com a mercadoria de uma nota fiscal já classificada, entre receber, receber_parcial e recusar. Use depois de classificar a nota e antes de encaminhar o caso.
+name: decidir-recebimento
+description: A doca (ou a loja) da Já Chegou recebe a mercadoria desta nota fiscal, recebe só uma parte ou recusa? Responde com receber, receber_parcial ou recusar, a partir da divergência já classificada. Use depois de classificar-divergencia e antes de definir-aprovador.
 ---
 
-# Propor a ação na doca
+# Skill 2 — Decidir o recebimento
 
 Ponto de partida. O grupo completa esta skill a partir do dossiê e da camada de contexto.
 
