@@ -5,6 +5,9 @@ na nota, na ordem e na contagem, com as diferenças de quantidade e de valor. N�
 em unidade e não sugere ação. Lê só a base operacional em `dados/` (por `jachegou.base`), nunca
 o gabarito.
 
+A raiz do repositório é a primeira pasta acima com `jachegou/`, ou a pasta atual; assim o plugin
+pode ser copiado para outro lugar (`--skills <pasta>`, no DOMINGO.md) e o script roda da raiz.
+
 Uso:
     uv run python agente/plugin/skills/classificar/scripts/comparar_itens.py NF-001
 """
@@ -15,8 +18,6 @@ import argparse
 import sys
 from pathlib import Path
 
-# A raiz do repositório é a primeira pasta acima com jachegou/; assim o plugin pode ser copiado
-# para outro lugar (DOMINGO.md, "--skills <pasta>") e o script roda da raiz do repositório.
 RAIZ = next((p for p in Path(__file__).resolve().parents if (p / "jachegou").is_dir()), Path.cwd())
 sys.path.insert(0, str(RAIZ))
 

@@ -87,7 +87,10 @@ def _bash_permitido(comando: str, script: Path) -> bool:
 
 
 def decidir(ferramenta: str, entrada: dict, plugin: Path) -> str | None:
-    """Devolve o motivo da recusa, ou None se a chamada pode seguir. Nega por padrão."""
+    """Devolve o motivo da recusa, ou None se a chamada pode seguir. Nega por padrão.
+
+    Os dados vêm pelo MCP; do disco, o agente só lê o plugin (as references das skills).
+    """
     if ferramenta in FERRAMENTAS_LIVRES or ferramenta.startswith(f"mcp__{SERVIDOR_MCP}__"):
         return None
     if ferramenta in FERRAMENTAS_DE_ESCRITA:
@@ -98,7 +101,6 @@ def decidir(ferramenta: str, entrada: dict, plugin: Path) -> str | None:
             return None
         return "o Bash só roda o comparador de itens da skill classificar, numa nota"
     if ferramenta in FERRAMENTAS_DE_LEITURA:
-        # Os dados vêm pelo MCP; do disco, o agente só lê o plugin (as references das skills).
         alvo = entrada.get("file_path") or entrada.get("path") or ""
         if alvo and _dentro(_resolver(alvo), plugin.resolve()) and "gabarito" not in alvo.lower():
             return None
@@ -120,6 +122,8 @@ def criar_guarda(plugin: Path) -> HookCallback:
 
 
 def montar_opcoes(origem: str, saida: str, modelo: str | None = None, pasta_plugin: Path | None = None) -> ClaudeAgentOptions:
+    """Opções do agente: nada vem do disco, nem `.claude/settings.json` (e os plugins do Ahrena
+    que ele habilita) nem `CLAUDE.md`; as skills entram só pelo plugin local."""
     plugin = (pasta_plugin or PLUGIN).resolve()
     ambiente_mcp = {"FDE_ORIGEM": origem, "FDE_ARQUIVO_PROPOSTAS": saida}
     for chave in ("FDE_DADOS", "FDE_SAIDAS"):
@@ -129,8 +133,6 @@ def montar_opcoes(origem: str, saida: str, modelo: str | None = None, pasta_plug
         model=modelo or os.environ.get("AGENT_MODEL", "claude-sonnet-5-5"),
         system_prompt=(RAIZ / "agente" / "instrucoes.md").read_text(encoding="utf-8"),
         cwd=str(RAIZ),
-        # formacao-fde-ops#41: nada do disco, nem .claude/settings.json (e os plugins do Ahrena que
-        # ele habilita) nem CLAUDE.md. As skills entram só pelo plugin local.
         setting_sources=[],
         strict_mcp_config=True,
         plugins=[{"type": "local", "path": str(plugin)}],
@@ -194,9 +196,8 @@ async def analisar_nota(consulta: Consulta, opcoes: ClaudeAgentOptions, nota_id:
     proposta = None
     async for mensagem in consulta(prompt=pedido, options=opcoes):
         if isinstance(mensagem, AssistantMessage):
-            for bloco in mensagem.content:
-                if isinstance(bloco, ToolUseBlock):
-                    mostrar(bloco)
+            for bloco in (b for b in mensagem.content if isinstance(b, ToolUseBlock)):
+                mostrar(bloco)
             registros |= _ids_de_registro(mensagem)
         elif isinstance(mensagem, UserMessage):
             proposta = _proposta_em(mensagem, registros) or proposta
