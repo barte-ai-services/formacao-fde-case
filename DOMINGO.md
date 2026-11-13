@@ -105,7 +105,7 @@ Também dá para pedir de dentro do Claude Code ("liste as notas pendentes e use
 uv run python eval/avaliar.py saidas/propostas.jsonl --comparar saidas/baseline.jsonl --erros
 ```
 
-O arquivo acumula. Se a mesma nota tiver mais de uma proposta, vale a última aceita, mas o encaminhamento na primeira tentativa é medido pela primeira linha de cada nota. Para medir uma versão nova das skills, grave noutro arquivo (`FDE_ARQUIVO_PROPOSTAS`) ou renomeie `saidas/propostas.jsonl` antes do lote.
+O arquivo acumula. Se a mesma nota tiver mais de uma proposta, vale a última aceita, mas o encaminhamento na primeira tentativa é medido pela primeira linha de cada nota. Para medir uma versão nova das skills, grave noutro arquivo (`FDE_ARQUIVO_PROPOSTAS`) ou renomeie `saidas/propostas.jsonl` antes do lote. Se gravou noutro arquivo, troque o nome no comando do eval, por exemplo `saidas/propostas-v2.jsonl`.
 
 ## A base
 
