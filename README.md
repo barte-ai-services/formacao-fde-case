@@ -128,19 +128,19 @@ O kit de domingo já está aqui, menos o gabarito, que entra no domingo de manh�
 
 ## O agente de domingo
 
-O agente é um subagente do Claude Code e roda com o login da sua conta no Claude Code, sem chave da API. Numa nota, abra o Claude Code na raiz do repositório e peça:
+O agente é um subagente do Claude Code e roda com o login da sua conta no Claude Code, sem chave da API nem outra credencial. Numa nota, abra o Claude Code na raiz do repositório e peça:
 
 ```
 use o subagente auditor-de-notas na nota NF-001
 ```
 
-Nas 80 notas, peça ao Claude que use o subagente em cada nota pendente, ou rode um laço no terminal em que cada `claude -p` pede ao Claude que use o subagente numa nota. A proposta de cada nota vai para `saidas/propostas.jsonl`, e o eval continua o mesmo:
+O servidor `ja-chegou` do `.mcp.json` e o agente entram quando a sessão começa: quem acabou de dar `git pull` abre uma sessão nova. Nas 80 notas, peça na mesma sessão que o Claude use o subagente em cada nota pendente, uma por vez ou em lote. A proposta de cada nota vai para `saidas/propostas.jsonl`, e o eval continua o mesmo:
 
 ```bash
 uv run python eval/avaliar.py saidas/propostas.jsonl --comparar saidas/baseline.jsonl --erros
 ```
 
-O passo a passo, com o laço, está no [`DOMINGO.md`](DOMINGO.md#como-rodar).
+O passo a passo, com um laço opcional no terminal, está no [`DOMINGO.md`](DOMINGO.md#como-rodar).
 
 ## Comandos do dia a dia
 

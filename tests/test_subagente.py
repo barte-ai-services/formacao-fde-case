@@ -89,28 +89,54 @@ def test_agente_nao_carrega_os_claude_md():
     assert campos.get("omitClaudeMd") == "true"
 
 
+PEDIDO = "use o subagente auditor-de-notas na nota NF-001"
+PEDIDO_LOTE = "liste as notas pendentes e use o subagente auditor-de-notas em cada uma, uma por vez"
+EVAL = "uv run python eval/avaliar.py saidas/propostas.jsonl --comparar saidas/baseline.jsonl --erros"
+
+
+@pytest.mark.parametrize("arquivo", ["DOMINGO.md", "README.md"])
+def test_caminho_principal_e_pedir_na_sessao_interativa(arquivo):
+    """O aluno pede ao Claude Code dele, na raiz do repositório, que use o subagente; o eval é o de sempre."""
+    texto = (RAIZ / arquivo).read_text(encoding="utf-8")
+    assert f"```\n{PEDIDO}\n```" in texto
+    assert EVAL in texto
+    assert "saidas/propostas.jsonl" in texto
+    assert "sessão nova" in texto, "o .mcp.json e o agente só entram quando a sessão começa"
+    assert "sem chave da API" in texto
+
+
+def test_domingo_tem_o_pedido_das_80_notas_na_mesma_sessao():
+    texto = (RAIZ / "DOMINGO.md").read_text(encoding="utf-8")
+    assert f"```\n{PEDIDO_LOTE}\n```" in texto
+    assert texto.index(PEDIDO_LOTE) < texto.index("### Opcional: um laço no terminal")
+
+
 LACO = (
     'claude -p "Use o subagente auditor-de-notas para fazer o check antecipado da nota $nota e registrar a proposta." \\\n'
     '    --allowedTools "Agent" "mcp__ja-chegou__*"'
 )
 
 
-def test_laco_despacha_o_subagente_de_uma_sessao_normal():
-    """O laço usa o caminho documentado: a sessão despacha o subagente, com o pedido antes do --allowedTools."""
+def test_laco_e_opcional_e_so_usa_o_login():
+    """O laço com claude -p fica numa seção opcional, depois do caminho principal, e não pede credencial."""
     texto = (RAIZ / "DOMINGO.md").read_text(encoding="utf-8")
-    assert LACO in texto
+    secao = texto.split("### Opcional: um laço no terminal")[1].split("### Medir")[0]
+    assert LACO in secao
+    assert texto.count("claude -p") == secao.count("claude -p"), "claude -p só aparece na seção opcional"
+    assert "mesmo login do Claude Code, sem chave da API nem outra credencial" in secao
+    assert "Não é pré-requisito" in secao
     comando = LACO.replace("\\\n", " ")
     assert comando.index('-p "') < comando.index("--allowedTools"), "--allowedTools aceita uma lista e engoliria o pedido"
 
 
 @pytest.mark.parametrize("arquivo", ["DOMINGO.md", "README.md"])
 def test_documentacao_nao_roda_o_agente_como_sessao_principal(arquivo):
-    """Com --agent, o preload das skills na sessão principal não está documentado; o laço não depende dele."""
+    """Com --agent, o preload das skills na sessão principal não está documentado; o caminho principal não depende dele."""
     assert "--agent" not in (RAIZ / arquivo).read_text(encoding="utf-8")
 
 
 def test_mcp_json_passa_origem_e_arquivo_ao_servidor():
-    """O laço do DOMINGO.md troca o rótulo e o arquivo das propostas por variável de ambiente."""
+    """O DOMINGO.md troca o rótulo e o arquivo das propostas por variável de ambiente."""
     import json
 
     env = json.loads((RAIZ / ".mcp.json").read_text(encoding="utf-8"))["mcpServers"][SERVIDOR]["env"]
