@@ -76,7 +76,7 @@ use o subagente auditor-de-notas na nota NF-001
 
 O Claude despacha o subagente, que lê a nota pelas tools do `ja-chegou`, aplica as três skills e termina com `registrar_proposta`. Quando ele pedir permissão para usar uma tool do `ja-chegou`, aprove. A proposta vai para `saidas/propostas.jsonl`. Para conferir o que o subagente tem, rode `/agents`: ele deve mostrar as tools do `ja-chegou` e as três skills.
 
-- **O servidor e o agente entram quando a sessão começa.** O Claude Code lê o `.mcp.json` e o `.claude/agents/` ao abrir. Quem acabou de dar `git pull`, ou editou o frontmatter do agente, abre uma sessão nova.
+- **O servidor e o agente entram quando a sessão começa.** O Claude Code lê o `.mcp.json` e o `.claude/agents/` ao abrir. Quem acabou de dar `git pull`, ou editou o agente ou uma skill, abre uma sessão nova antes de medir.
 - **Quem escreve o pedido ao subagente é a sessão principal do Claude Code**, que lê arquivos, inclusive `dados/gabarito/` quando ele estiver no repositório. O subagente só recebe esse pedido.
 
 ### O agente nas 80 notas
@@ -87,13 +87,13 @@ Na mesma sessão, peça ao Claude que despache o subagente nota por nota:
 liste as notas pendentes e use o subagente auditor-de-notas em cada uma, uma por vez
 ```
 
-Ou em lote, alguns subagentes de cada vez. Para testar antes num pedaço, peça só as dez primeiras. Para não aprovar cada chamada, escolha a opção de não perguntar de novo para as tools do `ja-chegou` na primeira vez que ele pedir.
+Ou em lote, alguns subagentes de cada vez. Para testar antes num pedaço, peça só as dez primeiras. Para não aprovar cada chamada, rode antes uma nota e, para cada tool do `ja-chegou` que ele pedir, escolha a opção de não perguntar de novo. Faça isso antes do lote: subagentes em paralelo podem ter a tool negada em vez de perguntar.
 
 Para rotular as propostas ou gravar noutro arquivo, ponha as variáveis antes de abrir o Claude Code: `export FDE_ORIGEM=grupo-1 FDE_ARQUIVO_PROPOSTAS=propostas-v2.jsonl`, e depois `claude`. O `.mcp.json` as repassa ao servidor.
 
 ### Opcional: um laço no terminal
 
-Quem prefere uma sessão por nota pode rodar um laço com `claude -p`. Ele usa o mesmo login do Claude Code, sem chave da API nem outra credencial. Não é pré-requisito: o caminho acima basta.
+Quem prefere uma sessão por nota pode rodar um laço com `claude -p`. Ele usa o mesmo login do Claude Code, sem chave da API nem outra credencial (desde que não haja `ANTHROPIC_API_KEY` exportada no terminal: se houver, o `claude -p` usa a chave). Não é pré-requisito: o caminho acima basta.
 
 ```bash
 for nota in $(uv run python -c "from jachegou.base import Base; print(*Base().notas)"); do
@@ -113,7 +113,7 @@ done
 uv run python eval/avaliar.py saidas/propostas.jsonl --comparar saidas/baseline.jsonl --erros
 ```
 
-O arquivo acumula. Se a mesma nota tiver mais de uma proposta, vale a última aceita, mas o encaminhamento na primeira tentativa é medido pela primeira linha de cada nota. Para medir uma versão nova das skills, grave noutro arquivo (`FDE_ARQUIVO_PROPOSTAS`) ou renomeie `saidas/propostas.jsonl` antes do lote. Se gravou noutro arquivo, troque o nome no comando do eval, por exemplo `saidas/propostas-v2.jsonl`.
+O arquivo acumula. Se a mesma nota tiver mais de uma proposta, vale a última aceita, mas o encaminhamento na primeira tentativa é medido pela primeira linha de cada nota. Para medir uma versão nova das skills, abra uma sessão nova e grave noutro arquivo (`FDE_ARQUIVO_PROPOSTAS`) ou renomeie `saidas/propostas.jsonl` antes do lote. Se gravou noutro arquivo, troque o nome no comando do eval, por exemplo `saidas/propostas-v2.jsonl`.
 
 ## A base
 
@@ -151,4 +151,4 @@ As regras simples acertam falta, troca e quantidade menor. Erram onde o sentido 
 - As skills entram pelo campo `skills` do frontmatter. Sem a tool `Skill`, o subagente não carrega as outras skills do projeto, da sua conta ou dos plugins do `.claude/settings.json`.
 - O subagente começa sem os `CLAUDE.md` (`omitClaudeMd: true`): quem o despacha é sempre uma sessão principal.
 - A sessão principal não é o subagente. Ela carrega o `CLAUDE.md` do repositório e o da sua conta, os plugins do `.claude/settings.json` e as tools dela, lê arquivos sem pedir aprovação e escreve o pedido ao subagente. O que o eval mede é o subagente com o pedido que essa sessão escreveu, e não o subagente sozinho.
-- A sessão principal também alcança as tools do `ja-chegou`. O pedido manda usar o subagente, mas nada obriga a sessão a fazer isso: na conversa, veja se quem chamou `registrar_proposta` foi o subagente.
+- A sessão principal também alcança as tools do `ja-chegou`. O pedido manda usar o subagente, mas nada obriga a sessão a fazer isso: numa ou duas notas, confira na conversa que a chamada a `registrar_proposta` aparece dentro do subagente (`ctrl+o` mostra o detalhe).

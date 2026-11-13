@@ -99,6 +99,7 @@ def test_caminho_principal_e_pedir_na_sessao_interativa(arquivo):
     """O aluno pede ao Claude Code dele, na raiz do repositório, que use o subagente; o eval é o de sempre."""
     texto = (RAIZ / arquivo).read_text(encoding="utf-8")
     assert f"```\n{PEDIDO}\n```" in texto
+    assert "na raiz do repositório" in texto
     assert EVAL in texto
     assert "saidas/propostas.jsonl" in texto
     assert "sessão nova" in texto, "o .mcp.json e o agente só entram quando a sessão começa"
@@ -106,6 +107,7 @@ def test_caminho_principal_e_pedir_na_sessao_interativa(arquivo):
 
 
 def test_domingo_tem_o_pedido_das_80_notas_na_mesma_sessao():
+    """Nas 80 notas, o caminho principal é pedir na mesma sessão, antes da seção do laço opcional."""
     texto = (RAIZ / "DOMINGO.md").read_text(encoding="utf-8")
     assert f"```\n{PEDIDO_LOTE}\n```" in texto
     assert texto.index(PEDIDO_LOTE) < texto.index("### Opcional: um laço no terminal")
@@ -120,6 +122,7 @@ LACO = (
 def test_laco_e_opcional_e_so_usa_o_login():
     """O laço com claude -p fica numa seção opcional, depois do caminho principal, e não pede credencial."""
     texto = (RAIZ / "DOMINGO.md").read_text(encoding="utf-8")
+    assert "### Opcional: um laço no terminal" in texto
     secao = texto.split("### Opcional: um laço no terminal")[1].split("### Medir")[0]
     assert LACO in secao
     assert texto.count("claude -p") == secao.count("claude -p"), "claude -p só aparece na seção opcional"
