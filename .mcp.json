@@ -2,7 +2,11 @@
   "mcpServers": {
     "ja-chegou": {
       "command": "uv",
-      "args": ["run", "python", "mcp_server/servidor.py"]
+      "args": ["run", "python", "mcp_server/servidor.py"],
+      "env": {
+        "FDE_ORIGEM": "${FDE_ORIGEM:-agente}",
+        "FDE_ARQUIVO_PROPOSTAS": "${FDE_ARQUIVO_PROPOSTAS:-propostas.jsonl}"
+      }
     }
   }
 }

@@ -51,6 +51,7 @@ O agente é o arquivo `.claude/agents/check-antecipado.md`, um [subagente do Cla
 - **`tools` libera só as tools do `ja-chegou`** (`mcp__ja-chegou__*`). Sem `Read`, `Bash`, `Write`, `Edit`, `Glob` e `Grep`, o agente não abre arquivo nenhum, nem `dados/gabarito/`. A única escrita é `registrar_proposta`.
 - **`skills` carrega as três skills.** O agente não tem a tool `Skill`, então não invoca outras skills do projeto, da sua conta ou dos plugins.
 - **`model` é o modelo do agente** (`sonnet`).
+- **`omitClaudeMd: true`** deixa de fora do contexto do subagente o `CLAUDE.md` do repositório e o da sua conta.
 
 Não deixem de fora nenhum desses campos ao editar: é o frontmatter que segura os guardrails.
 
@@ -73,36 +74,38 @@ Abra o Claude Code na raiz do repositório (`claude`). Na primeira vez, ele perg
 use o subagente check-antecipado na nota NF-001
 ```
 
-O Claude despacha o subagente, que lê a nota pelas tools do `ja-chegou`, aplica as três skills e termina com `registrar_proposta`. Quando ele pedir permissão para usar uma tool do `ja-chegou`, aprove. Para conferir o que o subagente tem, rode `/agents`.
+O Claude despacha o subagente, que lê a nota pelas tools do `ja-chegou`, aplica as três skills e termina com `registrar_proposta`. Quando ele pedir permissão para usar uma tool do `ja-chegou`, aprove. Para conferir o que o subagente tem, rode `/agents`: ele deve mostrar as tools do `ja-chegou` e as três skills.
+
+Este caminho é para explorar uma nota. Quem escreve o pedido ao subagente é a sessão principal do Claude Code, que lê arquivos, inclusive `dados/gabarito/` quando ele estiver no repositório. Para medir, use o laço abaixo.
 
 ### O agente nas 80 notas
 
-De dentro do Claude Code, peça:
-
-```
-liste as notas pendentes com listar_notas_pendentes e use o subagente check-antecipado em cada uma, uma nota por vez
-```
-
-Ou, no terminal, um laço com `claude -p --agent check-antecipado`. Cada nota roda numa sessão própria, com o subagente no lugar do Claude Code. `--allowedTools` libera as tools do `ja-chegou` sem perguntar, já que no `-p` não há ninguém para aprovar:
+No terminal, um laço com `claude -p --agent check-antecipado`. Cada nota roda numa sessão própria, e a sessão inteira é o subagente: as mesmas tools, as mesmas skills e o mesmo prompt. É este o caminho que vale para o eval.
 
 ```bash
 for nota in $(uv run python -c "from jachegou.base import Base; print(*Base().notas)"); do
-  claude -p --agent check-antecipado --allowedTools "mcp__ja-chegou__*" \
-    "Faça o check antecipado da nota $nota e registre a proposta com registrar_proposta."
+  claude -p "Faça o check antecipado da nota $nota e registre a proposta com registrar_proposta." \
+    --agent check-antecipado --allowedTools "mcp__ja-chegou__*"
 done
 ```
 
-Para testar antes num pedaço, troque `print(*Base().notas)` por `print(*list(Base().notas)[:10])`.
+- **O pedido vem logo depois do `-p`.** `--allowedTools` aceita uma lista; o que vier depois dele seria lido como mais uma tool.
+- **`--allowedTools` libera as tools do `ja-chegou` sem perguntar**, já que no `-p` não há ninguém para aprovar.
+- **No `-p`, o Claude Code carrega o servidor `ja-chegou` do `.mcp.json` sem pedir aprovação.**
+- **Para testar antes num pedaço**, troque `print(*Base().notas)` por `print(*list(Base().notas)[:10])`.
+- **Para rotular as propostas ou gravar noutro arquivo**, ponha as variáveis antes do laço: `export FDE_ORIGEM=grupo-1 FDE_ARQUIVO_PROPOSTAS=propostas-v2.jsonl`. O `.mcp.json` as repassa ao servidor.
+
+Também dá para pedir de dentro do Claude Code ("liste as notas pendentes e use o subagente check-antecipado em cada uma, uma por vez"), com o mesmo cuidado do caminho de uma nota: quem despacha é a sessão principal.
 
 ### Medir
 
-`registrar_proposta` grava cada proposta em `saidas/propostas.jsonl`. O eval e o baseline são os mesmos de sempre:
+`registrar_proposta` grava cada proposta em `saidas/propostas.jsonl` (ou no arquivo de `FDE_ARQUIVO_PROPOSTAS`). O eval e o baseline são os mesmos de sempre:
 
 ```bash
 uv run python eval/avaliar.py saidas/propostas.jsonl --comparar saidas/baseline.jsonl --erros
 ```
 
-O arquivo acumula: se a mesma nota tiver mais de uma proposta, vale a última. Para medir uma versão nova das skills do zero, renomeie ou apague `saidas/propostas.jsonl` antes de rodar o lote.
+O arquivo acumula. Se a mesma nota tiver mais de uma proposta, vale a última aceita, mas o encaminhamento na primeira tentativa é medido pela primeira linha de cada nota. Para medir uma versão nova das skills, grave noutro arquivo (`FDE_ARQUIVO_PROPOSTAS`) ou renomeie `saidas/propostas.jsonl` antes do lote.
 
 ## A base
 
@@ -138,3 +141,5 @@ As regras simples acertam falta, troca e quantidade menor. Erram onde o sentido 
 - O servidor nunca lê `dados/gabarito/`.
 - As ferramentas do subagente são só as tools do `ja-chegou` (`tools: mcp__ja-chegou__*`). Sem `Read`, `Bash`, `Write`, `Edit`, `Glob` e `Grep`, ele não lê `dados/gabarito/` nem o `.env`, e não escreve fora de `saidas/`.
 - As skills entram pelo campo `skills` do frontmatter. Sem a tool `Skill`, o subagente não carrega as outras skills do projeto, da sua conta ou dos plugins do `.claude/settings.json`.
+- Despachado de dentro do Claude Code, o subagente começa sem os `CLAUDE.md` (`omitClaudeMd: true`). No laço com `--agent`, esse campo não vale: o `CLAUDE.md` do repositório e o da sua conta entram no contexto.
+- Só o laço com `--agent` mede o agente sozinho. Na conversa, a sessão principal tem as ferramentas de arquivo e escreve o pedido ao subagente.

@@ -68,6 +68,20 @@ def test_agente_so_usa_as_tools_do_ja_chegou():
     assert "disallowedTools" not in campos and "permissionMode" not in campos
 
 
+def test_agente_nao_carrega_os_claude_md():
+    """O CLAUDE.md do projeto e o da conta do aluno não entram no contexto do subagente."""
+    campos, _ = _frontmatter(AGENTE)
+    assert campos.get("omitClaudeMd") == "true"
+
+
+def test_mcp_json_passa_origem_e_arquivo_ao_servidor():
+    """O laço do DOMINGO.md troca o rótulo e o arquivo das propostas por variável de ambiente."""
+    import json
+
+    env = json.loads((RAIZ / ".mcp.json").read_text(encoding="utf-8"))["mcpServers"][SERVIDOR]["env"]
+    assert env == {"FDE_ORIGEM": "${FDE_ORIGEM:-agente}", "FDE_ARQUIVO_PROPOSTAS": "${FDE_ARQUIVO_PROPOSTAS:-propostas.jsonl}"}
+
+
 def test_agente_carrega_as_tres_skills():
     campos, _ = _frontmatter(AGENTE)
     assert _lista(campos.get("skills")) == SKILLS

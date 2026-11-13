@@ -8,6 +8,7 @@ skills:
   - propor-acao-na-doca
   - encaminhar
 model: sonnet
+omitClaudeMd: true
 ---
 
 # Agente de check antecipado · Já Chegou

@@ -194,7 +194,7 @@ def registrar_proposta(nota_id: str, classificacao: str, acao_doca: str, encamin
         return {"registrada": False, "erro": "; ".join(problemas)}
     proposta = {"nota_id": nota_id, "classificacao": classificacao, "acao_doca": acao_doca,
                 "encaminhamento": encaminhamento, "valor_em_risco": valor_em_risco,
-                "justificativa": justificativa.strip(), "origem": os.environ.get("FDE_ORIGEM", "agente"),
+                "justificativa": justificativa.strip(), "origem": os.environ.get("FDE_ORIGEM") or "agente",
                 "registrado_em": datetime.now().isoformat(timespec="seconds")}
     if NIVEIS.index(encaminhamento) < NIVEIS.index(nivel_minimo(classificacao, nota)):
         gravar({**proposta, "recusada": "regua"})
@@ -206,7 +206,7 @@ def registrar_proposta(nota_id: str, classificacao: str, acao_doca: str, encamin
 
 def gravar(linha: dict) -> None:
     SAIDAS.mkdir(parents=True, exist_ok=True)
-    with open(SAIDAS / os.environ.get("FDE_ARQUIVO_PROPOSTAS", "propostas.jsonl"), "a", encoding="utf-8") as f:
+    with open(SAIDAS / (os.environ.get("FDE_ARQUIVO_PROPOSTAS") or "propostas.jsonl"), "a", encoding="utf-8") as f:
         f.write(json.dumps(linha, ensure_ascii=False) + "\n")
 
 
