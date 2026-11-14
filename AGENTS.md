@@ -2,16 +2,16 @@
 
 Vale para qualquer agente, e para quem trabalha com um. O que vale para o time inteiro vem do Ahrena e não é copiado aqui; o que está aqui só vale neste repositório. `CLAUDE.md` aponta para cá.
 
-Antes de mudar qualquer coisa, leia o [README](README.md) e o [`DOMINGO.md`](DOMINGO.md).
+Antes de mudar qualquer coisa, leia o [README](README.md). O kit de domingo, com o `DOMINGO.md`, só chega aqui no domingo de manhã; até lá ele fica guardado no `formacao-fde-ops`.
 
 ## Este repositório é público
 
 Os alunos da Formação FDE fazem fork dele. Por isso:
 
 - **Nada que entregue as respostas entra aqui antes da hora:**
-  - o gabarito (`dados/gabarito/`) só entra no domingo de manhã;
+  - o kit de domingo (agente, skills, servidor MCP, base, baseline e eval) só entra no domingo às 8h30, e o gabarito (`dados/gabarito/`) também só no domingo de manhã;
   - o gerador da base e a solução de referência nunca entram.
-- **Os três ficam no repositório privado [`formacao-fde-ops`](https://github.com/barte-ai-services/formacao-fde-ops), em `kit-domingo/`.**
+- **Até a hora deles, todos ficam no repositório privado [`formacao-fde-ops`](https://github.com/barte-ai-services/formacao-fde-ops), em `kit-domingo/`.**
 - **A base de domingo não se edita à mão.** Ela sai do gerador no ops, com a semente padrão dele, e chega aqui copiada.
 - **Nenhum nome de cliente real** no texto nem nos dados. Os testes guardam a lista do que é proibido.
 - **Nada de segredo.** O kit não precisa de credencial: roda dentro do Claude Code. Se um grupo precisar guardar alguma, ela fica no `.env`, que não entra no git.
@@ -22,7 +22,7 @@ As issues deste repositório moram no `formacao-fde-ops`, que é privado. O PR d
 
 ## O gate
 
-`make check` roda os testes (`uv run pytest`) e passa antes do commit. Os testes que dependem do gabarito pulam enquanto ele não está.
+`make check` roda os testes (`uv run pytest`) e passa antes do commit. Os testes do kit de domingo chegam com ele; os que dependem do gabarito pulam enquanto ele não está.
 
 ## Documentação e nomes
 

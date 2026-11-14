@@ -5,9 +5,7 @@ description = "Public case repository for the Barte FDE training (Formação FDE
 readme = "README.md"
 requires-python = ">=3.12"
 license = "Apache-2.0"
-dependencies = [
-    "mcp>=2.3",
-]
+dependencies = []
 
 [dependency-groups]
 dev = [

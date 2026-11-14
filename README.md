@@ -123,45 +123,21 @@ Nunca coloque o arquivo `.env` nem nenhuma chave ou senha num commit. O `.env` j
 
 ## Mapa das pastas
 
-O kit de domingo já está aqui, menos o gabarito, que entra no domingo de manhã.
-
 | Pasta | O que tem |
 |---|---|
 | `case/` | O case da Já Chegou: o briefing e o dossiê, que só aparece no sábado depois do roleplay. |
 | `challenge/` | As instruções do desafio do kit, de sábado de manhã. |
 | `templates/` | Os modelos dos entregáveis dos checkpoints. |
 | `teams/` | Uma pasta por grupo, com nome, integrantes e o link do fork líder. |
-| `DOMINGO.md` | Como funciona o kit de domingo: o agente, as três skills, as tools e o eval. |
 | `.claude/skills/setup-fde/` | A skill que configura a sua máquina: peça ao Claude Code "configura o meu setup de FDE". |
-| `.claude/agents/`, `.claude/skills/`, `.claude/commands/` | O agente de domingo, um subagente do Claude Code (`auditor-de-notas`), as três skills dele no formato Agent Skills e o comando `/auditar-lote`. Veja o `DOMINGO.md` para editar e rodar. |
-| `mcp_server/`, `jachegou/` | As tools do agente, expostas por MCP, e o acesso à base. |
-| `dados/` | A base sintética de domingo. O gabarito (`dados/gabarito/`) chega no domingo de manhã. |
-| `baseline/`, `eval/` | Regras simples sem IA para comparar, e o eval contra o gabarito. |
-| `saidas/` | Onde o agente e o baseline gravam as propostas. |
 | `scripts/` | Utilitários, como o verificador de setup `scripts/check_setup.py`. |
 | `tests/` | Os testes automáticos do repositório (`uv run pytest`). |
 
 ## O agente de domingo
 
-O kit roda inteiro dentro do Claude Code: um subagente (`auditor-de-notas`), três skills e o comando `/auditar-lote`. Nada no repositório chama a API nem o `claude` pela linha de comando; o único requisito é o seu Claude Code. Numa nota, abra o Claude Code na raiz do repositório e peça:
-
-```
-use o subagente auditor-de-notas na nota NF-001
-```
-
-Nas 80 notas, rode na mesma sessão:
-
-```
-/auditar-lote
-```
-
-O servidor `ja-chegou` do `.mcp.json`, o agente e o comando entram quando a sessão começa: quem acabou de dar `git pull` abre uma sessão nova. A proposta de cada nota vai para `saidas/propostas.jsonl`, e o eval, que é Python puro e não chama modelo, continua o mesmo:
-
-```bash
-uv run python eval/avaliar.py saidas/propostas.jsonl --comparar saidas/baseline.jsonl --erros
-```
-
-O passo a passo está no [`DOMINGO.md`](DOMINGO.md#como-rodar).
+<!-- kit-domingo:inicio -->
+O kit de domingo (o agente, as skills, as tools, a base de notas, o baseline e o eval) chega a este repositório no domingo, 15/11, de manhã.
+<!-- kit-domingo:fim -->
 
 ## Comandos do dia a dia
 
