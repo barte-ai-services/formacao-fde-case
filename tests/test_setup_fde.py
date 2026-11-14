@@ -88,7 +88,7 @@ def test_documentacao_aponta_para_a_skill(arquivo):
     assert "12/11" not in texto
 
 
-def test_settings_liga_a_athena_e_o_argos():
+def test_settings_liga_a_athena_e_o_argos() -> None:
     """formacao-fde-ops#56/AC-1: o case liga os plugins de que o CLAUDE.md depende, e o bloco do Ahrena está no CLAUDE.md."""
     plugins = json.loads((RAIZ / ".claude" / "settings.json").read_text(encoding="utf-8"))["enabledPlugins"]
     for plugin in ("ahrena-engineering-development", "ahrena-engineering-code-review", "ahrena-engineering-data"):
@@ -97,7 +97,7 @@ def test_settings_liga_a_athena_e_o_argos():
     assert "<!-- ahrena:agency:start -->" in claude and "ahrena-engineering-development:athena" in claude
 
 
-def test_setup_explica_o_ahrena():
+def test_setup_explica_o_ahrena() -> None:
     """formacao-fde-ops#56/AC-5: o SETUP.md diz o que é o Ahrena e como confirmar com /agents e a Athena."""
     texto = (RAIZ / "SETUP.md").read_text(encoding="utf-8")
     assert "## O Ahrena no Claude Code" in texto

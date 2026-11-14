@@ -18,11 +18,8 @@ import sys
 
 def ligados(case: str) -> list[str]:
     caminho = os.path.join(case, ".claude", "settings.json")
-    try:
-        with open(caminho, encoding="utf-8") as arquivo:
-            plugins = json.load(arquivo).get("enabledPlugins", {})
-    except (OSError, ValueError):
-        return []
+    with open(caminho, encoding="utf-8") as arquivo:
+        plugins = json.load(arquivo).get("enabledPlugins", {})
     return [nome for nome, ligado in plugins.items() if ligado is True and nome.endswith("@ahrena")]
 
 
@@ -42,12 +39,13 @@ def main() -> int:
     case = sys.argv[1]
     try:
         lista = json.load(sys.stdin)
-    except ValueError:
+        plugins = ligados(case)
+    except (OSError, ValueError):
         return 2
     if not isinstance(lista, list):
         return 2
     tem = instalados(lista, case)
-    print(" ".join(nome.removesuffix("@ahrena") for nome in ligados(case) if nome not in tem))
+    print(" ".join(nome.removesuffix("@ahrena") for nome in plugins if nome not in tem))
     return 0
 
 

@@ -42,8 +42,7 @@ healthy_machine() {
   mkdir -p "$SANDBOX/bin" "$SANDBOX/home" "$SANDBOX/case/scripts" "$SANDBOX/case/.claude/skills/setup-fde/scripts"
   cp "$SCRIPT" "$SANDBOX/case/.claude/skills/setup-fde/scripts/setup-fde.sh"
   cp "$HERE/ahrena_faltando.py" "$SANDBOX/case/.claude/skills/setup-fde/scripts/"
-  # O case liga dois plugins do Ahrena; um de outro marketplace e um desligado
-  # não contam.
+  # formacao-fde-ops #57: dois plugins do Ahrena ligados; outro marketplace e desligado não contam.
   cat > "$SANDBOX/case/.claude/settings.json" <<'JSON'
 {"enabledPlugins": {"ahrena-engineering-development@ahrena": true, "ahrena-contributing@ahrena": true,
  "outro@outro-marketplace": true, "ahrena-engineering-go@ahrena": false}}
@@ -65,8 +64,7 @@ JSON
   stub id 'echo 1000'
   stub sudo 'if [ "$1" = -n ]; then [ -z "${FAKE_SUDO_PASSWORD:-}" ] || exit 1; shift; fi
   case "$1" in apt-get | dpkg | true) "$@" ;; tee) cat > /dev/null ;; esac'
-  # O claude plugin list --json: os dois plugins do case instalados para a pasta
-  # dele. FAKE_PLUGINS troca a lista inteira.
+  # formacao-fde-ops #57: claude plugin list --json; FAKE_PLUGINS troca a lista.
   stub claude 'case "$*" in "plugin list --json")
     if [ -n "${FAKE_PLUGINS:-}" ]; then echo "$FAKE_PLUGINS"; exit; fi
     c="$(dirname "$CALLS")/case"
@@ -74,7 +72,7 @@ JSON
       {\"id\":\"ahrena-contributing@ahrena\",\"scope\":\"user\",\"enabled\":true}]" ;;
   esac'
   cp "$SANDBOX/bin/claude" "$SANDBOX/claude-instalado"
-  # Instalar o claude o põe no PATH, como o instalador de verdade.
+  # formacao-fde-ops #57: Instalar o claude o põe no PATH, como o instalador de verdade.
   stub curl 'case "$*" in *claude.ai/install.sh*) cp "$(dirname "$CALLS")/claude-instalado" "$(dirname "$0")/claude" ;; esac'
   stub git 'case "$*" in
     "config user.name") [ -n "${FAKE_NO_IDENTITY:-}" ] || echo Ada ;;
@@ -96,10 +94,10 @@ JSON
     "sync --help") [ -n "${FAKE_OLD_UV:-}" ] && [ ! -f "$(dirname "$CALLS")/uv-updated" ] || echo "      --check" ;;
     "self update") : > "$(dirname "$CALLS")/uv-updated" ;;
   esac'
-  # O python3 de verdade lê os plugins; o resto é o verificador do case.
+  # formacao-fde-ops #57: o python3 de verdade lê os plugins.
   stub python3 'case "$1" in *ahrena_faltando.py) exec '"$REAL_PYTHON"' "$@" ;; esac
   [ -z "${FAKE_CHECK_FAILS:-}" ]'
-  # Instalar o gh pelo apt o põe no PATH.
+  # formacao-fde-ops #57: Instalar o gh pelo apt o põe no PATH.
   stub apt-get 'case "$*" in "install -y gh") printf "#!/bin/sh\n" > "$(dirname "$0")/gh"; chmod +x "$(dirname "$0")/gh" ;; esac'
 }
 
@@ -265,7 +263,7 @@ run fix FAKE_CHECK_FAILS=1
 expect "o verificador falhando é manual" line_is manual check-setup
 expect "a linha manda rodar o verificador" detail_has check-setup "python3 scripts/check_setup.py"
 
-# covers formacao-fde-ops#56/AC-2
+# covers formacao-fde-ops #56/AC-2
 healthy_machine
 run check
 expect "com os plugins do case instalados, o ahrena fica ok" line_is ok ahrena
@@ -282,7 +280,7 @@ expect "um plugin desabilitado não conta" line_is manual ahrena
 run check FAKE_PLUGINS='nada disso é json'
 expect "uma lista que não se lê deixa o ahrena manual" detail_has ahrena "não deu para ler os plugins"
 
-# covers formacao-fde-ops#56/AC-3
+# covers formacao-fde-ops #56/AC-3
 run fix FAKE_PLUGINS='[]'
 expect "o fix não instala plugin pela pessoa" never_ran "claude plugin install"
 expect "o fix não toca o settings.json do case" eval 'grep -q outro-marketplace "$SANDBOX/case/.claude/settings.json"'
@@ -291,6 +289,12 @@ healthy_machine
 rm "$SANDBOX/bin/claude"
 run check
 expect "sem o claude, o ahrena espera por ele" detail_has ahrena "depende do claude"
+
+# covers formacao-fde-ops #56/AC-2
+healthy_machine
+echo '<<<<<<< conflito' > "$SANDBOX/case/.claude/settings.json"
+run check
+expect "um settings.json que não se lê deixa o ahrena manual" detail_has ahrena "não deu para ler"
 
 [ "$FAILURES" -eq 0 ] || { echo "$FAILURES falharam"; exit 1; }
 echo "all passed"
