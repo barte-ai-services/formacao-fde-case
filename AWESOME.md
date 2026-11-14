@@ -9,6 +9,7 @@ O que o curso já tem e o que ainda falta, em 14/11/2026.
 | Ferramenta | Instalada pela `setup-fde` | Papel na arquitetura de referência | Situação no curso |
 |---|---|---|---|
 | **Claude Code** | sim | o agente: constrói e roda | pronto, com o Ahrena configurado no repositório |
+| **Ahrena Framework** | sim, os plugins | o time de agentes que constrói e revisa | pronto: Athena orquestra e Argos revisa |
 | **git e GitHub (`gh`)** | sim | fork, PRs, issues e Actions | pronto |
 | **Python (com `uv`)** | sim | linguagem do kit e das tools | pronto |
 | **Supabase** | sim, o CLI | banco, autenticação e storage | CLI pronto; o líder de cada grupo cria a conta ([teams/CONTAS.md](teams/CONTAS.md)) |
@@ -32,6 +33,15 @@ O ambiente onde o trabalho acontece: lê o repositório, roda comandos, usa MCPs
 - [Claude Agent SDK](https://docs.claude.com/en/docs/agent-sdk/overview): quando o agente precisa virar um serviço
 
 **Use quando:** sempre. É o ponto de partida de qualquer outra ferramenta daqui.
+
+## Ahrena Framework
+
+Regras, skills e agentes que transformam o Claude Code num time: a Athena planeja a issue e distribui o trabalho, os builders constroem camada a camada e o Argos revisa cada pull request antes do merge.
+
+- [Repositório e instalação](https://github.com/ahrenatechnology/ahrena-framework)
+- No curso, o `.claude/settings.json` já liga os plugins, e a skill `setup-fde` instala e confere. Para confirmar, rode `/agents` no Claude Code: a Athena precisa aparecer.
+
+**Use quando:** o trabalho vira código que vai para produção: issue, plano, PRs revisados e merge na main.
 
 ## Supabase
 
