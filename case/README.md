@@ -5,18 +5,18 @@ Esta pasta guarda o material do cliente do fim de semana, a **Já Chegou**.
 | Arquivo | O que tem | Quando ler |
 | --- | --- | --- |
 | [`briefing.md`](briefing.md) | O briefing do cliente antes do evento: quem é, o que está em jogo, como se preparar para a primeira reunião. | Antes de sábado. |
-| Dossiê (pasta proposta: `case/dossier/`) | O dossiê do caso: tudo o que cinco a sete horas de conversa com o cliente teriam rendido, com os números. | **Ainda não existe.** Chega no sábado, 14/11, às 10h30. |
+| [`dossier/README.md`](dossier/README.md) | O dossiê do caso: tudo o que cinco a sete horas de conversa com o cliente teriam rendido, com os números e os anexos 1 a 6. | Sábado, 14/11, a partir das 10h30, depois da primeira reunião. |
 
-## O dossiê ainda não está aqui
+## O dossiê chegou
 
-O dossiê **não** está neste repositório agora, e isso é de propósito. Na consultoria de verdade
-você não recebe os números antes de conversar com o cliente: primeiro vem a reunião, depois
-os dados.
+O dossiê está em [`case/dossier/`](dossier/README.md). Ele entrou no repositório só no sábado,
+14/11, às 10h30, depois da primeira reunião, e isso foi de propósito. Na consultoria de verdade
+você não recebe os números antes de conversar com o cliente: primeiro vem a reunião, depois os
+dados.
 
 - **Quando:** sábado, **14/11, às 10h30**, logo depois do roleplay da primeira reunião com o cliente.
 - **Como:** como um **commit no repositório original** (o `upstream`, de onde você fez o fork).
-- **Onde vai aparecer:** a pasta proposta é `case/dossier/`. A coordenação confirma o lugar exato
-  quando o dossiê for liberado.
+- **Onde:** na pasta `case/dossier/`.
 
 O seu fork **não** recebe esse commit sozinho. Você precisa sincronizar o fork com o repositório
 original. Isso também é um exercício de Git: faça com calma e confira o resultado.
@@ -31,7 +31,7 @@ o que chegou no repositório original, incluindo o dossiê.
 1. Abra o **seu fork** no GitHub (`https://github.com/<seu-usuario>/formacao-fde-case`).
 2. Logo acima da lista de arquivos, clique em **Sync fork**.
 3. Clique em **Update branch**.
-4. Confira: a pasta do dossiê aparece na lista de arquivos do seu fork.
+4. Confira: a pasta `case/dossier/` aparece na lista de arquivos do seu fork.
 5. Se você trabalha num clone no seu computador, traga a atualização para ele:
 
    ```bash
@@ -85,7 +85,7 @@ Rode no clone do seu fork, no seu computador.
    git log --oneline -5
    ```
 
-   O commit do dossiê deve aparecer no `git log`, e a pasta dele, na lista de arquivos (`ls case/`).
+   O commit do dossiê deve aparecer no `git log`, e a pasta `dossier/`, na lista de arquivos (`ls case/`).
 
 ## E o fork do líder do grupo?
 

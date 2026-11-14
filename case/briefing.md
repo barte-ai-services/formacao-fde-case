@@ -1,84 +1,149 @@
 # Briefing do cliente: Já Chegou
 
-> Leia antes de sábado, 14/11. Este é o briefing **antes** da primeira reunião. Os números do
-> cliente **não** estão aqui: eles chegam no dossiê, no sábado às 10h30 (veja
-> [`README.md`](README.md)).
+> Leia antes de sábado, 14/11. Este é o briefing **antes** da primeira reunião: tudo o que o
+> squad sabe antes dela. Os números das perdas chegam depois, no
+> [dossiê](dossier/README.md), no sábado às 10h30.
 
-## Quem é o cliente
+A Barte fechou um projeto de oito semanas com a **Já Chegou**, um varejista de entrega rápida. No
+sábado, às 9h40, vocês conduzem a primeira reunião com o CFO, o controller e o gerente de compras.
 
-A **Já Chegou** é uma varejista de entrega rápida. A empresa é fictícia: o caso foi montado a
-partir de projetos reais da Barte, anonimizados. Ninguém aqui tem nome: as pessoas aparecem
-só pelo papel que ocupam.
+A Já Chegou é uma empresa fictícia. O caso foi montado a partir de projetos reais da Barte, com
+números alterados. Ninguém aqui tem nome: as pessoas aparecem só pelo cargo que ocupam.
 
-## O que está em jogo
+## A empresa
 
-O trabalho é sobre **contas a pagar de ponta a ponta**: do pedido de compra ao pagamento do
-fornecedor, passando por tudo o que acontece no meio.
+| Item | Valor |
+| --- | --- |
+| Negócio | Varejo de entrega rápida, em que o cliente pede pelo app e recebe em minutos |
+| Operação | 4 centros de distribuição (CDs) e 30 lojas escuras, que só atendem entrega |
+| Compras | Cerca de 11 mil notas fiscais de mercadoria por mês, somando perto de R$ 35 milhões |
+| Margem bruta média | 32% |
+| Contas a pagar | 5 analistas terceirizados, sob o controller |
 
-Nesse processo, a Já Chegou perde dinheiro de quatro formas. O seu grupo vai escolher **qual
-delas mover**:
+Os CDs recebem cargas grandes de poucos fornecedores. As lojas recebem entregas pequenas e
+frequentes, muitas vezes direto do fornecedor.
+
+## O pedido do CFO
+
+O CFO resume o pedido assim, nas palavras dele:
+
+> Todo dia o contas a pagar monta umas 400 propostas de pagamento na mão. Cada boleto é pago um a
+> um no banco e baixado um a um no ERP. Quero isso automatizado: lançar, pagar e baixar sem
+> ninguém digitar. E quero parar de pagar juros e multa, que hoje custam cerca de R$ 120 mil por
+> mês.
+
+Ele também quer fechar o mês mais cedo e mostrar ao conselho que o financeiro cresce sem crescer
+o time na mesma proporção.
+
+## O que a Barte foi contratada para fazer
+
+| Item | Combinado |
+| --- | --- |
+| Escopo | Reduzir o custo e o atraso do contas a pagar |
+| Prazo | Oito semanas, com um squad da Barte dentro da operação |
+| Primeira entrega | Algo que o cliente veja funcionando ainda no primeiro mês |
+| Sponsor | CFO |
+
+O contrato descreve o problema como o CFO o vê. Cabe ao squad confirmar se é esse o problema que
+vale resolver.
+
+## As quatro perdas
+
+No contas a pagar, a Já Chegou perde dinheiro de quatro formas. O grupo escolhe qual delas o
+projeto promete mover; o valor de cada uma chega no dossiê de sábado.
 
 | Perda | Em uma frase |
 | --- | --- |
-| **Pagar errado** | Pagar um valor que não deveria ter sido pago. |
-| **Pagar atrasado** | Pagar depois do prazo. |
-| **Ruptura de estoque** | Faltar produto para vender. |
-| **Custo de operar** | O quanto custa fazer o processo funcionar. |
+| **Pagar errado** | Pagar por mercadoria que não chegou ou que não foi pedida |
+| **Pagar atrasado** | Pagar depois do vencimento, com juros e multa |
+| **Ruptura** | Faltar produto para vender porque o fornecedor parou de entregar |
+| **Custo de operar** | O quanto custa fazer o contas a pagar funcionar |
 
-Escolher a perda é escolher o **número** que o grupo promete mover. Sem número, não há como
-dizer se o trabalho deu certo.
+Escolher a perda é escolher o **número** que o grupo promete mover. Sem número, não há como dizer
+se o trabalho deu certo.
 
-## A primeira reunião: sábado, 9h40
+## Quem é quem
 
-A primeira reunião é um roleplay: a coordenação faz o papel do cliente. Do lado da Já Chegou
-estarão:
+Os três estão na reunião de sábado e respondem por toda a operação do contas a pagar, do pedido
+ao pagamento.
 
-- o **CFO**;
-- o **controller**;
-- a área de **compras**.
+| Cargo | Responde por |
+| --- | --- |
+| CFO | Resultado financeiro, caixa, bancos e aprovação dos pagamentos; sponsor do projeto |
+| Controller | Contabilidade, fiscal e fechamento do mês; o contas a pagar e o time de analistas; ERP, integrações e acessos |
+| Gerente de compras e comercial | Ordens de compra e negociação com fornecedores; recebimento nos CDs e nas lojas e estoque; cadastro de produtos e fornecedores |
 
-O CFO chega com um pedido. Antes de propor qualquer coisa, entenda o problema por trás dele: o
-que está custando caro, para quem, e como se mede.
+## Sistemas
 
-Depois de entender o problema, o grupo vai **priorizar quatro frentes de trabalho** por três
-critérios:
+| Sistema | Para que serve |
+| --- | --- |
+| Forecast | Gera os planos de compra |
+| Hub de inventário | Consolida o estoque e integra os demais sistemas |
+| WMS do CD | Registra o recebimento nos CDs |
+| App de loja | Registra o recebimento nas lojas |
+| ERP | Contábil, fiscal e financeiro |
+| Captura de NF | Busca as notas fiscais na SEFAZ |
 
-- **retorno**: quanto da perda escolhida a frente move;
-- **tempo até o primeiro valor**: quando o cliente vê o primeiro resultado;
-- **esforço**: quanto custa construir e operar.
+## O que o cliente já enviou
 
-As quatro frentes não estão descritas neste briefing.
+- Relação dos fornecedores ativos.
+- Organograma do financeiro.
 
-## Como se preparar para o roleplay
+A exportação dos títulos pagos de janeiro a setembro, tirada do ERP, ficou prometida para depois
+da reunião; os números dela chegam resumidos no dossiê de sábado. O resto dos dados e acessos
+depende do que vocês pedirem na reunião.
 
-### Perguntas para levar
+## A reunião de sábado
 
-Prepare as suas, mas comece por estas:
+| Item | Como funciona |
+| --- | --- |
+| Quando | Sábado 14/11, das 9h40 às 10h30 |
+| Formato | Uma reunião só, com a turma inteira. Cada grupo é convidado a perguntar, sem obrigação e sem pontuação |
+| Quem conduz | Vocês. O cliente responde o que for perguntado, a quem for perguntado |
+| Objetivo do grupo | Sair com uma hipótese de qual é o problema e de qual número ele move |
+| Depois | Às 10h30, no início da aula, chega o [dossiê](dossier/README.md), com o que algumas horas a mais de conversa com o time teriam mostrado |
 
-- Qual é o problema que o pedido resolve? Como vocês sabem que ele existe?
-- Qual das quatro perdas mais dói hoje, e quanto ela custa? Quem mede, e como?
-- Onde, no caminho do pedido de compra até o pagamento, o problema aparece primeiro?
-- Quem decide em cada etapa? Quem aprova um pagamento, e até que valor?
-- Quais sistemas e planilhas participam do processo? Quem é o dono de cada um?
-- O que já foi tentado? Por que não funcionou?
-- Se a gente resolver só uma coisa nas próximas semanas, qual faria mais diferença?
+## Roteiro da primeira reunião
+
+A primeira reunião dura cerca de uma hora, com o sponsor e o time que opera. No fim dela, o squad
+precisa saber qual é o problema real, qual número mover, quem decide e quais acessos pedir. No
+sábado ela dura 50 minutos e reúne a turma inteira, então cada grupo escolhe em quais momentos
+quer perguntar. Cada momento tem um norte; as perguntas que levam até ele ficam com o grupo.
+
+| Tempo | Momento | Norte |
+| --- | --- | --- |
+| 5 min | Abertura | Deixar claro quem é o squad e o que vocês querem sair sabendo da conversa |
+| 10 min | O pedido | Entender por que o pedido existe agora e o que acontece se nada mudar |
+| 10 min | O resultado | Chegar ao número que o cliente quer mover e a como ele é medido hoje |
+| 15 min | O processo | Reconstruir o caminho de uma nota, da compra ao pagamento, e ver onde ele trava |
+| 10 min | Pessoas e decisão | Mapear quem decide, quem paga e quem sente a mudança |
+| 5 min | Dados e acessos | Descobrir onde cada dado mora e quem libera o acesso |
+| 5 min | Fecho | Combinar o que o squad vai pedir até a próxima conversa, e a quem |
+
+Regras:
+
+- Separar o que foi dito do que foi mostrado com dado.
+- Anotar a pergunta que ninguém soube responder.
+- Não propor solução na primeira reunião.
+
+## Como se preparar
+
+- Traga três perguntas que você faria ao cliente, e a qual cargo.
+- Pense no que você pediria de dados e de acesso no fim da reunião.
 
 ### O que escutar
 
 - **A diferença entre o pedido e o problema.** O que o CFO pede pode não ser o que move o número.
-- **Onde cada papel sente a dor.** CFO, controller e compras podem descrever o mesmo problema de
+- **Onde cada cargo sente a dor.** CFO, controller e compras podem descrever o mesmo problema de
   jeitos diferentes, ou descrever problemas diferentes.
 - **Números citados de passagem.** Anote; depois confira no dossiê.
+- **Termos que cada cargo usa com sentidos diferentes.** Anote-os durante a reunião: eles viram a
+  camada de contexto da tarde.
 - **Quem tem os dados e os acessos.** Você vai precisar disso no checkpoint 2.
 - **O que não foi dito.** Uma etapa que ninguém menciona também é informação.
 
 Leve o template do checkpoint 1 ([`../templates/checkpoint-1-diagnosis.md`](../templates/checkpoint-1-diagnosis.md))
 aberto: ele mostra o que o grupo vai ter de responder depois da reunião.
-
-## Os números
-
-Os números do caso, incluindo o baseline (o ponto de partida de cada perda), **chegam no dossiê**, no
-sábado às 10h30. Até lá, trabalhe com perguntas, não com suposições.
 
 ## Um segundo cliente: Terminal Sul
 
@@ -90,7 +155,7 @@ Terminal Sul, e o que teria de mudar.
 
 | Momento | O que o grupo entrega | Template |
 | --- | --- | --- |
-| Checkpoint 1 (sábado) | Diagnóstico e prioridade: problema, número a mover, prioridade. | [`checkpoint-1-diagnosis.md`](../templates/checkpoint-1-diagnosis.md) |
-| Checkpoint 2 (sábado) | Checklist de acessos, desenho da solução, plano de entrega e o que se repete na Terminal Sul. | [`checkpoint-2-access-checklist.md`](../templates/checkpoint-2-access-checklist.md), [`checkpoint-2-solution-design.md`](../templates/checkpoint-2-solution-design.md), [`checkpoint-2-delivery-plan.md`](../templates/checkpoint-2-delivery-plan.md) |
+| Checkpoint 1 (sábado, 12h) | Diagnóstico e prioridade: problema, número a mover, prioridade. | [`checkpoint-1-diagnosis.md`](../templates/checkpoint-1-diagnosis.md) |
+| Checkpoint 2 (sábado, 17h30) | Checklist de acessos, desenho da solução, plano de entrega e o que se repete na Terminal Sul. | [`checkpoint-2-access-checklist.md`](../templates/checkpoint-2-access-checklist.md), [`checkpoint-2-solution-design.md`](../templates/checkpoint-2-solution-design.md), [`checkpoint-2-delivery-plan.md`](../templates/checkpoint-2-delivery-plan.md) |
 | Pitch (domingo, 16h30) | Apresentação do grupo. | [`sunday-pitch.md`](../templates/sunday-pitch.md) |
 | Portfólio | O trabalho do grupo contado como peça de portfólio. | [`portfolio-tutorial.md`](../templates/portfolio-tutorial.md) |

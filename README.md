@@ -112,7 +112,7 @@ Nunca coloque o arquivo `.env` nem nenhuma chave ou senha num commit. O `.env` j
 | Sexta, 13/11, 18h–21h | Abertura da imersão na Casa Barte. |
 | Sábado, 14/11, 9h | Git em prática (cada aluno faz o seu fork e confere o setup, pelo [SETUP.md](SETUP.md)) e formação dos grupos, junto com o **desafio do kit** (pasta `challenge/`). |
 | Sábado, 14/11, 9h40 | Roleplay: primeira reunião com o CFO, a controladoria e compras da Já Chegou. |
-| Sábado, 14/11, 10h30 | O **dossiê** chega como um commit no repositório original (a pasta exata será indicada pela coordenação; a proposta é `case/dossier/`). Atualize o seu fork para recebê-lo. |
+| Sábado, 14/11, 10h30 | O **dossiê** chega como um commit no repositório original, em [`case/dossier/`](case/dossier/README.md). Atualize o seu fork para recebê-lo. |
 | Sábado, 14/11, 12h | **Checkpoint 1**: diagnóstico e prioridade (o problema, o número a mover, a prioridade). |
 | Sábado, 14/11, 15h–18h | Solution Design e aplicação no caso (a aplicação vai das 16h15 às 17h30, depois do café da tarde), fechando com o **checkpoint 2**: checklist de acessos e credenciais, desenho da solução, plano de entrega e o que se repete num segundo cliente, a Terminal Sul. |
 | Domingo, 15/11, 9h–10h30 | Aula: da solução ao agente (componentes, harness, ferramentas, evals, guardrails), metade teoria e metade mão na massa. |
@@ -125,7 +125,7 @@ Nunca coloque o arquivo `.env` nem nenhuma chave ou senha num commit. O `.env` j
 
 | Pasta | O que tem |
 |---|---|
-| `case/` | O case da Já Chegou: o briefing e o dossiê, que só aparece no sábado depois do roleplay. |
+| `case/` | O case da Já Chegou: o [briefing](case/briefing.md), de antes da primeira reunião, e o [dossiê](case/dossier/README.md), que entrou no sábado depois do roleplay. |
 | `challenge/` | As instruções do desafio do kit, de sábado de manhã. |
 | `templates/` | Os modelos dos entregáveis dos checkpoints. |
 | `teams/` | Uma pasta por grupo, com nome, integrantes e o link do fork líder. |
