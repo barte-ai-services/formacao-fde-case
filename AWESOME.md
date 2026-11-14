@@ -39,7 +39,7 @@ O ambiente onde o trabalho acontece: lê o repositório, roda comandos, usa MCPs
 Regras, skills e agentes que transformam o Claude Code num time: a Athena planeja a issue e distribui o trabalho, os builders constroem camada a camada e o Argos revisa cada pull request antes do merge.
 
 - [Repositório e instalação](https://github.com/ahrenatechnology/ahrena-framework)
-- No curso, o `.claude/settings.json` já liga os plugins, e a skill `setup-fde` instala e confere. Para confirmar, rode `/agents` no Claude Code: a Athena precisa aparecer.
+- No curso, o `.claude/settings.json` já liga os plugins, e a skill `setup-fde` instala e confere. Para confirmar, abra uma sessão nova do Claude Code na pasta do case e rode `/agents`: a Athena precisa aparecer.
 
 **Use quando:** o trabalho vira código que vai para produção: issue, plano, PRs revisados e merge na main.
 
