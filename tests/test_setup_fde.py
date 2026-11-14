@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 import shutil
 import subprocess
@@ -54,7 +55,7 @@ def test_script_tem_check_e_fix():
     """#50/AC-2 e AC-3: o script tem os dois comandos e os itens do case."""
     texto = SCRIPT.read_text(encoding="utf-8")
     assert "check) report" in texto and "fix)" in texto
-    for item in ("git", "gh", "uv", "python", "claude", "git-identity", "gh-login", "case-clone", "uv-sync", "check-setup"):
+    for item in ("git", "gh", "uv", "python", "claude", "git-identity", "gh-login", "case-clone", "uv-sync", "check-setup", "ahrena"):
         assert re.search(rf"\b{re.escape(item)}\b", texto), item
 
 
@@ -85,3 +86,19 @@ def test_documentacao_aponta_para_a_skill(arquivo):
     assert PEDIDO in texto
     assert INSTALAR_CLAUDE in texto
     assert "12/11" not in texto
+
+
+def test_settings_liga_a_athena_e_o_argos():
+    """formacao-fde-ops#56/AC-1: o case liga os plugins de que o CLAUDE.md depende, e o bloco do Ahrena está no CLAUDE.md."""
+    plugins = json.loads((RAIZ / ".claude" / "settings.json").read_text(encoding="utf-8"))["enabledPlugins"]
+    for plugin in ("ahrena-engineering-development", "ahrena-engineering-code-review", "ahrena-engineering-data"):
+        assert plugins.get(f"{plugin}@ahrena") is True, plugin
+    claude = (RAIZ / "CLAUDE.md").read_text(encoding="utf-8")
+    assert "<!-- ahrena:agency:start -->" in claude and "ahrena-engineering-development:athena" in claude
+
+
+def test_setup_explica_o_ahrena():
+    """formacao-fde-ops#56/AC-5: o SETUP.md diz o que é o Ahrena e como confirmar com /agents e a Athena."""
+    texto = (RAIZ / "SETUP.md").read_text(encoding="utf-8")
+    assert "## O Ahrena no Claude Code" in texto
+    assert "`/agents`" in texto and "athena" in texto

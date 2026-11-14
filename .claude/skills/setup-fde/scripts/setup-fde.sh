@@ -16,7 +16,7 @@ UPSTREAM_REPO="barte-ai-services/formacao-fde-case"
 UPSTREAM_URL="https://github.com/$UPSTREAM_REPO.git"
 PYTHON_FLOOR="3.12"
 
-ITEMS="git gh uv python claude git-identity gh-login case-clone uv-sync check-setup"
+ITEMS="git gh uv python claude git-identity gh-login case-clone uv-sync check-setup ahrena"
 
 # O uv, o Python dele e o claude se instalam aqui, e um terminal aberto antes da
 # instalação ainda não tem essa pasta no PATH.
@@ -106,6 +106,7 @@ manual_hint() {
     git-identity) echo 'git config --global user.name "Seu Nome" && git config --global user.email "seu-email@exemplo.com" (o mesmo e-mail da conta do GitHub)' ;;
     gh-login) echo 'gh auth login (GitHub.com, HTTPS, Login with a web browser) e depois gh auth setup-git' ;;
     check-setup) echo 'rode python3 scripts/check_setup.py na pasta do case e siga o que ele disser' ;;
+    ahrena) echo 'abra o Claude Code na pasta do case (claude) e aceite instalar os plugins do Ahrena; se ele não perguntar, rode /plugin dentro dele e instale os plugins do marketplace ahrena.' ;;
     *) echo "não há instalador para este sistema; instale $1 do seu jeito, como no SETUP.md" ;;
   esac
 }
@@ -174,6 +175,37 @@ check_check_setup() {
   needs_person check-setup
 }
 
+# O Python que lê JSON: o python3 da máquina ou, sem ele, o do uv. No macOS, o
+# python3 só vale com as ferramentas da Apple, como o git.
+run_python() {
+  if have python3 && git_works; then
+    python3 "$@"
+  elif have uv; then
+    uv run --no-project --quiet python "$@"
+  else
+    return 127
+  fi
+}
+
+# Os plugins do Ahrena que o .claude/settings.json do case liga precisam estar
+# instalados e habilitados no Claude Code. Quem instala é o próprio Claude Code,
+# quando a pessoa abre a pasta do case e aceita; o fix não tenta, porque o
+# `claude plugin install` reescreve o settings.json e deixa o fork alterado.
+check_ahrena() {
+  local missing
+  if [ -z "$CASE_DIR" ]; then STATUS=manual; DETAIL="depende do case-clone"; return; fi
+  have claude || { STATUS=manual; DETAIL="depende do claude"; return; }
+  if ! missing="$(claude plugin list --json 2>/dev/null | run_python "$HERE/ahrena_faltando.py" "$CASE_DIR" 2>/dev/null)"; then
+    STATUS=manual
+    DETAIL="não deu para ler os plugins do Claude Code; rode claude plugin list e confira os ahrena-*"
+    return
+  fi
+  if [ -n "$missing" ]; then
+    STATUS=manual
+    DETAIL="$(manual_hint ahrena) Faltam: $missing"
+  fi
+}
+
 # Define STATUS e DETAIL de um item, lendo a máquina sem mudar nada.
 inspect() {
   STATUS=ok
@@ -191,6 +223,7 @@ inspect() {
     case-clone) check_case_clone ;;
     uv-sync) check_uv_sync ;;
     check-setup) check_check_setup ;;
+    ahrena) check_ahrena ;;
     *) echo "item desconhecido: $1" >&2; exit 2 ;;
   esac
   case "$STATUS" in missing | outdated) ;; *) return 0 ;; esac
