@@ -80,11 +80,12 @@ API de e-mail transacional, simples de integrar.
 
 ## Barte
 
-A plataforma de pagamentos da casa: pedidos, links de pagamento, assinaturas, cartão com 3DS e antifraude, Pix e conta digital, com sandbox para testar.
+A plataforma de pagamentos da casa: pedidos, links de pagamento, assinaturas, cartão com 3DS e antifraude, Pix e conta PJ, com sandbox para testar.
 
 - [Documentação para desenvolvedores](https://docs.barte.com)
 - [Referência da API](https://docs.barte.com/api-reference): compradores, pedidos, estornos e 3DS
-- [Primeiros passos do vendedor](https://docs.barte.com/guias/passo-a-passo-do-vendedor/1o-preparacao): preparar a conta e criar pedidos, links de pagamento e assinaturas
+- [Preparação do vendedor](https://docs.barte.com/guias/passo-a-passo-do-vendedor/1o-preparacao): token de API e webhooks
+- [Pedidos, links de pagamento e assinaturas](https://docs.barte.com/guias/passo-a-passo-do-vendedor/2o-criando-pedidos-or-links-de-pagamento-or-assinaturas)
 - [Cartões para testes](https://docs.barte.com/guias/inicio/cartoes-para-testes) e [métodos de pagamento](https://docs.barte.com/guias/inicio/metodos-de-pagamento)
 - [Banking](https://docs.barte.com/banking): Pix com QR Code, transferências e os avisos por webhook
 - [SDK web](https://docs.barte.com/sdks): captura os dados do cartão com segurança, sem que eles passem pelo seu servidor
