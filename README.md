@@ -130,6 +130,7 @@ Nunca coloque o arquivo `.env` nem nenhuma chave ou senha num commit. O `.env` j
 | `templates/` | Os modelos dos entregáveis dos checkpoints. |
 | `teams/` | Uma pasta por grupo, com nome, integrantes e o link do fork líder. |
 | `.claude/skills/setup-fde/` | A skill que configura a sua máquina: peça ao Claude Code "configura o meu setup de FDE". |
+| `AWESOME.md` | As ferramentas de um builder (Claude Code, Supabase, Cloudflare, Resend, Stripe, Python, Evolution API, Temporal) e onde o curso está com cada uma. |
 | `scripts/` | Utilitários, como o verificador de setup `scripts/check_setup.py`. |
 | `tests/` | Os testes automáticos do repositório (`uv run pytest`). |
 
