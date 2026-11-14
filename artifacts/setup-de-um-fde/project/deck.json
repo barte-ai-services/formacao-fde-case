@@ -1,0 +1,52 @@
+{
+  "v": 5,
+  "attachments": {},
+  "createdOnFiles": {
+    "at": "2026-11-14T12:00:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "faces": {
+    "ibm-plex-sans": {
+      "family": "IBM Plex Sans",
+      "href": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"
+    },
+    "instrument-serif": {
+      "family": "Instrument Serif",
+      "href": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"
+    }
+  },
+  "format": {
+    "shared": [
+      "project/deck.css"
+    ],
+    "v": 1
+  },
+  "lists": "css",
+  "order": [
+    "cover",
+    "pergunta",
+    "ferramentas",
+    "ahrena",
+    "acessos",
+    "comece",
+    "pr",
+    "repo"
+  ],
+  "sections": {
+    "s1": {
+      "description": "O que é o setup e as três camadas",
+      "start": "cover"
+    },
+    "s2": {
+      "before": null,
+      "description": "Cada camada: ferramentas, acessos e agentes",
+      "start": "ahrena"
+    },
+    "s3": {
+      "description": "Como rodar e quando está pronto",
+      "start": "comece"
+    }
+  },
+  "title": "Setup de um FDE"
+}
