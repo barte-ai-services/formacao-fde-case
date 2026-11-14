@@ -2,9 +2,9 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
 <style>
-/* Layout: a mesma moldura do deck da Formação FDE. Um fluxo de três peças, a peça que fica embaixo (GitHub), e depois as peças uma a uma. */
+/* Layout: a moldura do deck da Formação FDE. Primeiro o diagrama em camadas (quem usa, Workers, Supabase, GitHub), depois uma aprovação passo a passo, as peças por camada, o banco, as credenciais e as ferramentas. */
 :root {
   --bg: #FAF8F4;
   --surface: #FFFFFF;
@@ -13,32 +13,46 @@
   --muted: #5B5853;
   --faint: #8A867F;
   --hair: rgba(23,23,23,.10);
+  --line: rgba(23,23,23,.34);
   --grid: rgba(23,23,23,.045);
   --pink: #DF285D;
   --claude: #D97757;
   --cloudflare: #F38020;
   --supabase: #3ECF8E;
+  --supabase-ink: #1F8F5C;
   --astro: #BC52EE;
+  --react: #087EA4;
+  --python: #3776AB;
+  --fastapi: #009688;
+  --band-user: rgba(223,40,93,.05);
+  --band-cf: rgba(243,128,32,.07);
+  --band-sb: rgba(62,207,142,.08);
+  --band-gh: rgba(23,23,23,.04);
   --ink-card: #171717;
   --ink-card-fg: #FAF8F4;
   --ink-card-muted: #BDB8B0;
   --code-bg: #171717;
   --code-fg: #F1EEE8;
+  --code-c: #8F8A82;
   --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #141312; --surface: #1D1C1A; --surface-2: #232220; --fg: #F1EEE8; --muted: #B5B0A8; --faint: #8F8A82;
-    --hair: rgba(241,238,232,.12); --grid: rgba(241,238,232,.04); --pink: #F0567F;
+    --bg: #141312; --surface: #1D1C1A; --surface-2: #262522; --fg: #F1EEE8; --muted: #B5B0A8; --faint: #8F8A82;
+    --hair: rgba(241,238,232,.12); --line: rgba(241,238,232,.42); --grid: rgba(241,238,232,.04); --pink: #F0567F;
+    --supabase-ink: #3ECF8E; --react: #58C4DC; --python: #6BA4D8; --fastapi: #2BB3A3;
+    --band-user: rgba(240,86,127,.07); --band-cf: rgba(243,128,32,.09); --band-sb: rgba(62,207,142,.08); --band-gh: rgba(241,238,232,.04);
     --ink-card: #0B0B0A; --ink-card-fg: #F1EEE8; --ink-card-muted: #A8A39B; --code-bg: #0B0B0A; --code-fg: #F1EEE8;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #141312; --surface: #1D1C1A; --surface-2: #232220; --fg: #F1EEE8; --muted: #B5B0A8; --faint: #8F8A82;
-  --hair: rgba(241,238,232,.12); --grid: rgba(241,238,232,.04); --pink: #F0567F;
+  --bg: #141312; --surface: #1D1C1A; --surface-2: #262522; --fg: #F1EEE8; --muted: #B5B0A8; --faint: #8F8A82;
+  --hair: rgba(241,238,232,.12); --line: rgba(241,238,232,.42); --grid: rgba(241,238,232,.04); --pink: #F0567F;
+  --supabase-ink: #3ECF8E; --react: #58C4DC; --python: #6BA4D8; --fastapi: #2BB3A3;
+  --band-user: rgba(240,86,127,.07); --band-cf: rgba(243,128,32,.09); --band-sb: rgba(62,207,142,.08); --band-gh: rgba(241,238,232,.04);
   --ink-card: #0B0B0A; --ink-card-fg: #F1EEE8; --ink-card-muted: #A8A39B; --code-bg: #0B0B0A; --code-fg: #F1EEE8;
   color-scheme: dark;
 }
@@ -61,95 +75,131 @@ body {
   padding-right: max(16px, env(safe-area-inset-right, 0px));
   display: flex;
   flex-direction: column;
-  gap: 56px;
+  gap: 64px;
 }
 .eyebrow { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); font-weight: 500; margin: 0; }
-h1 { font-weight: 400; font-size: clamp(40px, 7vw, 76px); line-height: 1.02; letter-spacing: -0.035em; margin: 10px 0 0; text-wrap: balance; }
+h1 { font-weight: 400; font-size: clamp(36px, 7vw, 72px); line-height: 1.03; letter-spacing: -0.035em; margin: 10px 0 0; text-wrap: balance; overflow-wrap: break-word; }
 h1 em, h2 em { font-family: var(--serif); font-style: italic; letter-spacing: -0.01em; }
 h1 em { color: var(--pink); }
 h2 { font-weight: 400; font-size: clamp(28px, 4vw, 40px); line-height: 1.1; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
 .lead { font-size: 19px; color: var(--muted); max-width: 64ch; margin: 18px 0 0; }
+.sub { color: var(--muted); max-width: 70ch; margin: 0; }
 p { margin: 0; }
-section { display: flex; flex-direction: column; gap: 22px; }
+section { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+a { color: inherit; text-decoration-color: color-mix(in srgb, var(--pink) 60%, transparent); text-underline-offset: 3px; }
+a:hover { color: var(--pink); }
+a:focus-visible { outline: 2px solid var(--pink); outline-offset: 2px; border-radius: 2px; }
+code { font-family: var(--mono); font-size: .9em; overflow-wrap: anywhere; }
 
-/* ícones */
-.logo { width: 28px; height: 28px; flex: none; }
-.logo path { fill: currentColor; }
+/* princípio */
+.rule { background: var(--ink-card); color: var(--ink-card-fg); border-radius: 20px; padding: 26px 28px; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 24px; }
+.rule div { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.rule b { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 30px; line-height: 1.05; color: var(--claude); }
+.rule div:nth-child(2) b { color: var(--supabase); }
+.rule div:nth-child(3) b { color: #F0567F; }
+.rule span { color: var(--ink-card-muted); font-size: 15.5px; }
 
-/* fluxo */
-.flow { display: grid; grid-template-columns: minmax(0,1fr) 88px minmax(0,1fr) 88px minmax(0,1fr); align-items: stretch; }
-.node { border-radius: 20px; padding: 22px 22px 24px; display: flex; flex-direction: column; gap: 10px; background: var(--surface); border: 1px solid var(--hair); box-shadow: 0 10px 30px rgba(23,23,23,.06); min-width: 0; }
-.node .head { display: flex; align-items: center; gap: 10px; }
-.node .vendor { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
-.node .name { font-size: 24px; letter-spacing: -0.01em; }
-.node .what { color: var(--muted); font-size: 15.5px; }
-.node.claude { background: var(--ink-card); border-color: var(--ink-card); color: var(--ink-card-fg); }
-.node.claude .name { color: var(--claude); }
-.node.claude .what, .node.claude .vendor { color: var(--ink-card-muted); }
-.node.claude .logo { color: var(--claude); }
-.node.cf { border-color: color-mix(in srgb, var(--cloudflare) 45%, transparent); }
-.node.cf .logo { color: var(--cloudflare); }
-.node.sb .logo { color: var(--supabase); }
-.edge { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 0 6px; text-align: center; }
-.edge .arrow { width: 100%; height: 14px; color: var(--faint); }
-.edge .proto { font-size: 13px; color: var(--fg); font-weight: 500; }
-.edge .auth { font-size: 12px; color: var(--faint); line-height: 1.35; }
-.below { display: grid; grid-template-columns: minmax(0,1fr) 88px minmax(0,2fr) ; margin-top: 18px; }
-.node.gh .logo { color: var(--fg); }
-.node.gh { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 18px; flex-wrap: wrap; }
-.node.gh .text { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1 1 320px; }
+/* diagrama */
+.diagram-wrap { background: var(--surface); border: 1px solid var(--hair); border-radius: 20px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.diagram-wrap:focus-visible { outline: 2px solid var(--pink); outline-offset: 2px; }
+.diagram { display: block; width: 100%; min-width: 780px; height: auto; font-family: var(--sans); }
+.diagram .band-user { fill: var(--band-user); }
+.diagram .band-cf { fill: var(--band-cf); }
+.diagram .band-sb { fill: var(--band-sb); }
+.diagram .band-gh { fill: var(--band-gh); }
+.diagram .band-label, .diagram .lbl, .diagram .lbl-s { paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+.diagram .band-label { fill: var(--faint); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; font-weight: 500; }
+.diagram .box { fill: var(--surface); stroke: var(--hair); stroke-width: 1; }
+.diagram .box-cf { fill: var(--surface); stroke: var(--cloudflare); stroke-width: 1.25; }
+.diagram .box-sb { fill: var(--surface); stroke: var(--supabase); stroke-width: 1.25; }
+.diagram .box-ink { fill: var(--ink-card); stroke: var(--ink-card); }
+.diagram .box-in { fill: var(--surface-2); stroke: var(--hair); }
+.diagram .t { fill: var(--fg); font-size: 16px; font-weight: 500; }
+.diagram .t-ink { fill: var(--ink-card-fg); font-size: 16px; font-weight: 500; }
+.diagram .s { fill: var(--muted); font-size: 12.5px; }
+.diagram .s-ink { fill: var(--ink-card-muted); font-size: 12.5px; }
+.diagram .m { fill: var(--fg); font-family: var(--mono); font-size: 12.5px; font-weight: 500; }
+.diagram .edge { stroke: var(--line); stroke-width: 1.5; fill: none; }
+.diagram .edge.dash { stroke-dasharray: 5 4; }
+.diagram .head { fill: var(--line); }
+.diagram .lbl { fill: var(--fg); font-size: 12px; font-weight: 500; }
+.diagram .lbl-s { fill: var(--faint); font-size: 11.5px; }
+.diagram .lbl-bg { fill: var(--surface); }
+.diagram .ic-claude { color: var(--claude); }
+.diagram .ic-cf { color: var(--cloudflare); }
+.diagram .ic-sb { color: var(--supabase); }
+.diagram .ic-astro { color: var(--astro); }
+.diagram .ic-react { color: var(--react); }
+.diagram .ic-py { color: var(--python); }
+.diagram .ic-fastapi { color: var(--fastapi); }
+.diagram .ic-fg { color: var(--fg); }
+.hint { display: none; color: var(--faint); font-size: 14px; }
+
+/* passo a passo */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0 32px; counter-reset: passo; }
+.steps li { counter-increment: passo; display: grid; grid-template-columns: 44px minmax(0,1fr); gap: 4px 14px; padding: 18px 0; border-top: 1px solid var(--hair); align-content: start; }
+.steps li > * { grid-column: 2; }
+.steps li::before { content: counter(passo); grid-column: 1; grid-row: 1 / span 3; font-family: var(--serif); font-style: italic; font-size: 34px; line-height: 1; color: var(--pink); }
+.steps b { font-weight: 500; }
+.steps span { color: var(--muted); font-size: 15.5px; }
+.steps .who { font-family: var(--mono); font-size: 12.5px; color: var(--faint); display: block; margin-top: 4px; }
 
 /* peças */
+.layer { display: flex; flex-direction: column; gap: 14px; }
+.layer > h3 { font-weight: 500; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin: 0; display: flex; align-items: center; gap: 10px; }
+.layer > h3::before { content: ""; width: 10px; height: 10px; border-radius: 3px; background: var(--layer-c, var(--faint)); flex: none; }
+.layer.l-front { --layer-c: var(--astro); }
+.layer.l-back { --layer-c: var(--python); }
+.layer.l-data { --layer-c: var(--supabase); }
+.layer.l-ops { --layer-c: var(--fg); }
 .pieces { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; }
 .piece { background: var(--surface); border: 1px solid var(--hair); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.piece .head { display: flex; align-items: center; gap: 10px; }
-.piece h3 { font-weight: 500; font-size: 19px; margin: 0; }
+.piece.wide { grid-column: 1 / -1; }
+.piece .head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.piece h4 { font-weight: 500; font-size: 19px; margin: 0; }
 .piece ul { margin: 0; padding-left: 18px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
-.piece.claude .logo { color: var(--claude); }
-.piece.cf .logo { color: var(--cloudflare); }
-.piece.sb .logo { color: var(--supabase); }
-.piece.astro .logo { color: var(--astro); }
-.piece.gh .logo { color: var(--fg); }
-pre { margin: 0; background: var(--code-bg); color: var(--code-fg); border-radius: 12px; padding: 14px 16px; overflow-x: auto; font-family: var(--mono); font-size: 13.5px; line-height: 1.6; }
-pre .c { color: #8F8A82; }
-code { font-family: var(--mono); font-size: .92em; }
+.logo { width: 26px; height: 26px; flex: none; }
+.logos { display: inline-flex; gap: 6px; }
+pre { margin: 0; background: var(--code-bg); color: var(--code-fg); border-radius: 12px; padding: 14px 16px; overflow-x: auto; font-family: var(--mono); font-size: 13px; line-height: 1.6; tab-size: 4; }
+pre .c { color: var(--code-c); }
+pre:focus-visible { outline: 2px solid var(--pink); outline-offset: 2px; }
 
-/* autenticação */
+/* tabelas */
 .table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--hair); border-radius: 20px; }
-table { width: 100%; border-collapse: collapse; font-size: 15.5px; min-width: 640px; }
+table { width: 100%; border-collapse: collapse; font-size: 15.5px; min-width: 680px; }
 th { text-align: left; font-weight: 500; font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); padding: 16px 20px 12px; border-bottom: 1px solid var(--hair); }
 td { padding: 14px 20px; border-bottom: 1px solid var(--hair); vertical-align: top; color: var(--muted); }
 tr:last-child td { border-bottom: 0; }
 td:first-child { color: var(--fg); white-space: nowrap; }
+td:first-child code { font-size: 14px; }
 
 /* ferramentas */
-a { color: inherit; text-decoration-color: color-mix(in srgb, var(--pink) 60%, transparent); text-underline-offset: 3px; }
-a:hover { color: var(--pink); }
 .tools-group { display: flex; flex-direction: column; gap: 14px; }
 .tools-group h3 { font-weight: 500; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin: 0; }
 .tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 18px; }
 .tool { background: var(--surface); border: 1px solid var(--hair); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .tool h4 { font-weight: 500; font-size: 19px; margin: 0; }
 .tool-head { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.tool .logo { width: 28px; height: 28px; }
 .initials { width: 28px; height: 28px; flex: none; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--hair); color: var(--muted); font-size: 11px; font-weight: 500; letter-spacing: .02em; display: inline-flex; align-items: center; justify-content: center; }
 .tool .role { color: var(--fg); font-size: 15.5px; }
 .tool .when { color: var(--muted); font-size: 15px; }
 .tool ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 15px; display: flex; flex-direction: column; gap: 4px; }
-.tool code { overflow-wrap: anywhere; }
 .more { color: var(--muted); max-width: 70ch; }
 footer { color: var(--faint); font-size: 14px; border-top: 1px solid var(--hair); padding-top: 18px; }
 
 @media (max-width: 860px) {
-  .flow { grid-template-columns: minmax(0,1fr); }
-  .edge { flex-direction: row; justify-content: flex-start; padding: 10px 6px; text-align: left; gap: 12px; }
-  .edge .arrow { width: 14px; height: 40px; transform: none; }
-  .edge .arrow.h { display: none; }
-  .edge .arrow.v { display: block; }
-  .below { grid-template-columns: minmax(0,1fr); }
-  .pieces { grid-template-columns: minmax(0,1fr); }
+  .pieces, .steps { grid-template-columns: minmax(0,1fr); }
+  .rule { grid-template-columns: minmax(0,1fr); gap: 18px; padding: 22px; }
+  .hint { display: block; }
 }
-.edge .arrow.v { display: none; }
-@media (max-width: 860px) { .edge .arrow.v { display: block; } }
+@media (max-width: 420px) {
+  body { font-size: 16px; }
+  .lead { font-size: 17px; }
+  .piece, .tool { padding: 18px; }
+  pre { font-size: 12px; padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -169,161 +219,360 @@ footer { color: var(--faint); font-size: 14px; border-top: 1px solid var(--hair)
   <symbol id="i-n8n" viewBox="0 0 24 24"><path fill="currentColor" d="M4.8 16.8c.45 0 .6-.15.6-.6V15c0-1.8.6-2.4 2.4-2.4H9c1.8 0 2.4.6 2.4 2.4v1.2c0 .45.15.6.6.6s.6-.15.6-.6V15c0-1.8.6-2.4 2.4-2.4h1.2c1.8 0 2.4.6 2.4 2.4v1.2c0 .45.15.6.6.6s.6-.15.6-.6V15c0-1.8.6-2.4 2.4-2.4h1.2c.45 0 .6-.15.6-.6s-.15-.6-.6-.6h-1.2c-1.8 0-2.4-.6-2.4-2.4V7.8c0-.45-.15-.6-.6-.6s-.6.15-.6.6V9c0 1.8-.6 2.4-2.4 2.4H15c-1.8 0-2.4-.6-2.4-2.4V7.8c0-.45-.15-.6-.6-.6s-.6.15-.6.6V9c0 1.8-.6 2.4-2.4 2.4H7.8c-1.8 0-2.4-.6-2.4-2.4V7.8c0-.45-.15-.6-.6-.6s-.6.15-.6.6V9c0 1.8-.6 2.4-2.4 2.4H.6c-.45 0-.6.15-.6.6s.15.6.6.6h1.2c1.8 0 2.4.6 2.4 2.4v1.2c0 .45.15.6.6.6"/></symbol>
   <symbol id="i-bruno" viewBox="0 0 24 24"><path fill="currentColor" d="M9.394 9.583s-.742.511-1.13.275c-.387-.236-.51-.742-.274-1.129.236-.388.742-.511 1.129-.275.388.236.275 1.129.275 1.129m1.48 3.245-.308.82.582.24c.04-.224.254-.372.477-.332.224.041.372.254.332.478-.093.515-.638.813-1.122.613l-.95-.391a.41.41 0 0 1-.228-.524l.448-1.193c.12-.32.426-.533.769-.533h2.525l.239.036c.076.023.148.057.214.101a.817.817 0 0 1 .303.363l.476 1.12c.083.197.002.425-.187.524l-.896.471c-.505.266-1.121-.053-1.196-.62a.411.411 0 0 1 .353-.461.411.411 0 0 1 .461.353l.56-.294-.327-.771zM9.353 17.98c-.959-.514-2.183-1.54-1.961-3.22.029-.225.236-.383.461-.354.225.03.383.236.353.461-.167 1.272.822 2.009 1.546 2.395.348.185.771.151 1.081-.092l.903-.708v-1.045c0-.226.184-.41.411-.41s.411.184.411.41v1.045l.903.708c.19.15.423.22.655.209a.45.45 0 0 1 .074-.019.42.42 0 0 1 .093-.003c.089-.02.176-.051.259-.095.724-.386 1.713-1.123 1.546-2.395a.411.411 0 0 1 .353-.461c.225-.029.432.129.461.354.223 1.688-1.013 2.716-1.974 3.227-.072.038-.145.071-.22.099.148 1.424-.14 2.562-.449 3.24-.169.37-.355.617-.49.732-.194.167-.517.305-.933.366-.531.078-1.227.039-1.945-.182-.576-.177-.973-.686-1.208-1.343-.362-1.009-.352-2.368-.33-2.919m4.54.213a1.81 1.81 0 0 1-.939-.376l-.807-.633-.807.633c-.341.268-.758.397-1.173.384-.012.453-.001 1.219.15 1.922.072.333.174.652.329.908.122.2.275.361.486.425.586.18 1.152.218 1.585.155.227-.033.412-.086.518-.176.115-.099.259-.363.395-.744.213-.597.367-1.46.263-2.498m-8.683-.955-.191.402c-.384.81-1.475.955-2.053.27-.81-.961-1.948-2.505-2.548-4.068-.427-1.115-.576-2.241-.213-3.198C2.894 3.559 6.247 2.969 6.98 2.928c1.34-.865 5.583-2.807 10.424.342.795-.051 4.042.203 6.424 7.252.325.961.162 2.081-.263 3.186-.599 1.557-1.709 3.088-2.5 4.046-.574.695-1.675.553-2.061-.262l-.133-.28c-.219.369-.524.832-.901 1.281-.57.679-1.306 1.32-2.154 1.598a.412.412 0 0 1-.519-.263.4114.4114 0 0 1 .263-.518c.705-.231 1.306-.78 1.781-1.345.556-.662.938-1.355 1.097-1.666l-.245-.518c-.126-.264-.154-.56-.078-.842.246-.924.981-4.015.071-6.043a.4105.4105 0 1 1 .749-.336c.993 2.212.243 5.583-.026 6.591a.405.405 0 0 0 .026.278l.811 1.712c.129.27.494.32.685.089.748-.904 1.801-2.346 2.367-3.817.351-.912.52-1.834.252-2.628-2.447-7.241-5.667-6.687-5.667-6.687a.416.416 0 0 1-.309-.061C12.48.972 8.456 2.917 7.339 3.676a.41.41 0 0 1-.252.07S3.739 3.649.973 10.935c-.297.783-.137 1.701.213 2.612.565 1.475 1.644 2.927 2.408 3.833.192.228.555.177.683-.092l.816-1.723a.4.4 0 0 0 .027-.278c-.269-1.008-1.02-4.38-.027-6.592a.4113.4113 0 0 1 .543-.206c.207.093.3.336.207.543-.911 2.028-.176 5.119.071 6.043.075.282.047.578-.078.842l-.203.427c.117.226 1.249 2.351 2.958 2.911.216.071.334.303.263.519a.4115.4115 0 0 1-.519.262c-1.484-.487-2.606-1.983-3.125-2.798m10.247-7.655s-.114-.893.274-1.129a.821.821 0 0 1 1.129.275c.236.387.113.893-.274 1.129-.388.236-1.129-.275-1.129-.275"/></symbol>
   <symbol id="i-astro" viewBox="0 0 24 24"><path fill="currentColor" d="M8.358 20.162c-1.186-1.07-1.532-3.316-1.038-4.944.856 1.026 2.043 1.352 3.272 1.535 1.897.283 3.76.177 5.522-.678.202-.098.388-.229.608-.36.166.473.209.95.151 1.437-.14 1.185-.738 2.1-1.688 2.794-.38.277-.782.525-1.175.787-1.205.804-1.531 1.747-1.078 3.119l.044.148a3.158 3.158 0 0 1-1.407-1.188 3.31 3.31 0 0 1-.544-1.815c-.004-.32-.004-.642-.048-.958-.106-.769-.472-1.113-1.161-1.133-.707-.02-1.267.411-1.415 1.09-.012.053-.028.104-.045.165h.002zm-5.961-4.445s3.24-1.575 6.49-1.575l2.451-7.565c.092-.366.36-.614.662-.614.302 0 .57.248.662.614l2.45 7.565c3.85 0 6.491 1.575 6.491 1.575L16.088.727C15.93.285 15.663 0 15.303 0H8.697c-.36 0-.615.285-.784.727l-5.516 14.99z"/></symbol>
+  <symbol id="i-react" viewBox="0 0 24 24"><path fill="currentColor" d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.41 0-.783.093-1.106.278-1.375.793-1.683 3.264-.973 6.365C1.98 8.917 0 10.42 0 12.004c0 1.59 1.99 3.097 5.043 4.03-.704 3.113-.39 5.588.988 6.38.32.187.69.275 1.102.275 1.345 0 3.107-.96 4.888-2.624 1.78 1.654 3.542 2.603 4.887 2.603.41 0 .783-.09 1.106-.275 1.374-.792 1.683-3.263.973-6.365C22.02 15.096 24 13.59 24 12.004c0-1.59-1.99-3.097-5.043-4.032.704-3.11.39-5.587-.988-6.38-.318-.184-.688-.277-1.092-.278zm-.005 1.09v.006c.225 0 .406.044.558.127.666.382.955 1.835.73 3.704-.054.46-.142.945-.25 1.44-.96-.236-2.006-.417-3.107-.534-.66-.905-1.345-1.727-2.035-2.447 1.592-1.48 3.087-2.292 4.105-2.295zm-9.77.02c1.012 0 2.514.808 4.11 2.28-.686.72-1.37 1.537-2.02 2.442-1.107.117-2.154.298-3.113.538-.112-.49-.195-.964-.254-1.42-.23-1.868.054-3.32.714-3.707.19-.09.4-.127.563-.132zm4.882 3.05c.455.468.91.992 1.36 1.564-.44-.02-.89-.034-1.345-.034-.46 0-.915.01-1.36.034.44-.572.895-1.096 1.345-1.565zM12 8.1c.74 0 1.477.034 2.202.093.406.582.802 1.203 1.183 1.86.372.64.71 1.29 1.018 1.946-.308.655-.646 1.31-1.013 1.95-.38.66-.773 1.288-1.18 1.87-.728.063-1.466.098-2.21.098-.74 0-1.477-.035-2.202-.093-.406-.582-.802-1.204-1.183-1.86-.372-.64-.71-1.29-1.018-1.946.303-.657.646-1.313 1.013-1.954.38-.66.773-1.286 1.18-1.868.728-.064 1.466-.098 2.21-.098zm-3.635.254c-.24.377-.48.763-.704 1.16-.225.39-.435.782-.635 1.174-.265-.656-.49-1.31-.676-1.947.64-.15 1.315-.283 2.015-.386zm7.26 0c.695.103 1.365.23 2.006.387-.18.632-.405 1.282-.66 1.933-.2-.39-.41-.783-.64-1.174-.225-.392-.465-.774-.705-1.146zm3.063.675c.484.15.944.317 1.375.498 1.732.74 2.852 1.708 2.852 2.476-.005.768-1.125 1.74-2.857 2.475-.42.18-.88.342-1.355.493-.28-.958-.646-1.956-1.1-2.98.45-1.017.81-2.01 1.085-2.964zm-13.395.004c.278.96.645 1.957 1.1 2.98-.45 1.017-.812 2.01-1.086 2.964-.484-.15-.944-.318-1.37-.5-1.732-.737-2.852-1.706-2.852-2.474 0-.768 1.12-1.742 2.852-2.476.42-.18.88-.342 1.356-.494zm11.678 4.28c.265.657.49 1.312.676 1.948-.64.157-1.316.29-2.016.39.24-.375.48-.762.705-1.158.225-.39.435-.788.636-1.18zm-9.945.02c.2.392.41.783.64 1.175.23.39.465.772.705 1.143-.695-.102-1.365-.23-2.006-.386.18-.63.406-1.282.66-1.933zM17.92 16.32c.112.493.2.968.254 1.423.23 1.868-.054 3.32-.714 3.708-.147.09-.338.128-.563.128-1.012 0-2.514-.807-4.11-2.28.686-.72 1.37-1.536 2.02-2.44 1.107-.118 2.154-.3 3.113-.54zm-11.83.01c.96.234 2.006.415 3.107.532.66.905 1.345 1.727 2.035 2.446-1.595 1.483-3.092 2.295-4.11 2.295-.22-.005-.406-.05-.553-.132-.666-.38-.955-1.834-.73-3.703.054-.46.142-.944.25-1.438zm4.56.64c.44.02.89.034 1.345.034.46 0 .915-.01 1.36-.034-.44.572-.895 1.095-1.345 1.565-.455-.47-.91-.993-1.36-1.565z"/></symbol>
+  <symbol id="i-fastapi" viewBox="0 0 24 24"><path fill="currentColor" d="M12 .0387C5.3729.0384.0003 5.3931 0 11.9988c-.001 6.6066 5.372 11.9628 12 11.9625 6.628.0003 12.001-5.3559 12-11.9625-.0003-6.6057-5.3729-11.9604-12-11.96m-.829 5.4153h7.55l-7.5805 5.3284h5.1828L5.279 18.5436q2.9466-6.5444 5.892-13.0896"/></symbol>
 </svg>
 
 <div class="wrap">
   <header>
     <p class="eyebrow">Formação FDE · caso Já Chegou</p>
-    <h1>Arquitetura de referência.<br><em>Claude Code, um MCP na Cloudflare e o Supabase.</em></h1>
-    <p class="lead">Uma proposta de stack para o grupo partir: o agente roda no Claude Code, as tools do caso ficam num servidor MCP próprio num Cloudflare Worker, e os dados ficam no Supabase. A tela de quem aprova é um front-end em Astro, também na Cloudflare. O GitHub guarda o código e publica tudo.</p>
+    <h1>Arquitetura de referência.<br><em>O agente propõe, uma pessoa aprova.</em></h1>
+    <p class="lead">Uma proposta de stack para o grupo partir, com Python no backend e Astro com React no front. O agente roda no Claude Code e lê o caso por um servidor FastMCP. Quem aprova entra numa tela em Astro, e tudo grava no Supabase com o login de quem pediu. É o banco que decide quem pode o quê.</p>
   </header>
 
-  <section aria-labelledby="fluxo">
-    <h2 id="fluxo">O fluxo</h2>
-    <div class="flow">
-      <div class="node claude">
-        <div class="head"><svg class="logo" role="img" aria-label="Claude"><use href="#i-claude"/></svg><span class="vendor">Agente</span></div>
-        <p class="name">Claude Code</p>
-        <p class="what">Lê as notas pelo MCP, aplica as skills e grava a proposta. No terminal, no app ou num job.</p>
-      </div>
-      <div class="edge">
-        <svg class="arrow h" viewBox="0 0 88 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 7H82M76 2l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-        <svg class="arrow v" viewBox="0 0 14 40" aria-hidden="true"><path d="M7 2V34M2 28l5 6 5-6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-        <div><p class="proto">MCP por HTTP</p><p class="auth">token Bearer</p></div>
-      </div>
-      <div class="node cf">
-        <div class="head"><svg class="logo" role="img" aria-label="Cloudflare"><use href="#i-cloudflare"/></svg><span class="vendor">Cloudflare Workers</span></div>
-        <p class="name">Servidor MCP</p>
-        <p class="what">As tools do caso: ler nota, pedido e recebimento, e registrar a proposta. Publicado com o Wrangler.</p>
-      </div>
-      <div class="edge">
-        <svg class="arrow h" viewBox="0 0 88 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 7H82M76 2l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-        <svg class="arrow v" viewBox="0 0 14 40" aria-hidden="true"><path d="M7 2V34M2 28l5 6 5-6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-        <div><p class="proto">supabase-js</p><p class="auth">chave secreta no Worker</p></div>
-      </div>
-      <div class="node sb">
-        <div class="head"><svg class="logo" role="img" aria-label="Supabase"><use href="#i-supabase"/></svg><span class="vendor">Supabase</span></div>
-        <p class="name">Banco e auth</p>
-        <p class="what">Postgres com notas, pedidos de compra, recebimentos da doca e as propostas do agente. Auth e Storage se precisar.</p>
-      </div>
+  <div class="rule" role="note" aria-label="O princípio da arquitetura">
+    <div><b>O agente propõe.</b><span>Ele lê notas, ordens e recebimentos e grava uma proposta. Não tem permissão para aprovar nada.</span></div>
+    <div><b>Uma pessoa aprova.</b><span>Ela precisa estar logada e ter o papel da alçada daquele valor. A decisão leva o nome dela.</span></div>
+    <div><b>O banco recusa o resto.</b><span>As regras ficam no banco do Supabase, com RLS. Um front com bug ou uma tool mal escrita não passa por cima delas.</span></div>
+  </div>
+
+  <section aria-labelledby="camadas">
+    <h2 id="camadas">As camadas</h2>
+    <p class="sub">Quatro faixas: quem usa, o que roda na borda, onde ficam os dados e onde fica o código. As setas cheias são chamadas, e a tracejada é o banco avisando o backend.</p>
+    <p class="hint">Arraste o diagrama para o lado para ver tudo.</p>
+    <div class="diagram-wrap" tabindex="0" role="region" aria-label="Diagrama das camadas, rolável na horizontal">
+      <svg class="diagram" viewBox="0 0 1080 760" role="img" aria-labelledby="dg-t dg-d">
+        <title id="dg-t">Arquitetura de referência do Já Chegou em camadas</title>
+        <desc id="dg-d">Quem aprova usa o front em Astro com React num Worker da Cloudflare, que chama o FastAPI num Python Worker com o JWT da pessoa. O Claude Code chama o servidor FastMCP no FastMCP Gateway com OAuth 2.1, e o login é o do Supabase. O FastAPI e o FastMCP gravam no banco do Supabase com o token do usuário, e o RLS confere o papel. O XML e o PDF ficam no Storage. Um webhook do banco chama o FastAPI, que avisa o aprovador pelo Resend. O GitHub guarda o código, publica tudo e roda o lote agendado.</desc>
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0L10 5L0 10z"/></marker>
+        </defs>
+
+        <!-- faixas -->
+        <rect class="band-user" x="10" y="10" width="1060" height="140" rx="16"/>
+        <rect class="band-cf" x="10" y="186" width="1060" height="176" rx="16"/>
+        <rect class="band-sb" x="10" y="440" width="1060" height="176" rx="16"/>
+        <rect class="band-gh" x="10" y="652" width="1060" height="98" rx="16"/>
+
+        <!-- quem usa -->
+        <rect class="box" x="30" y="48" width="430" height="86" rx="14"/>
+        <svg x="48" y="64" width="22" height="22" class="ic-fg" viewBox="0 0 24 24"><circle cx="12" cy="7.5" r="4.5" fill="currentColor"/><path d="M3 22c0-5 4-8.5 9-8.5s9 3.5 9 8.5z" fill="currentColor"/></svg>
+        <text class="t" x="80" y="81">Quem aprova</text>
+        <text class="s" x="48" y="112">Analista, coordenação ou diretoria, no navegador.</text>
+
+        <rect class="box-ink" x="580" y="48" width="470" height="86" rx="14"/>
+        <use href="#i-claude" x="598" y="64" width="22" height="22" class="ic-claude"/>
+        <text class="t-ink" x="630" y="81">Claude Code</text>
+        <text class="s-ink" x="598" y="112">Na máquina de cada um, ou no lote agendado das Actions.</text>
+
+        <!-- borda -->
+        <rect class="box-cf" x="30" y="224" width="430" height="118" rx="14"/>
+        <use href="#i-astro" x="48" y="240" width="22" height="22" class="ic-astro"/>
+        <use href="#i-react" x="76" y="240" width="22" height="22" class="ic-react"/>
+        <text class="t" x="108" y="257">Astro com React</text>
+        <text class="m" x="48" y="288">ja-chegou-web</text>
+        <text class="s" x="48" y="310">Worker da Cloudflare. A fila de propostas, a nota</text>
+        <text class="s" x="48" y="328">ao lado da ordem, aprovar ou recusar, e o consentimento OAuth.</text>
+
+        <rect class="box-cf" x="580" y="224" width="220" height="118" rx="14"/>
+        <use href="#i-fastapi" x="598" y="240" width="22" height="22" class="ic-fastapi"/>
+        <text class="t" x="630" y="257">FastAPI</text>
+        <text class="m" x="598" y="288">/api</text>
+        <text class="s" x="598" y="310">Python Worker da</text>
+        <text class="s" x="598" y="328">Cloudflare, com Cron.</text>
+
+        <rect class="box" x="830" y="224" width="220" height="118" rx="14"/>
+        <use href="#i-python" x="848" y="240" width="22" height="22" class="ic-py"/>
+        <text class="t" x="880" y="257">FastMCP</text>
+        <text class="m" x="848" y="288">/mcp</text>
+        <text class="s" x="848" y="310">FastMCP Gateway,</text>
+        <text class="s" x="848" y="328">com OAuth 2.1.</text>
+
+        <!-- dados -->
+        <rect class="box-sb" x="30" y="478" width="300" height="118" rx="14"/>
+        <use href="#i-supabase" x="48" y="494" width="22" height="22" class="ic-sb"/>
+        <text class="t" x="80" y="511">Auth</text>
+        <text class="s" x="48" y="542">Login das pessoas e servidor OAuth</text>
+        <text class="s" x="48" y="560">do MCP. O papel vai dentro do JWT.</text>
+
+        <rect class="box-sb" x="350" y="478" width="180" height="118" rx="14"/>
+        <use href="#i-supabase" x="368" y="494" width="22" height="22" class="ic-sb"/>
+        <text class="t" x="400" y="511">Storage</text>
+        <text class="s" x="368" y="542">XML e PDF das</text>
+        <text class="s" x="368" y="560">notas, privado.</text>
+
+        <rect class="box-sb" x="550" y="478" width="340" height="118" rx="14"/>
+        <use href="#i-supabase" x="568" y="494" width="22" height="22" class="ic-sb"/>
+        <text class="t" x="600" y="511">Banco Supabase, com RLS</text>
+        <text class="s" x="568" y="542">Notas, ordens, recebimentos, propostas,</text>
+        <text class="s" x="568" y="560">aprovações e auditoria. As regras moram aqui.</text>
+
+        <rect class="box" x="910" y="478" width="140" height="118" rx="14"/>
+        <use href="#i-resend" x="928" y="494" width="22" height="22" class="ic-fg"/>
+        <text class="t" x="960" y="511">Resend</text>
+        <text class="s" x="928" y="542">E-mail para</text>
+        <text class="s" x="928" y="560">quem aprova.</text>
+
+        <!-- código -->
+        <rect class="box" x="30" y="690" width="1020" height="44" rx="12"/>
+        <use href="#i-github" x="48" y="701" width="22" height="22" class="ic-fg"/>
+        <text class="t" x="80" y="718">Fork e Actions</text>
+        <text class="s" x="210" y="718">publicam os dois Workers e o MCP, aplicam as migrações e rodam o lote do agente num schedule.</text>
+
+        <!-- setas: quem usa → borda -->
+        <path class="edge" d="M245 134V222" marker-end="url(#ar)"/>
+        <text class="lbl" x="255" y="166">HTTPS</text>
+        <text class="lbl-s" x="255" y="180">sessão em cookie</text>
+
+        <path class="edge" d="M940 134V222" marker-end="url(#ar)"/>
+        <text class="lbl" x="930" y="166" text-anchor="end">MCP por HTTP</text>
+        <text class="lbl-s" x="930" y="180" text-anchor="end">OAuth 2.1</text>
+
+        <!-- front → api -->
+        <path class="edge" d="M460 283H578" marker-end="url(#ar)"/>
+        <text class="lbl" x="519" y="273" text-anchor="middle">/api</text>
+        <text class="lbl-s" x="519" y="302" text-anchor="middle">JWT de quem</text>
+        <text class="lbl-s" x="519" y="316" text-anchor="middle">está logado</text>
+
+        <!-- borda → dados -->
+        <path class="edge" d="M120 342V476" marker-end="url(#ar)"/>
+        <text class="lbl" x="130" y="404">login</text>
+
+        <path class="edge" d="M596 342L450 476" marker-end="url(#ar)"/>
+        <text class="lbl" x="518" y="404" text-anchor="end">URL assinada</text>
+
+        <path class="edge" d="M680 342V476" marker-end="url(#ar)"/>
+        <path class="edge dash" d="M770 476V342" marker-end="url(#ar)"/>
+        <text class="lbl" x="688" y="384">JWT → RLS</text>
+        <text class="lbl-s" x="688" y="399">grava</text>
+        <text class="lbl" x="778" y="420">webhook</text>
+        <text class="lbl-s" x="778" y="434">nova proposta</text>
+
+        <path class="edge" d="M860 342L860 476" marker-end="url(#ar)"/>
+        <text class="lbl" x="868" y="384">JWT → RLS</text>
+        <text class="lbl-s" x="868" y="399">lê e propõe</text>
+
+        <path class="edge" d="M796 342C820 440 960 420 990 476" marker-end="url(#ar)"/>
+        <text class="lbl" x="1000" y="440">e-mail</text>
+
+        <!-- rótulos das faixas, por cima das setas -->
+        <text class="band-label" x="30" y="34">Quem usa</text>
+        <text class="band-label" x="30" y="210">Na borda · Cloudflare Workers e FastMCP Gateway</text>
+        <text class="band-label" x="30" y="464">Dados · Supabase: banco, login e arquivos</text>
+        <text class="band-label" x="30" y="676">Código · GitHub</text>
+      </svg>
     </div>
-    <div class="below">
-      <div class="node gh">
-        <svg class="logo" role="img" aria-label="GitHub"><use href="#i-github"/></svg>
-        <div class="text">
-          <span class="vendor">GitHub</span>
-          <p class="name">Repositório e Actions</p>
-          <p class="what">O fork guarda o código do Worker e as migrações do Supabase. Cada merge na main publica o Worker e aplica as migrações. O Claude Code também pode rodar num job, com o token do <code>claude setup-token</code>.</p>
-        </div>
-      </div>
-    </div>
+  </section>
+
+  <section aria-labelledby="passos">
+    <h2 id="passos">Uma aprovação, <em>passo a passo</em></h2>
+    <p class="sub">O caminho de uma nota, da chegada até a auditoria. A ordem é a real: cada passo depende do anterior.</p>
+    <ol class="steps">
+      <li><b>A nota chega.</b><span>O XML e o PDF vão para um bucket privado do Storage, e a nota vira uma linha em <code>notas</code> com o caminho dos arquivos.</span><span class="who">Storage · notas</span></li>
+      <li><b>O lote acorda o agente.</b><span>Um workflow agendado nas Actions roda o Claude Code com as skills do caso. Ele entra no MCP como o usuário do agente, que tem o papel <code>agente</code>.</span><span class="who">GitHub Actions · Claude Code</span></li>
+      <li><b>O agente lê e propõe.</b><span>As tools do FastMCP leem a nota, a ordem de compra e o recebimento da doca com o token do agente. O resultado é uma linha em <code>propostas</code>, com a alçada calculada pelo valor.</span><span class="who">FastMCP · RLS: o agente só insere em propostas</span></li>
+      <li><b>O banco avisa quem decide.</b><span>Um webhook do banco chama o <code>/api</code> a cada proposta nova. O FastAPI busca quem tem o papel daquela alçada e manda o e-mail pelo Resend, com o link da tela.</span><span class="who">Webhook · FastAPI · Resend</span></li>
+      <li><b>Uma pessoa decide.</b><span>Ela entra no Astro com o login do Supabase e vê a nota ao lado da ordem e do recebimento. Ao aprovar ou recusar, o front chama o <code>/api</code> com o JWT dela.</span><span class="who">Astro com React · FastAPI</span></li>
+      <li><b>O banco confere e registra.</b><span>A policy compara o papel do JWT com a alçada da proposta e recusa o que não bate. Se passar, um trigger grava em <code>auditoria</code> quem decidiu, quando e o quê.</span><span class="who">Banco Supabase · RLS · trigger de auditoria</span></li>
+    </ol>
+    <p class="sub">De hora em hora, o Cron do Python Worker procura propostas paradas há mais de dois dias e manda um lembrete. As faixas de alçada vêm do caso (R$ 5 mil, R$ 20 mil, R$ 100 mil e acima). Os papéis de cada faixa aqui são exemplo: quem decide cada uma é pergunta para o cliente.</p>
   </section>
 
   <section aria-labelledby="pecas">
     <h2 id="pecas">Peça a peça</h2>
-    <div class="pieces">
-      <article class="piece claude">
-        <div class="head"><svg class="logo" role="img" aria-label="Claude"><use href="#i-claude"/></svg><h3>Claude Code</h3></div>
-        <ul>
-          <li>Na máquina, entra com a conta de cada um.</li>
-          <li>Fora dela, num job ou servidor, usa um token de longa duração da assinatura, gerado uma vez.</li>
-          <li>O servidor MCP entra como qualquer outro, apontando para a URL do Worker.</li>
-        </ul>
-<pre><span class="c"># token de longa duração, para jobs</span>
-claude setup-token
-<span class="c"># no job: CLAUDE_CODE_OAUTH_TOKEN=&lt;token&gt;</span>
+    <p class="sub">Os comandos foram conferidos na documentação de cada ferramenta em 14/11/2026. A <code>setup-fde</code> instala o <code>supabase</code>, o <code>wrangler</code> e o <code>uv</code>, que rodam sem <code>npx</code>.</p>
 
-<span class="c"># ligar o MCP do caso</span>
-claude mcp add --transport http ja-chegou \
-  https://ja-chegou-mcp.&lt;conta&gt;.workers.dev/mcp \
-  --header "Authorization: Bearer $MCP_TOKEN"</pre>
-      </article>
+    <div class="layer l-front">
+      <h3>Front-end · Astro com React</h3>
+      <div class="pieces">
+        <article class="piece">
+          <div class="head"><span class="logos"><svg class="logo" role="img" aria-label="Astro" style="color:var(--astro)"><use href="#i-astro"/></svg><svg class="logo" role="img" aria-label="React" style="color:var(--react)"><use href="#i-react"/></svg></span><h4>A tela de quem aprova</h4></div>
+          <ul>
+            <li>O Astro monta as páginas no servidor, com a sessão do Supabase guardada em cookie.</li>
+            <li>As partes interativas são ilhas React: a fila de propostas, o comparativo da nota e os botões de aprovar e recusar.</li>
+            <li>Ele também hospeda a tela de consentimento do OAuth, aquela em que a pessoa autoriza o Claude Code a usar o MCP em nome dela.</li>
+            <li>O front não fala com o banco para decidir: ele chama o <code>/api</code> com o JWT da pessoa.</li>
+          </ul>
+<pre tabindex="0"><span class="c"># criar o projeto, com React e o adaptador da Cloudflare</span>
+npm create astro@latest ja-chegou-web
+cd ja-chegou-web
+npx astro add react cloudflare
+npm install @supabase/supabase-js @supabase/ssr
 
-      <article class="piece cf">
-        <div class="head"><svg class="logo" role="img" aria-label="Cloudflare"><use href="#i-cloudflare"/></svg><h3>Servidor MCP no Worker</h3></div>
-        <ul>
-          <li>Um Worker que fala MCP por HTTP, com as tools do caso.</li>
-          <li>Confere o token Bearer antes de qualquer tool.</li>
-          <li>Os segredos ficam no Worker, nunca no código nem no repositório.</li>
-        </ul>
-<pre><span class="c"># criar o projeto</span>
-npm create cloudflare@latest -- ja-chegou-mcp
-
-<span class="c"># segredos do Worker</span>
-wrangler secret put MCP_TOKEN
-wrangler secret put SUPABASE_SECRET_KEY
-
-<span class="c"># publicar</span>
-wrangler deploy</pre>
-      </article>
-
-      <article class="piece astro">
-        <div class="head"><svg class="logo" role="img" aria-label="Astro"><use href="#i-astro"/></svg><h3>Front-end em Astro</h3></div>
-        <ul>
-          <li>A tela de quem aprova: as propostas do agente, a nota ao lado do pedido e do recebimento, aprovar ou recusar.</li>
-          <li>Páginas estáticas onde der; renderizadas no servidor onde precisam dos dados de quem está logado.</li>
-          <li>Publicado num Worker da Cloudflare com o adaptador <code>@astrojs/cloudflare</code>, como o MCP.</li>
-        </ul>
-<pre><span class="c"># criar o projeto</span>
-npm create astro@latest
-
-<span class="c"># adaptador da Cloudflare</span>
-npx astro add cloudflare
-
-<span class="c"># publicar</span>
+<span class="c"># publicar num Worker</span>
 npm run build
 wrangler deploy</pre>
-      </article>
+        </article>
+        <article class="piece">
+          <div class="head"><svg class="logo" role="img" aria-label="Supabase" style="color:var(--supabase)"><use href="#i-supabase"/></svg><h4>Login e papéis</h4></div>
+          <ul>
+            <li>O login é o Supabase Auth, por e-mail ou SSO.</li>
+            <li>Um Custom Access Token Hook põe o papel da pessoa (<code>analista</code>, <code>coordenacao</code>, <code>diretoria</code> ou <code>agente</code>) dentro do JWT.</li>
+            <li>O mesmo JWT chega ao <code>/api</code> e ao <code>/mcp</code>, e o banco lê o papel com <code>auth.jwt()</code>.</li>
+          </ul>
+<pre tabindex="0"><span class="c">-- o hook que põe o papel no token</span>
+create or replace function public.custom_access_token_hook(event jsonb)
+returns jsonb language plpgsql stable as $$
+declare claims jsonb; papel text;
+begin
+  select p.papel into papel from public.pessoas p
+   where p.id = (event->>'user_id')::uuid;
+  claims := jsonb_set(event->'claims', '{papel}', to_jsonb(papel));
+  return jsonb_set(event, '{claims}', claims);
+end $$;</pre>
+        </article>
+      </div>
+    </div>
 
-      <article class="piece sb">
-        <div class="head"><svg class="logo" role="img" aria-label="Supabase"><use href="#i-supabase"/></svg><h3>Supabase</h3></div>
-        <ul>
-          <li>Local com Docker para desenvolver, na nuvem para publicar.</li>
-          <li>O esquema vive em migrações versionadas no repositório.</li>
-          <li>Só o Worker conhece a chave secreta. O Claude Code nunca fala direto com o banco.</li>
-        </ul>
-<pre><span class="c"># local</span>
+    <div class="layer l-back">
+      <h3>Backend · Python</h3>
+      <div class="pieces">
+        <article class="piece">
+          <div class="head"><svg class="logo" role="img" aria-label="Python" style="color:var(--python)"><use href="#i-python"/></svg><h4>FastMCP no FastMCP Gateway</h4></div>
+          <ul>
+            <li>As tools do caso: listar as notas pendentes, ler a nota, a ordem e o recebimento, e registrar a proposta.</li>
+            <li>O <code>SupabaseProvider</code> troca o token Bearer fixo por OAuth 2.1, com o Supabase como servidor de login. Ative o OAuth Server e o registro dinâmico de clientes no projeto.</li>
+            <li>Cada tool pega o token de quem chamou (<code>get_access_token().token</code>) e o repassa ao Supabase. Assim, o RLS vale também para o agente.</li>
+            <li>Ele é publicado no FastMCP Gateway, da Prefect: você conecta o fork, aponta <code>main.py:mcp</code> e a URL sai em <code>*.fastmcp.app/mcp</code>.</li>
+          </ul>
+<pre tabindex="0"><span class="c"># main.py · uv add fastmcp</span>
+from fastmcp import FastMCP
+from fastmcp.server.auth.providers.supabase import SupabaseProvider
+from fastmcp.server.dependencies import get_access_token
+
+auth = SupabaseProvider(
+    project_url="https://&lt;ref&gt;.supabase.co",
+    base_url="https://ja-chegou.fastmcp.app",
+)
+mcp = FastMCP("ja-chegou", auth=auth)
+
+@mcp.tool
+async def ler_nota(chave: str) -&gt; dict:
+    """Lê uma nota pela chave de acesso."""
+    jwt = get_access_token().token  <span class="c"># o RLS vale</span>
+    ...
+
+<span class="c"># local: fastmcp run main.py:mcp --transport http --port 8000</span></pre>
+        </article>
+        <article class="piece">
+          <div class="head"><svg class="logo" role="img" aria-label="FastAPI" style="color:var(--fastapi)"><use href="#i-fastapi"/></svg><h4>FastAPI num Python Worker</h4></div>
+          <ul>
+            <li>O <code>/api</code> do front: listar as propostas, gerar a URL assinada do PDF e registrar a decisão.</li>
+            <li>Cada chamada repassa ao Supabase o JWT de quem está logado. O backend não usa a chave secreta para decidir nada.</li>
+            <li>A rota <code>/api/avisos</code> recebe o webhook do banco, confere o segredo compartilhado e manda o e-mail pelo Resend.</li>
+            <li>O mesmo Worker tem um Cron Trigger para os lembretes.</li>
+          </ul>
+<pre tabindex="0"><span class="c"># criar e rodar</span>
+uvx --from workers-py pywrangler init
+uv add fastapi
+uv run pywrangler dev
+uv run pywrangler deploy
+
+<span class="c"># src/main.py</span>
+from fastapi import FastAPI
+from workers import asgi
+
+app = FastAPI()
+
+@app.post("/api/propostas/{id}/decisao")
+async def decidir(id: int):
+    ...
+
+Default = asgi.entrypoint(app)
+
+<span class="c"># wrangler.jsonc: "triggers": { "crons": ["0 * * * *"] }</span></pre>
+        </article>
+      </div>
+    </div>
+
+    <div class="layer l-data">
+      <h3>Dados · Supabase</h3>
+      <div class="pieces">
+        <article class="piece wide">
+          <div class="head"><svg class="logo" role="img" aria-label="Supabase" style="color:var(--supabase)"><use href="#i-supabase"/></svg><h4>O banco no Supabase: RLS, Storage e o webhook</h4></div>
+          <ul>
+            <li>O esquema vive em migrações versionadas no fork, e o desenvolvimento usa o Supabase local com Docker.</li>
+            <li>Todas as tabelas têm RLS ligado. O agente insere em <code>propostas</code> e não toca em <code>aprovacoes</code>. Uma pessoa só aprova até o limite do papel dela.</li>
+            <li>O webhook é um trigger com <code>pg_net</code>. A URL e o segredo dele ficam no Vault, fora das migrações.</li>
+            <li>O bucket <code>notas</code> é privado, e o PDF só abre por URL assinada.</li>
+          </ul>
+<pre tabindex="0"><span class="c"># local e nuvem</span>
 supabase init
 supabase start
-supabase migration new criar_tabelas
+supabase migration new esquema_inicial
+supabase link
+supabase db push --remote
 
-<span class="c"># nuvem</span>
-supabase link --project-ref &lt;ref&gt;
-supabase db push --remote</pre>
-      </article>
+<span class="c">-- só aprova quem tem papel para o valor da proposta</span>
+create policy "aprova dentro da alçada" on public.aprovacoes
+for insert to authenticated
+with check (
+  decidido_por = auth.uid()
+  and public.pode_aprovar(auth.jwt() -&gt;&gt; 'papel', proposta_id)
+);</pre>
+        </article>
+      </div>
+    </div>
 
-      <article class="piece gh">
-        <div class="head"><svg class="logo" role="img" aria-label="GitHub"><use href="#i-github"/></svg><h3>GitHub</h3></div>
-        <ul>
-          <li>Fork, branch e pull request, como em qualquer projeto.</li>
-          <li>Actions publica o Worker e aplica as migrações depois do merge.</li>
-          <li>Os tokens da Cloudflare, do Supabase e do Claude ficam nos secrets do repositório.</li>
-        </ul>
-<pre><span class="c"># secrets do repositório</span>
+    <div class="layer l-ops">
+      <h3>Código e publicação · GitHub</h3>
+      <div class="pieces">
+        <article class="piece wide">
+          <div class="head"><svg class="logo" role="img" aria-label="GitHub" style="color:var(--fg)"><use href="#i-github"/></svg><h4>Fork, Actions e o lote do agente</h4></div>
+          <ul>
+            <li>Um fork com três pastas: <code>web/</code> (Astro), <code>api/</code> (FastAPI) e <code>mcp/</code> (FastMCP), mais <code>supabase/</code> com as migrações.</li>
+            <li>Depois do merge na <code>main</code>, as Actions publicam os dois Workers e aplicam as migrações. O FastMCP Gateway publica sozinho a partir do fork.</li>
+            <li>O lote é um workflow com <code>schedule</code> que roda o Claude Code com o token do <code>claude setup-token</code>.</li>
+          </ul>
+<pre tabindex="0"><span class="c"># secrets do repositório</span>
 gh secret set CLOUDFLARE_API_TOKEN
 gh secret set CLOUDFLARE_ACCOUNT_ID
 gh secret set SUPABASE_ACCESS_TOKEN
 gh secret set SUPABASE_DB_PASSWORD
 gh secret set CLAUDE_CODE_OAUTH_TOKEN
 
-<span class="c"># actions: cloudflare/wrangler-action@v4</span>
-<span class="c">#          supabase/setup-cli@v3</span>
-<span class="c">#          anthropics/claude-code-action@v1</span></pre>
-      </article>
+<span class="c"># actions: cloudflare/wrangler-action, supabase/setup-cli, anthropics/claude-code-action</span></pre>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="banco">
+    <h2 id="banco">O banco, <em>no Supabase</em></h2>
+    <p class="sub">O banco é o Postgres do próprio Supabase, sem outro banco ao lado. São oito tabelas e um bucket. A última coluna mostra quem pode escrever em cada uma, e quem impõe isso é o RLS.</p>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Tabelas do banco">
+      <table>
+        <thead><tr><th>Tabela</th><th>O que guarda</th><th>Quem escreve</th></tr></thead>
+        <tbody>
+          <tr><td><code>pessoas</code></td><td>Quem usa o sistema e o papel de cada um, que o hook põe no JWT</td><td>Só a diretoria</td></tr>
+          <tr><td><code>fornecedores</code></td><td>CNPJ, razão social e dados de pagamento</td><td>Cadastro, pela importação</td></tr>
+          <tr><td><code>notas</code></td><td>Chave de acesso, emitente, valor, itens e o caminho do XML e do PDF no Storage</td><td>A importação das notas</td></tr>
+          <tr><td><code>ordens</code></td><td>Ordens de compra: itens, quantidades e preços combinados</td><td>A importação do ERP</td></tr>
+          <tr><td><code>recebimentos</code></td><td>O que a doca conferiu de cada ordem</td><td>A importação da doca</td></tr>
+          <tr><td><code>propostas</code></td><td>O que o agente sugere para cada nota, com a justificativa, o valor e a alçada</td><td>Só o papel <code>agente</code></td></tr>
+          <tr><td><code>aprovacoes</code></td><td>A decisão de uma pessoa sobre uma proposta: aprovar ou recusar, e o motivo</td><td>Só uma pessoa com o papel da alçada</td></tr>
+          <tr><td><code>auditoria</code></td><td>Cada mudança: quem, quando, a tabela e o antes e o depois</td><td>Só os triggers; ninguém altera nem apaga</td></tr>
+          <tr><td>bucket <code>notas</code></td><td>XML e PDF originais, num bucket privado</td><td>A importação. A leitura é só por URL assinada</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
   <section aria-labelledby="auth">
     <h2 id="auth">Quem se autentica onde</h2>
-    <div class="table-wrap">
+    <p class="sub">Em uso, nenhum salto tem uma chave que passe por cima do RLS. Só os passos de publicação têm acesso amplo, e as credenciais deles ficam nos secrets do repositório.</p>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Credenciais por salto">
       <table>
         <thead><tr><th>Salto</th><th>Credencial</th><th>Onde fica</th></tr></thead>
         <tbody>
-          <tr><td>Você → Claude Code</td><td>Login da sua conta, ou o token do <code>claude setup-token</code> num job</td><td>Na sua máquina, ou em <code>CLAUDE_CODE_OAUTH_TOKEN</code> nos secrets do repositório</td></tr>
-          <tr><td>Claude Code → MCP</td><td>Token Bearer no cabeçalho <code>Authorization</code></td><td>No <code>claude mcp add</code> de cada um e no secret <code>MCP_TOKEN</code> do Worker</td></tr>
-          <tr><td>MCP → Supabase</td><td>Chave secreta do projeto</td><td>Só no secret <code>SUPABASE_SECRET_KEY</code> do Worker</td></tr>
-          <tr><td>Actions → Cloudflare</td><td>API token e ID da conta</td><td><code>CLOUDFLARE_API_TOKEN</code> e <code>CLOUDFLARE_ACCOUNT_ID</code> nos secrets do repositório</td></tr>
-          <tr><td>Actions → Supabase</td><td>Access token pessoal e senha do banco</td><td><code>SUPABASE_ACCESS_TOKEN</code> e <code>SUPABASE_DB_PASSWORD</code> nos secrets do repositório</td></tr>
+          <tr><td>Pessoa → Astro</td><td>Login do Supabase Auth, com a sessão em cookie</td><td>No navegador da pessoa</td></tr>
+          <tr><td>Astro → <code>/api</code></td><td>O JWT da pessoa, com o papel dentro</td><td>No cabeçalho <code>Authorization</code> de cada chamada</td></tr>
+          <tr><td>Claude Code → <code>/mcp</code></td><td>OAuth 2.1: na primeira vez, o navegador abre o login do Supabase e a tela de consentimento</td><td>No Claude Code de cada um, que renova o token sozinho</td></tr>
+          <tr><td>Lote → <code>/mcp</code></td><td>O JWT do usuário do agente, com o papel <code>agente</code>, pedido ao Supabase Auth no início do workflow</td><td>O e-mail e a senha desse usuário nos secrets do repositório</td></tr>
+          <tr><td><code>/api</code> e <code>/mcp</code> → Supabase</td><td>A chave publicável mais o JWT de quem chamou, e o RLS vale</td><td>A chave publicável nas variáveis do Worker e do Gateway</td></tr>
+          <tr><td>Banco → <code>/api/avisos</code></td><td>Um segredo compartilhado no cabeçalho do webhook</td><td>No Vault do Supabase e num secret do Worker</td></tr>
+          <tr><td><code>/api</code> → Resend</td><td>API key do Resend</td><td>Num secret do Worker (<code>wrangler secret put RESEND_API_KEY</code>)</td></tr>
+          <tr><td>Actions → Cloudflare e Supabase</td><td>API token e ID da conta; access token e senha do banco</td><td>Nos secrets do repositório</td></tr>
         </tbody>
       </table>
     </div>
@@ -331,7 +580,6 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
 
   <section aria-labelledby="ferramentas">
     <h2 id="ferramentas">Awesome tools para builders</h2>
-    <p class="lead" style="margin:0">As ferramentas que um FDE da Barte usa para construir e entregar. Quase todas têm plano gratuito e várias têm um servidor MCP oficial, o que deixa o Claude Code operar a ferramenta por você.</p>
     <div class="tools-group">
       <h3>Na stack do curso</h3>
       <div class="tools">
@@ -350,7 +598,7 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
         <article class="tool">
           <div class="tool-head"><svg class="logo" role="img" aria-label="git e GitHub" style="color:var(--fg)"><use href="#i-github"/></svg><h4>git e GitHub</h4></div>
           <p class="role">Fork, PRs, issues e Actions.</p>
-          <p class="when">Em todo o trabalho: o código do Worker e as migrações vivem no fork.</p>
+          <p class="when">Em todo o trabalho: o front, o backend e as migrações vivem no fork.</p>
           <ul><li><a href="https://cli.github.com/manual/" target="_blank" rel="noopener">GitHub CLI</a></li><li><a href="https://docs.github.com/actions" target="_blank" rel="noopener">GitHub Actions</a></li></ul>
         </article>
         <article class="tool">
@@ -361,21 +609,27 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
         </article>
         <article class="tool">
           <div class="tool-head"><svg class="logo" role="img" aria-label="Cloudflare" style="color:var(--cloudflare)"><use href="#i-cloudflare"/></svg><h4>Cloudflare</h4></div>
-          <p class="role">O servidor MCP num Worker.</p>
+          <p class="role">O front em Astro e o FastAPI, cada um num Worker, com o Cron dos lembretes.</p>
           <p class="when">Publicar uma API, um MCP ou uma página sem cuidar de infraestrutura.</p>
-          <ul><li><a href="https://developers.cloudflare.com/workers/" target="_blank" rel="noopener">Workers</a></li><li><a href="https://developers.cloudflare.com/workers/wrangler/" target="_blank" rel="noopener">Wrangler</a></li><li><a href="https://developers.cloudflare.com/agents/guides/remote-mcp-server/" target="_blank" rel="noopener">Servidor MCP remoto num Worker</a></li><li><a href="https://developers.cloudflare.com/workers/languages/python/" target="_blank" rel="noopener">Workers em Python</a></li></ul>
+          <ul><li><a href="https://developers.cloudflare.com/workers/" target="_blank" rel="noopener">Workers</a></li><li><a href="https://developers.cloudflare.com/workers/wrangler/" target="_blank" rel="noopener">Wrangler</a></li><li><a href="https://developers.cloudflare.com/workers/configuration/cron-triggers/" target="_blank" rel="noopener">Cron Triggers</a></li><li><a href="https://developers.cloudflare.com/workers/languages/python/" target="_blank" rel="noopener">Workers em Python</a></li></ul>
         </article>
         <article class="tool">
           <div class="tool-head"><svg class="logo" role="img" aria-label="Astro" style="color:var(--astro)"><use href="#i-astro"/></svg><h4>Astro</h4></div>
-          <p class="role">O framework de front-end: a tela de quem aprova.</p>
+          <p class="role">O framework de front-end: a tela de quem aprova, com ilhas React.</p>
           <p class="when">O agente precisa de uma interface: listar as propostas, mostrar a nota e registrar a decisão de uma pessoa.</p>
-          <ul><li><a href="https://docs.astro.build/en/getting-started/" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://docs.astro.build/en/guides/deploy/cloudflare/" target="_blank" rel="noopener">Deploy na Cloudflare</a></li><li><a href="https://docs.astro.build/en/guides/backend/supabase/" target="_blank" rel="noopener">Astro com Supabase</a></li></ul>
+          <ul><li><a href="https://docs.astro.build/en/getting-started/" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://docs.astro.build/en/guides/deploy/cloudflare/" target="_blank" rel="noopener">Deploy na Cloudflare</a></li><li><a href="https://docs.astro.build/en/guides/backend/supabase/" target="_blank" rel="noopener">Astro com Supabase</a></li><li><a href="https://docs.astro.build/en/guides/integrations-guide/react/" target="_blank" rel="noopener">Ilhas React</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><span class="initials" aria-hidden="true">FM</span><h4>FastMCP</h4></div>
+          <p class="role">O servidor MCP em Python, com as tools do caso e o login OAuth pelo Supabase.</p>
+          <p class="when">O agente precisa ler e gravar no sistema do cliente em nome de quem o chamou.</p>
+          <ul><li><a href="https://gofastmcp.com" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://gofastmcp.com/integrations/supabase" target="_blank" rel="noopener">Login com o Supabase</a></li><li><a href="https://gofastmcp.com/deployment/fastmcp-cloud" target="_blank" rel="noopener">FastMCP Gateway</a></li></ul>
         </article>
         <article class="tool">
           <div class="tool-head"><svg class="logo" role="img" aria-label="Python" style="color:#3776AB"><use href="#i-python"/></svg><h4>Python</h4></div>
-          <p class="role">A linguagem do kit e das tools.</p>
-          <p class="when">As tools, os scripts e os testes do projeto.</p>
-          <ul><li><a href="https://docs.astral.sh/uv/" target="_blank" rel="noopener">uv</a></li><li><a href="https://docs.pytest.org" target="_blank" rel="noopener">pytest</a></li><li><a href="https://docs.pydantic.dev" target="_blank" rel="noopener">Pydantic</a></li><li><a href="https://github.com/modelcontextprotocol/python-sdk" target="_blank" rel="noopener">SDK de MCP em Python</a></li></ul>
+          <p class="role">A linguagem do backend, do kit e das tools.</p>
+          <p class="when">O FastAPI, o FastMCP, os scripts e os testes do projeto.</p>
+          <ul><li><a href="https://docs.astral.sh/uv/" target="_blank" rel="noopener">uv</a></li><li><a href="https://docs.pytest.org" target="_blank" rel="noopener">pytest</a></li><li><a href="https://docs.pydantic.dev" target="_blank" rel="noopener">Pydantic</a></li><li><a href="https://fastapi.tiangolo.com" target="_blank" rel="noopener">FastAPI</a></li><li><a href="https://developers.cloudflare.com/workers/languages/python/packages/fastapi/" target="_blank" rel="noopener">FastAPI num Python Worker</a></li></ul>
         </article>
         <article class="tool">
           <div class="tool-head"><svg class="logo" role="img" aria-label="Docker" style="color:#2496ED"><use href="#i-docker"/></svg><h4>Docker</h4></div>
@@ -390,7 +644,7 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
       <div class="tools">
         <article class="tool">
           <div class="tool-head"><svg class="logo" role="img" aria-label="Resend" style="color:var(--fg)"><use href="#i-resend"/></svg><h4>Resend</h4></div>
-          <p class="role">E-mail: avisar quem aprova.</p>
+          <p class="role">E-mail: avisar quem aprova. Já está na arquitetura de referência.</p>
           <p class="when">O agente precisa avisar uma pessoa: uma aprovação pendente, um resumo do dia, uma exceção.</p>
           <ul><li><a href="https://resend.com/docs" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://github.com/resend/resend-python" target="_blank" rel="noopener">SDK de Python</a></li><li><a href="https://github.com/resend/mcp-send-email" target="_blank" rel="noopener">Servidor MCP</a></li></ul>
         </article>
@@ -415,7 +669,7 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
         <article class="tool">
           <div class="tool-head"><svg class="logo" role="img" aria-label="MCP Inspector" style="color:var(--fg)"><use href="#i-modelcontextprotocol"/></svg><h4>MCP Inspector</h4></div>
           <p class="role">Abre o servidor MCP sem o Claude Code, lista as tools e chama uma por uma.</p>
-          <p class="when">Subir o MCP no Worker e ele não responder como esperado. Roda com <code>npx @modelcontextprotocol/inspector</code>.</p>
+          <p class="when">Subir o FastMCP e ele não responder como esperado. Roda com <code>npx @modelcontextprotocol/inspector</code>.</p>
           <ul><li><a href="https://modelcontextprotocol.io/docs/tools/inspector" target="_blank" rel="noopener">Documentação</a></li></ul>
         </article>
         <article class="tool">
@@ -471,5 +725,5 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
     <p class="more">Nenhuma das de baixo é pré-requisito para o fim de semana. A lista completa, com mais links, está no <a href="https://github.com/barte-ai-services/formacao-fde-case/blob/main/AWESOME.md" target="_blank" rel="noopener"><code>AWESOME.md</code></a> do case.</p>
   </section>
 
-  <footer>Um ponto de partida, não a solução do caso: cada peça pode ser trocada. Ícones de Simple Icons; as marcas são de seus donos.</footer>
+  <footer>Um ponto de partida, não a solução do caso: cada peça pode ser trocada. Ícones de Simple Icons 16.37.0; as marcas são de seus donos.</footer>
 </div>

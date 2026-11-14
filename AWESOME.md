@@ -11,11 +11,13 @@ O que o curso já tem e o que ainda falta, em 14/11/2026.
 | **Claude Code** | sim | o agente: constrói e roda | pronto, com o Ahrena configurado no repositório |
 | **Ahrena Framework** | sim, os plugins | o time de agentes que constrói e revisa | pronto: Athena orquestra e Argos revisa |
 | **git e GitHub (`gh`)** | sim | fork, PRs, issues e Actions | pronto |
-| **Python (com `uv`)** | sim | linguagem do kit e das tools | pronto |
+| **Python (com `uv`)** | sim | o backend (FastAPI e FastMCP), o kit e as tools | pronto |
 | **Supabase** | sim, o CLI | banco, autenticação e storage | CLI pronto; o líder de cada grupo cria a conta ([teams/CONTAS.md](teams/CONTAS.md)) |
-| **Cloudflare** | sim, o Wrangler (com Node.js e npm) | o servidor MCP num Worker | Wrangler pronto; o líder de cada grupo cria a conta ([teams/CONTAS.md](teams/CONTAS.md)) |
+| **Cloudflare** | sim, o Wrangler (com Node.js e npm) | o front em Astro e o FastAPI, cada um num Worker | Wrangler pronto; o líder de cada grupo cria a conta ([teams/CONTAS.md](teams/CONTAS.md)) |
 | **Docker** | sim (Colima no Mac) | sobe o Supabase local | pronto |
-| **Resend** | não | e-mail: avisar quem aprova | fora do curso; candidato para notificações |
+| **Astro com React** | não; vem no projeto com `npm create astro@latest` | a tela de quem aprova | pronto para usar: Node.js e npm já vêm na `setup-fde` |
+| **FastMCP** | não; vem no projeto com `uv add fastmcp` | o servidor MCP, com login OAuth pelo Supabase | pronto para usar; o FastMCP Gateway pede conta na Prefect |
+| **Resend** | não | e-mail: avisar quem aprova | na arquitetura de referência; a conta é opcional no fim de semana |
 | **Barte** | não | pagamentos: cobrar, receber e pagar | fora do curso; o caso não cobra ninguém |
 | **Evolution API** | não | WhatsApp: pedir a aprovação onde a pessoa está | fora do curso; exige servidor próprio |
 | **Temporal** | não | fluxos longos: esperar a aprovação e retomar | fora do curso; o próximo passo quando o fluxo ficar longo |
@@ -61,11 +63,34 @@ Workers rodam o seu código nos servidores da Cloudflare, perto de quem acessa, 
 
 - [Workers](https://developers.cloudflare.com/workers/)
 - [Wrangler](https://developers.cloudflare.com/workers/wrangler/): `wrangler deploy`, `wrangler secret put`
-- [Servidor MCP remoto num Worker](https://developers.cloudflare.com/agents/guides/remote-mcp-server/): o caminho da arquitetura de referência
-- [Workers em Python](https://developers.cloudflare.com/workers/languages/python/)
+- [Workers em Python](https://developers.cloudflare.com/workers/languages/python/): onde roda o FastAPI da arquitetura de referência
+- [FastAPI num Python Worker](https://developers.cloudflare.com/workers/languages/python/packages/fastapi/)
+- [Cron Triggers](https://developers.cloudflare.com/workers/configuration/cron-triggers/): rodar uma rotina num horário
 - [Servidores MCP da Cloudflare](https://github.com/cloudflare/mcp-server-cloudflare): o Claude Code operando a conta
 
-**Use quando:** precisa publicar uma API, um MCP ou uma página sem cuidar de infraestrutura.
+**Use quando:** precisa publicar uma API ou uma página sem cuidar de infraestrutura.
+
+## Astro
+
+Framework de front-end que monta as páginas no servidor e deixa interativas só as partes que precisam, como ilhas React. Publica num Worker da Cloudflare.
+
+- [Documentação](https://docs.astro.build/en/getting-started/)
+- [Deploy na Cloudflare](https://docs.astro.build/en/guides/deploy/cloudflare/): `npx astro add cloudflare` e `wrangler deploy`
+- [Ilhas React](https://docs.astro.build/en/guides/integrations-guide/react/): `npx astro add react`
+- [Astro com Supabase](https://docs.astro.build/en/guides/backend/supabase/): o login de quem aprova
+
+**Use quando:** o agente precisa de uma interface: listar as propostas, mostrar a nota e registrar a decisão de uma pessoa.
+
+## FastMCP
+
+O jeito mais curto de escrever um servidor MCP em Python: uma função com `@mcp.tool` vira uma tool. Tem login OAuth pronto com o Supabase.
+
+- [Documentação](https://gofastmcp.com)
+- [Login com o Supabase](https://gofastmcp.com/integrations/supabase): OAuth 2.1, com o token de quem chamou em cada tool
+- [FastMCP Gateway](https://gofastmcp.com/deployment/fastmcp-cloud): publica o servidor a partir do repositório
+- [SDK de MCP em Python](https://github.com/modelcontextprotocol/python-sdk): o SDK oficial, por baixo
+
+**Use quando:** o agente precisa ler e gravar no sistema do cliente em nome de quem o chamou.
 
 ## Resend
 
@@ -94,15 +119,15 @@ A plataforma de pagamentos da casa: pedidos, links de pagamento, assinaturas, ca
 
 ## Python
 
-A linguagem do kit e das tools.
+A linguagem do backend, do kit e das tools.
 
 - [uv](https://docs.astral.sh/uv/): ambiente, dependências e versão do Python, num comando
 - [Ruff](https://docs.astral.sh/ruff/): lint e formatação
 - [pytest](https://docs.pytest.org): os testes do `make check`
 - [Pydantic](https://docs.pydantic.dev): validar o que entra e o que sai
 - [httpx](https://www.python-httpx.org): chamadas HTTP, síncronas ou assíncronas
-- [FastAPI](https://fastapi.tiangolo.com): uma API em minutos
-- [SDK de MCP em Python](https://github.com/modelcontextprotocol/python-sdk): escrever as suas próprias tools
+- [FastAPI](https://fastapi.tiangolo.com): o `/api` da arquitetura de referência
+- [FastMCP](https://gofastmcp.com): o servidor MCP da arquitetura de referência
 
 **Use quando:** as tools, os scripts e os testes do projeto. É a linguagem do kit de domingo.
 
