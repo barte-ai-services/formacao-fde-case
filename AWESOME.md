@@ -131,19 +131,19 @@ Ferramentas que fecham os buracos da arquitetura de referência quando o projeto
 
 - **[MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector):** abre o servidor MCP sem o Claude Code, lista as tools e chama uma por uma. **Use quando:** subir o MCP no Worker e ele não responder como esperado. Roda com `npx @modelcontextprotocol/inspector`.
 - **[Langfuse](https://langfuse.com/docs):** rastreia cada chamada do agente, com prompt, tools, custo e tempo, e guarda os resultados dos evals. **Use quando:** precisar comparar uma versão do agente com a anterior.
-- **[PostHog](https://posthog.com/docs):** analytics de produto, gravação de sessões, feature flags e acompanhamento das chamadas de LLM ([LLM analytics](https://posthog.com/docs/ai-engineering)). **Use quando:** pessoas de verdade começarem a usar o produto.
+- **[PostHog](https://posthog.com/docs):** métricas de uso do produto, gravação das sessões, ligar e desligar funções sem publicar de novo (feature flags) e acompanhamento das chamadas de LLM ([AI Observability](https://posthog.com/docs/ai-observability)). **Use quando:** pessoas de verdade começarem a usar o produto.
 - **[Grafana](https://grafana.com/docs/grafana/latest/):** painéis de métricas e logs, com plano gratuito no [Grafana Cloud](https://grafana.com/products/cloud/). **Use quando:** a operação precisar acompanhar o agente em produção: volume, erros, tempo de resposta.
 
 ### Dados e segredos
 
-- **[DuckDB](https://duckdb.org/docs/):** SQL direto sobre CSV e Parquet, sem servidor. **Use quando:** analisar as notas, os pedidos e os erros do eval no seu computador.
-- **[1Password CLI](https://developer.1password.com/docs/cli/):** guarda as chaves fora do repositório e as injeta no `.env` e nos comandos. **Use quando:** o grupo dividir chaves de API entre si.
+- **[DuckDB](https://duckdb.org/docs/):** SQL direto sobre CSV, JSON e Parquet, sem servidor. **Use quando:** analisar as notas, os pedidos e os erros do eval no seu computador.
+- **[1Password CLI](https://developer.1password.com/docs/cli/):** guarda as chaves fora do repositório. Com `op run`, o `.env` guarda só referências `op://`, e as chaves entram direto no comando. É pago: não tem plano gratuito, e um cofre dividido pelo grupo pede o plano Teams ou Business. **Use quando:** o grupo dividir chaves de API entre si e alguém já tiver o plano.
 
 ### Interface, integrações e APIs
 
 - **[Playwright](https://playwright.dev/python/):** testa a interface ponta a ponta, num navegador de verdade. **Use quando:** o grupo tiver uma tela, como a de quem aprova.
 - **[n8n](https://docs.n8n.io):** automações entre ferramentas, montadas visualmente. **Use quando:** o fluxo for curto e não justificar o Temporal.
-- **[Bruno](https://docs.usebruno.com):** chama e versiona as chamadas de API no próprio repositório. **Use quando:** testar as APIs do Supabase, do Resend ou do Stripe sem escrever código.
+- **[Bruno](https://docs.usebruno.com):** chama e versiona as chamadas de API no próprio repositório. As chaves ficam no `.env`, lidas como `{{process.env.NOME}}`, nunca escritas no arquivo da coleção. **Use quando:** testar as APIs do Supabase, do Resend ou do Stripe sem escrever código.
 
 ## Regra para todas
 
