@@ -228,7 +228,7 @@ footer { color: var(--faint); font-size: 14px; border-top: 1px solid var(--hair)
   <header>
     <p class="eyebrow">Formação FDE · caso Já Chegou</p>
     <h1>Arquitetura de referência.<br><em>O agente propõe, uma pessoa aprova.</em></h1>
-    <p class="lead">Uma proposta de stack para o grupo partir, com Python no backend e Astro com React no front. O agente é o Claude, que lê o caso por um servidor FastMCP. Quem aprova entra numa tela em Astro, e tudo grava no Supabase com o login de quem pediu. É o banco que decide quem pode o quê.</p>
+    <p class="lead">Uma proposta de stack para o grupo partir, com Python no backend e Astro com React no front. O agente é o Claude, que lê o caso por um servidor MCP num Python Worker da Cloudflare. A proposta grava no Supabase com o login do agente, e a decisão, com o de quem aprovou. É o banco que decide quem pode o quê.</p>
   </header>
 
   <div class="rule" role="note" aria-label="O princípio da arquitetura">
@@ -244,7 +244,7 @@ footer { color: var(--faint); font-size: 14px; border-top: 1px solid var(--hair)
     <div class="diagram-wrap" tabindex="0" role="region" aria-label="Diagrama das camadas, rolável na horizontal">
       <svg class="diagram" viewBox="0 0 1080 760" role="img" aria-labelledby="dg-t dg-d">
         <title id="dg-t">Arquitetura de referência do Já Chegou em camadas</title>
-        <desc id="dg-d">Quem aprova usa o front em Astro com React num Worker da Cloudflare, que chama o FastAPI num Python Worker com o JWT da pessoa. O Claude chama o servidor FastMCP no FastMCP Gateway com OAuth 2.1, e o login é o do Supabase. O FastAPI e o FastMCP gravam no banco do Supabase com o token do usuário, e o RLS confere o papel. O XML e o PDF ficam no Storage. Um webhook do banco chama o FastAPI, que avisa o aprovador pelo Resend. O GitHub guarda o código, publica tudo e roda o lote agendado.</desc>
+        <desc id="dg-d">Quem aprova usa o front em Astro com React num Worker da Cloudflare, que chama o FastAPI num Python Worker com o JWT da pessoa. O Claude chama o servidor MCP, outro Python Worker, com um token Bearer. O MCP entra no Supabase como o usuário agente, e o FastAPI repassa o JWT da pessoa. Nos dois casos o RLS confere o papel. O XML e o PDF ficam no Storage. Um webhook do banco chama o FastAPI, que avisa o aprovador pelo Resend. O GitHub guarda o código, publica tudo e roda o lote agendado.</desc>
         <defs>
           <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0L10 5L0 10z"/></marker>
         </defs>
@@ -273,7 +273,7 @@ footer { color: var(--faint); font-size: 14px; border-top: 1px solid var(--hair)
         <text class="t" x="108" y="257">Astro com React</text>
         <text class="m" x="48" y="288">ja-chegou-web</text>
         <text class="s" x="48" y="310">Worker da Cloudflare. A fila de propostas, a nota</text>
-        <text class="s" x="48" y="328">ao lado da ordem, aprovar ou recusar, e o consentimento OAuth.</text>
+        <text class="s" x="48" y="328">ao lado da ordem, e aprovar ou recusar.</text>
 
         <rect class="box-cf" x="580" y="224" width="220" height="118" rx="14"/>
         <use href="#i-fastapi" x="598" y="240" width="22" height="22" class="ic-fastapi"/>
@@ -282,19 +282,19 @@ footer { color: var(--faint); font-size: 14px; border-top: 1px solid var(--hair)
         <text class="s" x="598" y="310">Python Worker da</text>
         <text class="s" x="598" y="328">Cloudflare, com Cron.</text>
 
-        <rect class="box" x="830" y="224" width="220" height="118" rx="14"/>
+        <rect class="box-cf" x="830" y="224" width="220" height="118" rx="14"/>
         <use href="#i-python" x="848" y="240" width="22" height="22" class="ic-py"/>
-        <text class="t" x="880" y="257">FastMCP</text>
-        <text class="m" x="848" y="288">/mcp</text>
-        <text class="s" x="848" y="310">FastMCP Gateway,</text>
-        <text class="s" x="848" y="328">com OAuth 2.1.</text>
+        <text class="t" x="880" y="257">Servidor MCP</text>
+        <text class="m" x="848" y="288">ja-chegou-mcp</text>
+        <text class="s" x="848" y="310">Python Worker, com</text>
+        <text class="s" x="848" y="328">o SDK oficial de MCP.</text>
 
         <!-- dados -->
         <rect class="box-sb" x="30" y="478" width="300" height="118" rx="14"/>
         <use href="#i-supabase" x="48" y="494" width="22" height="22" class="ic-sb"/>
         <text class="t" x="80" y="511">Auth</text>
-        <text class="s" x="48" y="542">Login das pessoas e servidor OAuth</text>
-        <text class="s" x="48" y="560">do MCP. O papel vai dentro do JWT.</text>
+        <text class="s" x="48" y="542">Login das pessoas e do agente.</text>
+        <text class="s" x="48" y="560">O papel vai dentro do JWT.</text>
 
         <rect class="box-sb" x="350" y="478" width="180" height="118" rx="14"/>
         <use href="#i-supabase" x="368" y="494" width="22" height="22" class="ic-sb"/>
@@ -318,7 +318,7 @@ footer { color: var(--faint); font-size: 14px; border-top: 1px solid var(--hair)
         <rect class="box" x="30" y="690" width="1020" height="44" rx="12"/>
         <use href="#i-github" x="48" y="701" width="22" height="22" class="ic-fg"/>
         <text class="t" x="80" y="718">Fork e Actions</text>
-        <text class="s" x="210" y="718">publicam os dois Workers, aplicam as migrações e rodam o lote do agente num schedule. O MCP sai do Gateway.</text>
+        <text class="s" x="210" y="718">publicam os três Workers, aplicam as migrações e rodam o lote do agente num schedule.</text>
 
         <!-- setas: quem usa → borda -->
         <path class="edge" d="M245 134V222" marker-end="url(#ar)"/>
@@ -327,7 +327,7 @@ footer { color: var(--faint); font-size: 14px; border-top: 1px solid var(--hair)
 
         <path class="edge" d="M940 134V222" marker-end="url(#ar)"/>
         <text class="lbl" x="930" y="166" text-anchor="end">MCP por HTTP</text>
-        <text class="lbl-s" x="930" y="180" text-anchor="end">OAuth 2.1</text>
+        <text class="lbl-s" x="930" y="180" text-anchor="end">Bearer MCP_TOKEN</text>
 
         <!-- front → api -->
         <path class="edge" d="M460 283H578" marker-end="url(#ar)"/>
@@ -350,15 +350,15 @@ footer { color: var(--faint); font-size: 14px; border-top: 1px solid var(--hair)
         <text class="lbl-s" x="778" y="434">nova proposta</text>
 
         <path class="edge" d="M860 342L860 476" marker-end="url(#ar)"/>
-        <text class="lbl" x="868" y="384">JWT → RLS</text>
-        <text class="lbl-s" x="868" y="399">lê e propõe</text>
+        <text class="lbl" x="868" y="384">JWT do agente</text>
+        <text class="lbl-s" x="868" y="399">RLS · lê e propõe</text>
 
         <path class="edge" d="M796 342C820 440 960 420 990 476" marker-end="url(#ar)"/>
         <text class="lbl" x="1000" y="440">e-mail</text>
 
         <!-- rótulos das faixas, por cima das setas -->
         <text class="band-label" x="30" y="34">Quem usa</text>
-        <text class="band-label" x="30" y="210">Na borda · Cloudflare Workers e FastMCP Gateway</text>
+        <text class="band-label" x="30" y="210">Na borda · Cloudflare Workers</text>
         <text class="band-label" x="30" y="464">Dados · Supabase: banco, login e arquivos</text>
         <text class="band-label" x="30" y="676">Código · GitHub</text>
       </svg>
@@ -370,8 +370,8 @@ footer { color: var(--faint); font-size: 14px; border-top: 1px solid var(--hair)
     <p class="sub">O caminho de uma nota, da chegada até a auditoria. A ordem é a real: cada passo depende do anterior.</p>
     <ol class="steps">
       <li><b>A nota chega.</b><span>O XML e o PDF vão para um bucket privado do Storage, e a nota vira uma linha em <code>notas</code> com o caminho dos arquivos.</span><span class="who">Storage · notas</span></li>
-      <li><b>O lote acorda o agente.</b><span>Um workflow agendado nas Actions roda o Claude com as skills do caso. Ele entra no MCP como o usuário do agente, que tem o papel <code>agente</code>.</span><span class="who">GitHub Actions · Claude</span></li>
-      <li><b>O agente lê e propõe.</b><span>As tools do FastMCP leem a nota, a ordem de compra e o recebimento da doca com o token do agente. O resultado é uma linha em <code>propostas</code>, com a justificativa. A alçada não vem do agente: o banco a calcula pelo valor da nota.</span><span class="who">FastMCP · RLS: o agente só insere em propostas</span></li>
+      <li><b>O lote acorda o agente.</b><span>Um workflow agendado nas Actions roda o Claude com as skills do caso. Ele chama o MCP com o <code>MCP_TOKEN</code>, e o MCP entra no Supabase como o usuário do agente, que tem o papel <code>agente</code>.</span><span class="who">GitHub Actions · Claude</span></li>
+      <li><b>O agente lê e propõe.</b><span>As tools do MCP leem a nota, a ordem de compra e o recebimento da doca com o JWT do agente. O resultado é uma linha em <code>propostas</code>, com a justificativa. A alçada não vem do agente: o banco a calcula pelo valor da nota.</span><span class="who">Servidor MCP · RLS: o agente só insere em propostas</span></li>
       <li><b>O banco avisa quem decide.</b><span>Um webhook do banco chama o <code>/api</code> a cada proposta nova. O FastAPI chama a função <code>quem_avisar</code>, que devolve só os e-mails de quem tem o papel daquela alçada, e manda o aviso pelo Resend com o link da tela.</span><span class="who">Webhook · FastAPI · Resend</span></li>
       <li><b>Uma pessoa decide.</b><span>Ela entra no Astro com o login do Supabase e vê a nota ao lado da ordem e do recebimento. Ao aprovar ou recusar, o front chama o <code>/api</code> com o JWT dela.</span><span class="who">Astro com React · FastAPI</span></li>
       <li><b>O banco confere e registra.</b><span>A policy compara o papel do JWT com a alçada que o banco tirou do valor da nota e recusa o que não bate. Se passar, um trigger grava em <code>auditoria</code> quem decidiu, quando e o quê.</span><span class="who">Banco Supabase · RLS · trigger de auditoria</span></li>
@@ -391,7 +391,6 @@ footer { color: var(--faint); font-size: 14px; border-top: 1px solid var(--hair)
           <ul>
             <li>O Astro monta as páginas no servidor, com a sessão do Supabase guardada em cookie.</li>
             <li>As partes interativas são ilhas React: a fila de propostas, o comparativo da nota e os botões de aprovar e recusar.</li>
-            <li>Ele também hospeda a tela de consentimento do OAuth, aquela em que a pessoa autoriza o Claude a usar o MCP em nome dela.</li>
             <li>O front não fala com o banco para decidir: ele chama o <code>/api</code> com o JWT da pessoa.</li>
           </ul>
 <pre tabindex="0"><span class="c"># criar o projeto, com React e o adaptador da Cloudflare</span>
@@ -409,7 +408,7 @@ wrangler deploy</pre>
           <ul>
             <li>O login é o Supabase Auth, por e-mail ou SSO.</li>
             <li>Um Custom Access Token Hook põe o papel da pessoa (<code>analista</code>, <code>coordenacao</code>, <code>diretoria</code> ou <code>agente</code>) dentro do JWT.</li>
-            <li>O mesmo JWT chega ao <code>/api</code> e ao <code>/mcp</code>, e o banco lê o papel com <code>auth.jwt()</code>.</li>
+            <li>O JWT da pessoa chega ao <code>/api</code>. O MCP entra com o usuário <code>agente</code>, que também é um login do Supabase Auth. Nos dois casos, o banco lê o papel com <code>auth.jwt()</code>.</li>
           </ul>
 <pre tabindex="0"><span class="c">-- o hook que põe o papel no token</span>
 create or replace function public.custom_access_token_hook(event jsonb)
@@ -442,31 +441,41 @@ create policy "o hook lê os papéis" on public.pessoas
       <h3>Backend · Python</h3>
       <div class="pieces">
         <article class="piece">
-          <div class="head"><svg class="logo" role="img" aria-label="Python" style="color:var(--python)"><use href="#i-python"/></svg><h4>FastMCP no FastMCP Gateway</h4></div>
+          <div class="head"><svg class="logo" role="img" aria-label="Python" style="color:var(--python)"><use href="#i-python"/></svg><h4>Servidor MCP num Python Worker</h4></div>
           <ul>
             <li>As tools do caso: listar as notas pendentes, ler a nota, a ordem e o recebimento, e registrar a proposta.</li>
-            <li>O <code>SupabaseProvider</code> troca o token Bearer fixo por OAuth 2.1, com o Supabase como servidor de login. Ative o OAuth Server e o registro dinâmico de clientes no projeto. O projeto precisa assinar o JWT com chave assimétrica: o padrão do <code>SupabaseProvider</code> é ES256, e com RSA você passa <code>algorithm="RS256"</code>.</li>
-            <li>Cada tool pega o token de quem chamou (<code>get_access_token().token</code>) e o repassa ao Supabase. Assim, o RLS vale também para o agente.</li>
-            <li>Ele é publicado no FastMCP Gateway, da Prefect: você conecta o fork, aponta <code>main.py:mcp</code> e a URL sai em <code>*.fastmcp.app/mcp</code>.</li>
+            <li>Parte do exemplo oficial da Cloudflare, <code>python-workers-examples/mcp-server</code>, com o SDK oficial de MCP em Python (<code>mcp==2.2.0</code>, Python 3.14). Ele serve <code>/mcp</code> por HTTP, sem estado.</li>
+            <li>O Worker recusa a chamada que não traz <code>Authorization: Bearer</code> com o <code>MCP_TOKEN</code>, guardado como secret.</li>
+            <li>Para ler e gravar, ele entra no Supabase Auth como o usuário <code>agente</code> e chama a API REST com o JWT desse usuário. O RLS vale também para o agente, e a chave secreta do Supabase não vai para o MCP.</li>
+            <li>O exemplo guarda os dados no D1. Aqui, o D1 sai: os dados ficam no Supabase.</li>
           </ul>
-<pre tabindex="0"><span class="c"># main.py · uv add fastmcp</span>
-from fastmcp import FastMCP
-from fastmcp.server.auth.providers.supabase import SupabaseProvider
-from fastmcp.server.dependencies import get_access_token
+<pre tabindex="0"><span class="c"># a partir do exemplo mcp-server, na pasta mcp/</span>
+uv run pywrangler dev        <span class="c"># http://localhost:8787/mcp</span>
+wrangler secret put MCP_TOKEN
+wrangler secret put SUPABASE_URL
+wrangler secret put SUPABASE_PUBLISHABLE_KEY
+wrangler secret put AGENTE_EMAIL
+wrangler secret put AGENTE_SENHA
+uv run pywrangler deploy     <span class="c"># ja-chegou-mcp.&lt;subdominio&gt;.workers.dev/mcp</span>
 
-auth = SupabaseProvider(
-    project_url="https://&lt;ref&gt;.supabase.co",
-    base_url="https://ja-chegou.fastmcp.app",
-)
-mcp = FastMCP("ja-chegou", auth=auth)
+<span class="c"># src/entry.py</span>
+import hmac
 
-@mcp.tool
-async def ler_nota(chave: str) -&gt; dict:
-    """Lê uma nota pela chave de acesso."""
-    jwt = get_access_token().token  <span class="c"># o RLS vale</span>
-    ...
+class Default(WorkerEntrypoint):
+    async def fetch(self, request):
+        token = request.headers.get("Authorization") or ""
+        if not hmac.compare_digest(token, f"Bearer {self.env.MCP_TOKEN}"):
+            return Response("Unauthorized", status=401)
+        ...  <span class="c"># como no exemplo: asgi.fetch(self.app, ...)</span>
 
-<span class="c"># local: fastmcp run main.py:mcp --transport http --port 8000</span></pre>
+<span class="c"># cada tool lê e grava com o JWT do agente:</span>
+<span class="c"># POST {SUPABASE_URL}/auth/v1/token?grant_type=password</span>
+<span class="c"># e depois {SUPABASE_URL}/rest/v1/... com Authorization: Bearer &lt;jwt&gt;</span>
+
+<span class="c"># ligar no Claude</span>
+claude mcp add --transport http ja-chegou \
+  https://ja-chegou-mcp.&lt;subdominio&gt;.workers.dev/mcp \
+  --header "Authorization: Bearer $MCP_TOKEN"</pre>
         </article>
         <article class="piece">
           <div class="head"><svg class="logo" role="img" aria-label="FastAPI" style="color:var(--fastapi)"><use href="#i-fastapi"/></svg><h4>FastAPI num Python Worker</h4></div>
@@ -537,9 +546,9 @@ with check (
         <article class="piece wide">
           <div class="head"><svg class="logo" role="img" aria-label="GitHub" style="color:var(--fg)"><use href="#i-github"/></svg><h4>Fork, Actions e o lote do agente</h4></div>
           <ul>
-            <li>Um fork com três pastas: <code>web/</code> (Astro), <code>api/</code> (FastAPI) e <code>mcp/</code> (FastMCP), mais <code>supabase/</code> com as migrações.</li>
-            <li>Depois do merge na <code>main</code>, as Actions publicam os dois Workers e aplicam as migrações. O FastMCP Gateway publica sozinho a partir do fork.</li>
-            <li>O lote é um workflow com <code>schedule</code> que roda o Claude com o token do <code>claude setup-token</code>.</li>
+            <li>Um fork com três pastas: <code>web/</code> (Astro), <code>api/</code> (FastAPI) e <code>mcp/</code> (o servidor MCP), mais <code>supabase/</code> com as migrações.</li>
+            <li>Depois do merge na <code>main</code>, as Actions publicam os três Workers e aplicam as migrações.</li>
+            <li>O lote é um workflow com <code>schedule</code> que roda o Claude com o token do <code>claude setup-token</code> e liga o MCP com o <code>MCP_TOKEN</code>.</li>
           </ul>
 <pre tabindex="0"><span class="c"># secrets do repositório</span>
 gh secret set CLOUDFLARE_API_TOKEN
@@ -547,6 +556,7 @@ gh secret set CLOUDFLARE_ACCOUNT_ID
 gh secret set SUPABASE_ACCESS_TOKEN
 gh secret set SUPABASE_DB_PASSWORD
 gh secret set CLAUDE_CODE_OAUTH_TOKEN
+gh secret set MCP_TOKEN
 
 <span class="c"># actions: cloudflare/wrangler-action, supabase/setup-cli, anthropics/claude-code-action</span></pre>
         </article>
@@ -584,9 +594,10 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
         <tbody>
           <tr><td>Pessoa → Astro</td><td>Login do Supabase Auth, com a sessão em cookie</td><td>No navegador da pessoa</td></tr>
           <tr><td>Astro → <code>/api</code></td><td>O JWT da pessoa, com o papel dentro</td><td>No cabeçalho <code>Authorization</code> de cada chamada</td></tr>
-          <tr><td>Claude → <code>/mcp</code></td><td>OAuth 2.1: na primeira vez, o navegador abre o login do Supabase e a tela de consentimento</td><td>No Claude de cada um, que renova o token sozinho</td></tr>
-          <tr><td>Lote → <code>/mcp</code></td><td>O JWT do usuário do agente, com o papel <code>agente</code>, pedido ao Supabase Auth no início do workflow</td><td>O e-mail e a senha desse usuário nos secrets do repositório</td></tr>
-          <tr><td><code>/api</code> e <code>/mcp</code> → Supabase</td><td>A chave publicável mais o JWT de quem chamou, e o RLS vale</td><td>A chave publicável nas variáveis do Worker e do Gateway</td></tr>
+          <tr><td>Claude → <code>/mcp</code></td><td>O token Bearer <code>MCP_TOKEN</code>, no cabeçalho <code>Authorization</code></td><td>No Claude de cada um, pelo <code>claude mcp add --header</code>, e num secret do Worker (<code>wrangler secret put MCP_TOKEN</code>)</td></tr>
+          <tr><td>Lote → <code>/mcp</code></td><td>O mesmo <code>MCP_TOKEN</code></td><td>Nos secrets do repositório</td></tr>
+          <tr><td><code>/mcp</code> → Supabase</td><td>A chave publicável mais o JWT do usuário <code>agente</code>, que o Worker pede ao Supabase Auth com e-mail e senha. O RLS vale, e o agente só insere em <code>propostas</code></td><td>Nos secrets do Worker: <code>SUPABASE_URL</code>, <code>SUPABASE_PUBLISHABLE_KEY</code>, <code>AGENTE_EMAIL</code> e <code>AGENTE_SENHA</code>. A chave secreta não vai para o MCP</td></tr>
+          <tr><td><code>/api</code> → Supabase</td><td>A chave publicável mais o JWT da pessoa logada, e o RLS vale</td><td>A chave publicável nas variáveis do Worker</td></tr>
           <tr><td>Banco → <code>/api/avisos</code></td><td>Um segredo compartilhado no cabeçalho do webhook</td><td>No Vault do Supabase e num secret do Worker</td></tr>
           <tr><td>Aviso e Cron → Supabase</td><td>A chave secreta, usada só para chamar <code>quem_avisar</code> e <code>propostas_paradas</code></td><td>Num secret do Worker (<code>wrangler secret put SUPABASE_SECRET_KEY</code>)</td></tr>
           <tr><td><code>/api</code> → Resend</td><td>API key do Resend</td><td>Num secret do Worker (<code>wrangler secret put RESEND_API_KEY</code>)</td></tr>
@@ -627,9 +638,9 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
         </article>
         <article class="tool">
           <div class="tool-head"><svg class="logo" role="img" aria-label="Cloudflare" style="color:var(--cloudflare)"><use href="#i-cloudflare"/></svg><h4>Cloudflare</h4></div>
-          <p class="role">O front em Astro e o FastAPI, cada um num Worker, com o Cron dos lembretes.</p>
+          <p class="role">O front em Astro, o FastAPI e o servidor MCP, cada um num Worker, com o Cron dos lembretes.</p>
           <p class="when">Publicar uma API ou uma página sem cuidar de infraestrutura.</p>
-          <ul><li><a href="https://developers.cloudflare.com/workers/" target="_blank" rel="noopener">Workers</a></li><li><a href="https://developers.cloudflare.com/workers/wrangler/" target="_blank" rel="noopener">Wrangler</a></li><li><a href="https://developers.cloudflare.com/workers/configuration/cron-triggers/" target="_blank" rel="noopener">Cron Triggers</a></li><li><a href="https://developers.cloudflare.com/workers/languages/python/" target="_blank" rel="noopener">Workers em Python</a></li></ul>
+          <ul><li><a href="https://developers.cloudflare.com/workers/" target="_blank" rel="noopener">Workers</a></li><li><a href="https://developers.cloudflare.com/workers/wrangler/" target="_blank" rel="noopener">Wrangler</a></li><li><a href="https://developers.cloudflare.com/workers/configuration/cron-triggers/" target="_blank" rel="noopener">Cron Triggers</a></li><li><a href="https://developers.cloudflare.com/workers/languages/python/" target="_blank" rel="noopener">Workers em Python</a></li><li><a href="https://github.com/cloudflare/python-workers-examples/tree/main/mcp-server" target="_blank" rel="noopener">Exemplo de servidor MCP</a></li></ul>
         </article>
         <article class="tool">
           <div class="tool-head"><svg class="logo" role="img" aria-label="Astro" style="color:var(--astro)"><use href="#i-astro"/></svg><h4>Astro</h4></div>
@@ -639,15 +650,15 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
         </article>
         <article class="tool">
           <div class="tool-head"><span class="initials" aria-hidden="true">FM</span><h4>FastMCP</h4></div>
-          <p class="role">O servidor MCP em Python, com as tools do caso e o login OAuth pelo Supabase.</p>
-          <p class="when">O agente precisa ler e gravar no sistema do cliente em nome de quem o chamou.</p>
+          <p class="role">Alternativa, fora da stack: um framework de MCP em Python com login OAuth e hospedagem própria, o FastMCP Gateway.</p>
+          <p class="when">O grupo quer o login OAuth de cada pessoa no MCP, em vez do token único. Não é o caminho desta arquitetura.</p>
           <ul><li><a href="https://gofastmcp.com" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://gofastmcp.com/integrations/supabase" target="_blank" rel="noopener">Login com o Supabase</a></li><li><a href="https://gofastmcp.com/deployment/fastmcp-cloud" target="_blank" rel="noopener">FastMCP Gateway</a></li></ul>
         </article>
         <article class="tool">
           <div class="tool-head"><svg class="logo" role="img" aria-label="Python" style="color:var(--python)"><use href="#i-python"/></svg><h4>Python</h4></div>
           <p class="role">A linguagem do backend, do kit e das tools.</p>
-          <p class="when">O FastAPI, o FastMCP, os scripts e os testes do projeto.</p>
-          <ul><li><a href="https://docs.astral.sh/uv/" target="_blank" rel="noopener">uv</a></li><li><a href="https://docs.pytest.org" target="_blank" rel="noopener">pytest</a></li><li><a href="https://docs.pydantic.dev" target="_blank" rel="noopener">Pydantic</a></li><li><a href="https://fastapi.tiangolo.com" target="_blank" rel="noopener">FastAPI</a></li><li><a href="https://developers.cloudflare.com/workers/languages/python/packages/fastapi/" target="_blank" rel="noopener">FastAPI num Python Worker</a></li></ul>
+          <p class="when">O FastAPI, o servidor MCP, os scripts e os testes do projeto.</p>
+          <ul><li><a href="https://docs.astral.sh/uv/" target="_blank" rel="noopener">uv</a></li><li><a href="https://docs.pytest.org" target="_blank" rel="noopener">pytest</a></li><li><a href="https://docs.pydantic.dev" target="_blank" rel="noopener">Pydantic</a></li><li><a href="https://fastapi.tiangolo.com" target="_blank" rel="noopener">FastAPI</a></li><li><a href="https://developers.cloudflare.com/workers/languages/python/packages/fastapi/" target="_blank" rel="noopener">FastAPI num Python Worker</a></li><li><a href="https://py.sdk.modelcontextprotocol.io/" target="_blank" rel="noopener">SDK de MCP em Python</a></li></ul>
         </article>
         <article class="tool">
           <div class="tool-head"><svg class="logo" role="img" aria-label="Docker" style="color:#2496ED"><use href="#i-docker"/></svg><h4>Docker</h4></div>
@@ -687,7 +698,7 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
         <article class="tool">
           <div class="tool-head"><svg class="logo" role="img" aria-label="MCP Inspector" style="color:var(--fg)"><use href="#i-modelcontextprotocol"/></svg><h4>MCP Inspector</h4></div>
           <p class="role">Abre o servidor MCP sem o Claude, lista as tools e chama uma por uma.</p>
-          <p class="when">Subir o FastMCP e ele não responder como esperado. Roda com <code>npx @modelcontextprotocol/inspector</code>.</p>
+          <p class="when">Subir o servidor MCP e ele não responder como esperado. Roda com <code>npx @modelcontextprotocol/inspector</code>.</p>
           <ul><li><a href="https://modelcontextprotocol.io/docs/tools/inspector" target="_blank" rel="noopener">Documentação</a></li></ul>
         </article>
         <article class="tool">
