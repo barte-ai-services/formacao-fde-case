@@ -475,7 +475,7 @@ async def ler_nota(chave: str) -&gt; dict:
             <li>Cada chamada repassa ao Supabase o JWT de quem está logado. O backend não usa a chave secreta para decidir nada.</li>
             <li>A rota <code>/api/avisos</code> recebe o webhook do banco, confere o segredo compartilhado e manda o e-mail pelo Resend.</li>
             <li>O mesmo Worker tem um Cron Trigger para os lembretes.</li>
-            <li>O aviso e o Cron são os únicos que rodam sem uma pessoa logada. Eles usam a chave secreta só para chamar duas funções do banco, <code>quem_avisar</code> e <code>propostas_paradas</code>, que devolvem e-mails e links e nada mais.</li>
+            <li>O aviso e o Cron são os únicos que rodam sem uma pessoa logada. Eles usam a chave secreta só para chamar duas funções do banco, <code>quem_avisar</code> e <code>propostas_paradas</code>, que devolvem e-mails e links e nada mais. As duas são <code>security definer</code>, com o <code>execute</code> revogado de <code>public</code>, <code>anon</code> e <code>authenticated</code> e dado só ao <code>service_role</code>.</li>
           </ul>
 <pre tabindex="0"><span class="c"># criar e rodar</span>
 uvx --from workers-py pywrangler init
