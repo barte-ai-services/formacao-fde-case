@@ -1,6 +1,6 @@
 ---
 name: setup-fde
-description: Prepara ou confere a máquina para a Formação FDE. Inspeciona o computador, instala o que falta (git, GitHub CLI, uv, Python 3.12, Claude Code), deixa o fork do case com origin e upstream certos, roda o uv sync e o verificador do case, confere os plugins do Ahrena no Claude Code e acompanha a pessoa nos logins que só ela pode fazer. Use quando a pessoa pedir "configura o meu setup", "configura o meu setup de FDE", "setup de FDE", "prepara a minha máquina", "o que falta instalar", "meu ambiente não funciona", ou quando uma ferramenta, o login do GitHub ou o fork do case estiver faltando.
+description: Prepara ou confere a máquina para a Formação FDE. Inspeciona o computador, instala o que falta (git, GitHub CLI, uv, Python 3.12, Claude Code, os plugins do Ahrena), deixa o fork do case com origin e upstream certos, roda o uv sync e o verificador do case, e acompanha a pessoa nos logins que só ela pode fazer. Use quando a pessoa pedir "configura o meu setup", "configura o meu setup de FDE", "setup de FDE", "prepara a minha máquina", "o que falta instalar", "meu ambiente não funciona", ou quando uma ferramenta, o login do GitHub ou o fork do case estiver faltando.
 ---
 
 # Setup de FDE
@@ -30,7 +30,7 @@ Os itens, na ordem:
 | Item | O que confere |
 |---|---|
 | `brew` | o Homebrew, só no macOS |
-| `git` | o git funciona; no macOS, também as ferramentas de linha de comando da Apple, que trazem o git |
+| `git` | o git funciona e é 2.45 ou mais novo (o Claude Code precisa dele para instalar os plugins do Ahrena); no macOS, também as ferramentas de linha de comando da Apple. Um git velho sai `outdated`: no Ubuntu o `fix` traz o git atual do PPA `git-core`, no Mac o do Homebrew |
 | `gh`, `claude` | as ferramentas estão instaladas |
 | `uv` | o uv está instalado e é novo o bastante para o `uv sync --check` (senão sai `outdated`, e o `fix` atualiza) |
 | `python` | o uv tem um Python 3.12 ou mais novo |
@@ -39,7 +39,7 @@ Os itens, na ordem:
 | `case-clone` | a pasta é o clone do fork da pessoa: `origin` é o fork e `upstream` é o `barte-ai-services/formacao-fde-case` |
 | `uv-sync` | a `.venv` do case está em dia com o `uv.lock` |
 | `check-setup` | o verificador do case (`python3 scripts/check_setup.py`) passa |
-| `ahrena` | os plugins do Ahrena que o `.claude/settings.json` do case liga estão instalados e habilitados no Claude Code, para a pessoa ou para a pasta do case |
+| `ahrena` | os plugins do Ahrena que o `.claude/settings.json` do case liga estão instalados e habilitados no Claude Code, para a pessoa ou para a pasta do case (o `fix` instala os que faltam) |
 
 Mostre à pessoa as linhas que não estão `ok` antes de mudar qualquer coisa. Se todas estão `ok`, diga isso e pare.
 
@@ -75,7 +75,7 @@ Para cada uma, passe o comando do detalhe e espere a pessoa rodar. Abra `referen
 - Nunca peça para colar um token, uma senha ou uma chave na conversa. Um segredo digitado aqui é um segredo vazado. Se a pessoa colar um mesmo assim, diga para ela revogar e gerar outro.
 - Quando o comando precisa de `sudo` e esta sessão não tem terminal, não tente contornar: passe o comando para a pessoa rodar no terminal dela.
 
-**O `ahrena`.** Quem instala os plugins é o próprio Claude Code: ao abrir uma sessão na pasta do case, ele pergunta se pode instalar os plugins do marketplace `ahrena`, e a pessoa aceita. Se ele não perguntar, ela roda `/plugin` dentro do Claude Code e instala os plugins que a linha lista. Depois, ela fecha e abre uma sessão nova na pasta do case, e `/agents` mostra a `athena`. O `fix` não instala esses plugins porque o `claude plugin install` reescreve o `settings.json` e deixa o fork da pessoa alterado.
+**O `ahrena`.** O `fix` instala os plugins que faltam com `claude plugin install <plugin>@ahrena --scope local`, que grava no `.claude/settings.local.json` (fora do git) e deixa o `settings.json` do fork como está. Ele só tenta depois que o `git` está `ok`: com o git 2.34 do Ubuntu 22.04, a instalação cai. Depois, a pessoa fecha o Claude Code e abre uma sessão nova na pasta do case, e `/agents` mostra a `athena`.
 
 Um item pode estar fora das mãos da pessoa, como a conta do Claude Code que os organizadores entregam. Anote quem destrava e siga em frente.
 

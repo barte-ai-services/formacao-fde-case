@@ -15,6 +15,11 @@ set -u
 UPSTREAM_REPO="barte-ai-services/formacao-fde-case"
 UPSTREAM_URL="https://github.com/$UPSTREAM_REPO.git"
 PYTHON_FLOOR="3.12"
+# formacao-fde-ops #57: o Claude Code instala os plugins do Ahrena num clone
+# parcial com a rede bloqueada, e o git 2.34 do Ubuntu 22.04 cai com segfault
+# no checkout desse clone. Abaixo deste git, os plugins não instalam.
+GIT_FLOOR="2.45"
+AHRENA_MARKETPLACE="ahrenatechnology/ahrena-framework"
 
 ITEMS="git gh uv python claude git-identity gh-login case-clone uv-sync check-setup ahrena"
 
@@ -64,7 +69,7 @@ CASE_DIR="$(find_case_dir)"
 
 # O que o `fix` instala, por sistema. O resto é manual.
 fixable_items() {
-  local anywhere="uv python claude case-clone uv-sync"
+  local anywhere="uv python claude case-clone uv-sync ahrena"
   case "$SYSTEM" in
     macos | debian) echo "$anywhere git gh" ;;
     *) echo "$anywhere" ;;
@@ -106,7 +111,10 @@ manual_hint() {
     git-identity) echo 'git config --global user.name "Seu Nome" && git config --global user.email "seu-email@exemplo.com" (o mesmo e-mail da conta do GitHub)' ;;
     gh-login) echo 'gh auth login (GitHub.com, HTTPS, Login with a web browser) e depois gh auth setup-git' ;;
     check-setup) echo 'rode python3 scripts/check_setup.py na pasta do case e siga o que ele disser' ;;
-    ahrena) echo 'abra o Claude Code na pasta do case (claude) e aceite instalar os plugins do Ahrena; se ele não perguntar, rode /plugin dentro dele e instale os plugins do marketplace ahrena.' ;;
+    git-outdated) case "$SYSTEM" in
+        macos*) echo "o git da Apple é mais velho que o $GIT_FLOOR; instale o Homebrew e rode o fix de novo, que ele instala o git do Homebrew" ;;
+        *) echo "este sistema não tem um git $GIT_FLOOR ou mais novo no instalador; instale um do seu jeito e rode o fix de novo" ;;
+      esac ;;
     *) echo "não há instalador para este sistema; instale $1 do seu jeito, como no SETUP.md" ;;
   esac
 }
@@ -144,6 +152,33 @@ check_case_clone() {
     STATUS=manual
     DETAIL="git remote set-url upstream $UPSTREAM_URL (hoje aponta para $upstream)"
   fi
+}
+
+# formacao-fde-ops #57: a versão do git, como 2.34, e se ela chega ao piso.
+git_version() { git --version 2>/dev/null | awk '{print $3}'; }
+
+version_at_least() {
+  awk -v have="$1" -v want="$2" 'BEGIN {
+    split(have, h, "."); split(want, w, ".")
+    for (i = 1; i <= 2; i++) { if (h[i] + 0 > w[i] + 0) exit 0; if (h[i] + 0 < w[i] + 0) exit 1 }
+    exit 0 }'
+}
+
+# formacao-fde-ops #57: no Ubuntu o git novo vem do PPA git-core; no Debian, não há.
+is_ubuntu() { grep -qsE '^(ID|ID_LIKE)=.*ubuntu' "${OS_RELEASE:-/etc/os-release}"; }
+
+check_git() {
+  local version
+  git_works || { STATUS=missing; return; }
+  version="$(git_version)"
+  DETAIL="$version"
+  version_at_least "$version" "$GIT_FLOOR" && return
+  DETAIL="$version, abaixo do $GIT_FLOOR que os plugins do Ahrena pedem"
+  case "$SYSTEM" in
+    macos) STATUS=outdated ;;
+    debian) if is_ubuntu; then STATUS=outdated; else needs_person git-outdated; fi ;;
+    *) needs_person git-outdated ;;
+  esac
 }
 
 # Um uv sem o `uv sync --check` é velho demais para o uv-sync.
@@ -186,20 +221,37 @@ run_python() {
   fi
 }
 
-# formacao-fde-ops #57: os plugins do Ahrena do case, instalados pela pessoa; o fix não instala.
+# formacao-fde-ops #57: os plugins do Ahrena que o settings.json do case liga,
+# instalados e habilitados no Claude Code. AHRENA_MISSING guarda os que faltam.
 check_ahrena() {
-  local missing
+  AHRENA_MISSING=""
   if [ -z "$CASE_DIR" ]; then STATUS=manual; DETAIL="depende do case-clone"; return; fi
   have claude || { STATUS=manual; DETAIL="depende do claude"; return; }
-  if ! missing="$(claude plugin list --json 2>/dev/null | run_python "$HERE/ahrena_faltando.py" "$CASE_DIR" 2>/dev/null)"; then
+  if ! AHRENA_MISSING="$(claude plugin list --json 2>/dev/null | run_python "$HERE/ahrena_faltando.py" "$CASE_DIR" 2>/dev/null)"; then
     STATUS=manual
     DETAIL="não deu para ler os plugins do Claude Code; rode claude plugin list e confira os ahrena-*"
     return
   fi
-  if [ -n "$missing" ]; then
+  [ -n "$AHRENA_MISSING" ] || return 0
+  DETAIL="faltam: $AHRENA_MISSING"
+  if ! version_at_least "$(git_version)" "$GIT_FLOOR"; then
     STATUS=manual
-    DETAIL="$(manual_hint ahrena) Faltam: $missing"
+    DETAIL="$DETAIL; depende do git $GIT_FLOOR ou mais novo"
+    return
   fi
+  STATUS=missing
+}
+
+# formacao-fde-ops #57: instala no escopo local, que grava no
+# .claude/settings.local.json, fora do git, e deixa o settings.json do fork quieto.
+install_ahrena() {
+  local plugin failed=0
+  claude plugin marketplace list 2>/dev/null | grep -q "$AHRENA_MARKETPLACE" \
+    || claude plugin marketplace add "$AHRENA_MARKETPLACE" || return 1
+  for plugin in $AHRENA_MISSING; do
+    (cd "$CASE_DIR" && claude plugin install "$plugin@ahrena" --scope local) || failed=1
+  done
+  return "$failed"
 }
 
 # formacao-fde-ops #57: Define STATUS e DETAIL de um item, lendo a máquina sem mudar nada.
@@ -208,7 +260,7 @@ inspect() {
   DETAIL=""
   case "$1" in
     brew | gh | claude) have "$1" || STATUS=missing ;;
-    git) git_works || STATUS=missing ;;
+    git) check_git ;;
     uv) check_uv ;;
     python) uv python find ">=$PYTHON_FLOOR" >/dev/null 2>&1 || STATUS=missing ;;
     git-identity)
@@ -275,13 +327,19 @@ add_github_cli_repository() {
 
 install_on_macos() {
   case "$1" in
-    git | gh) brew install "$1" ;;
+    git | gh) brew install "$1" && hash -r ;;
   esac
+}
+
+# formacao-fde-ops #57: o PPA git-core traz o git atual para o Ubuntu.
+add_git_core_repository() {
+  have add-apt-repository || apt_install software-properties-common || return 1
+  as_root add-apt-repository -y ppa:git-core/ppa
 }
 
 install_on_debian() {
   case "$1" in
-    git) apt_install git ;;
+    git) if have git && is_ubuntu; then add_git_core_repository && apt_install git; else apt_install git; fi ;;
     gh) add_github_cli_repository && apt_install gh ;;
   esac
 }
@@ -293,6 +351,7 @@ install() {
     claude) ensure_curl && curl -fsSL https://claude.ai/install.sh | bash ;;
     case-clone) git -C "$CASE_DIR" remote add upstream "$UPSTREAM_URL" ;;
     uv-sync) (cd "$CASE_DIR" && uv sync) ;;
+    ahrena) install_ahrena ;;
     *) "install_on_$SYSTEM" "$1" ;;
   esac
 }

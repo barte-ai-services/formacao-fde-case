@@ -13,7 +13,7 @@ set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
 SCRIPT="$HERE/setup-fde.sh"
 ORIGINAL="https://github.com/barte-ai-services/formacao-fde-case.git"
-INSTALLS='apt-get|brew (install|upgrade)|curl|dpkg|uv python install|uv self update|uv sync$|git .*remote (add|set-url)|gh auth (login|setup-git|refresh)|gh repo fork'
+INSTALLS='apt-get|brew (install|upgrade)|curl|dpkg|uv python install|uv self update|uv sync$|git .*remote (add|set-url)|gh auth (login|setup-git|refresh)|gh repo fork|add-apt-repository|claude plugin (install|marketplace add)'
 FAILURES=0
 SANDBOX=""
 REAL_PYTHON="$(type -P python3)"
@@ -50,23 +50,30 @@ JSON
   : > "$SANDBOX/case/scripts/check_setup.py"
   : > "$SANDBOX/case/.synced"
   : > "$SANDBOX/calls"
-  for tool in sh sed grep head mktemp rm mkdir cat chmod cp dirname ln tr tee; do
+  echo 'ID=ubuntu' > "$SANDBOX/os-release"
+  for tool in sh sed grep head mktemp rm mkdir cat chmod cp dirname ln tr tee awk; do
     ln -s "$(type -P "$tool")" "$SANDBOX/bin/$tool"
   done
   # O bash do sistema, não o primeiro do PATH: no macOS é o 3.2, o mais velho
   # em que o script precisa rodar.
   ln -s /bin/bash "$SANDBOX/bin/bash"
-  for tool in apt-get dpkg; do
+  for tool in apt-get dpkg add-apt-repository; do
     stub "$tool" ''
   done
   stub uname 'case "$1" in -s) echo "${FAKE_SYSTEM:-Linux}" ;; *) echo x86_64 ;; esac'
   # Nunca root, e o sudo só repassa para os dublês: nada toca o /etc de verdade.
   stub id 'echo 1000'
   stub sudo 'if [ "$1" = -n ]; then [ -z "${FAKE_SUDO_PASSWORD:-}" ] || exit 1; shift; fi
-  case "$1" in apt-get | dpkg | true) "$@" ;; tee) cat > /dev/null ;; esac'
+  case "$1" in apt-get | dpkg | add-apt-repository | true) "$@" ;; tee) cat > /dev/null ;; esac'
   # formacao-fde-ops #57: claude plugin list --json; FAKE_PLUGINS troca a lista.
-  stub claude 'case "$*" in "plugin list --json")
-    if [ -n "${FAKE_PLUGINS:-}" ]; then echo "$FAKE_PLUGINS"; exit; fi
+  # Instalar um plugin deixa a lista completa; FAKE_INSTALL_FAILS faz a instalação falhar.
+  stub claude 'd="$(dirname "$CALLS")"
+  case "$*" in
+  "plugin marketplace list") [ -n "${FAKE_NO_MARKETPLACE:-}" ] && [ ! -f "$d/marketplace-added" ] || echo "ahrena (ahrenatechnology/ahrena-framework)" ;;
+  "plugin marketplace add"*) : > "$d/marketplace-added" ;;
+  "plugin install "*) [ -z "${FAKE_INSTALL_FAILS:-}" ] || exit 1; : > "$d/plugins-installed" ;;
+  "plugin list --json")
+    if [ -n "${FAKE_PLUGINS:-}" ] && [ ! -f "$d/plugins-installed" ]; then echo "$FAKE_PLUGINS"; exit; fi
     c="$(dirname "$CALLS")/case"
     echo "[{\"id\":\"ahrena-engineering-development@ahrena\",\"scope\":\"project\",\"enabled\":true,\"projectPath\":\"$c\"},
       {\"id\":\"ahrena-contributing@ahrena\",\"scope\":\"user\",\"enabled\":true}]" ;;
@@ -75,6 +82,7 @@ JSON
   # formacao-fde-ops #57: Instalar o claude o põe no PATH, como o instalador de verdade.
   stub curl 'case "$*" in *claude.ai/install.sh*) cp "$(dirname "$CALLS")/claude-instalado" "$(dirname "$0")/claude" ;; esac'
   stub git 'case "$*" in
+    --version) echo "git version ${FAKE_GIT_VERSION:-2.47.1}" ;;
     "config user.name") [ -n "${FAKE_NO_IDENTITY:-}" ] || echo Ada ;;
     "config user.email") [ -n "${FAKE_NO_IDENTITY:-}" ] || echo ada@exemplo.com ;;
     "rev-parse --show-toplevel") [ -n "${FAKE_TOPLEVEL:-}" ] || exit 128; echo "$FAKE_TOPLEVEL" ;;
@@ -113,7 +121,7 @@ healthy_mac() {
 run() {
   local command="$1"
   shift
-  OUTPUT="$(cd "$SANDBOX" && env -i PATH="$SANDBOX/bin" HOME="$SANDBOX/home" USER=ada CALLS="$SANDBOX/calls" "$@" \
+  OUTPUT="$(cd "$SANDBOX" && env -i PATH="$SANDBOX/bin" HOME="$SANDBOX/home" USER=ada CALLS="$SANDBOX/calls" OS_RELEASE="$SANDBOX/os-release" "$@" \
     "$SANDBOX/bin/bash" "$SANDBOX/case/.claude/skills/setup-fde/scripts/setup-fde.sh" "$command" 2>/dev/null </dev/null)"
   CODE=$?
 }
@@ -268,22 +276,61 @@ healthy_machine
 run check
 expect "com os plugins do case instalados, o ahrena fica ok" line_is ok ahrena
 run check FAKE_PLUGINS='[{"id":"ahrena-contributing@ahrena","scope":"user","enabled":true}]'
-expect "um plugin do case que não está instalado deixa o ahrena manual" line_is manual ahrena
-expect "a linha do ahrena diz qual plugin falta" detail_has ahrena "Faltam: ahrena-engineering-development"
+expect "um plugin do case que não está instalado deixa o ahrena missing" line_is missing ahrena
+expect "a linha do ahrena diz qual plugin falta" detail_has ahrena "faltam: ahrena-engineering-development"
 expect "a linha do ahrena não cita o que já está instalado" eval '! detail_has ahrena ahrena-contributing'
-expect "a linha do ahrena diz para aceitar a instalação no Claude Code" detail_has ahrena "aceite instalar os plugins do Ahrena"
 expect "o ahrena faltando sai 1" exits 1
 run check FAKE_PLUGINS="[{\"id\":\"ahrena-engineering-development@ahrena\",\"scope\":\"project\",\"enabled\":true,\"projectPath\":\"/outra/pasta\"},{\"id\":\"ahrena-contributing@ahrena\",\"scope\":\"user\",\"enabled\":true}]"
-expect "um plugin instalado para outra pasta não conta" line_is manual ahrena
+expect "um plugin instalado para outra pasta não conta" line_is missing ahrena
 run check FAKE_PLUGINS="[{\"id\":\"ahrena-engineering-development@ahrena\",\"scope\":\"user\",\"enabled\":false},{\"id\":\"ahrena-contributing@ahrena\",\"scope\":\"user\",\"enabled\":true}]"
-expect "um plugin desabilitado não conta" line_is manual ahrena
+expect "um plugin desabilitado não conta" line_is missing ahrena
 run check FAKE_PLUGINS='nada disso é json'
 expect "uma lista que não se lê deixa o ahrena manual" detail_has ahrena "não deu para ler os plugins"
 
 # covers formacao-fde-ops #56/AC-3
-run fix FAKE_PLUGINS='[]'
-expect "o fix não instala plugin pela pessoa" never_ran "claude plugin install"
+FALTA_UM='[{"id":"ahrena-contributing@ahrena","scope":"user","enabled":true}]'
+healthy_machine
+run fix FAKE_PLUGINS="$FALTA_UM"
+expect "o fix instala só o plugin que falta, no escopo local" only_install_is "claude plugin install ahrena-engineering-development@ahrena --scope local"
+expect "depois do fix o ahrena fica ok" line_is ok ahrena
+expect "depois do fix a máquina com o Ahrena sai 0" exits 0
 expect "o fix não toca o settings.json do case" eval 'grep -q outro-marketplace "$SANDBOX/case/.claude/settings.json"'
+
+healthy_machine
+run fix FAKE_PLUGINS="$FALTA_UM" FAKE_NO_MARKETPLACE=1
+expect "sem o marketplace, o fix registra o ahrena antes" ran "claude plugin marketplace add ahrenatechnology/ahrena-framework"
+expect "e depois instala o plugin" ran "claude plugin install ahrena-engineering-development@ahrena"
+
+healthy_machine
+run fix FAKE_PLUGINS="$FALTA_UM" FAKE_INSTALL_FAILS=1
+expect "quando a instalação falha, o ahrena continua missing" line_is missing ahrena
+
+healthy_machine
+run fix FAKE_PLUGINS="$FALTA_UM" FAKE_GIT_VERSION=2.34.1 FAKE_SUDO_PASSWORD=1
+expect "com o git velho, o ahrena espera o git" detail_has ahrena "depende do git 2.45"
+expect "com o git velho, o fix não tenta instalar plugin" never_ran "claude plugin install"
+
+# O git: o Claude Code precisa de um git novo para instalar os plugins.
+healthy_machine
+run check FAKE_GIT_VERSION=2.34.1
+expect "o git 2.34 do Ubuntu sai outdated" line_is outdated git
+run fix FAKE_GIT_VERSION=2.34.1
+expect "no Ubuntu, o git novo vem do PPA git-core" ran "add-apt-repository -y ppa:git-core/ppa"
+expect "e depois do apt" ran "apt-get install -y git"
+
+healthy_machine
+echo 'ID=debian' > "$SANDBOX/os-release"
+run fix FAKE_GIT_VERSION=2.39.2
+expect "no Debian sem PPA, o git velho é manual" line_is manual git
+expect "no Debian, o fix não acrescenta PPA" never_ran "add-apt-repository"
+
+healthy_mac
+run fix FAKE_SYSTEM=Darwin FAKE_GIT_VERSION=2.39.5
+expect "no Mac, o git velho da Apple é trocado pelo do Homebrew" ran "brew install git"
+
+healthy_machine
+run check FAKE_GIT_VERSION=2.45.0
+expect "o git no piso fica ok" line_is ok git
 
 healthy_machine
 rm "$SANDBOX/bin/claude"

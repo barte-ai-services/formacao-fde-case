@@ -102,3 +102,8 @@ def test_setup_explica_o_ahrena() -> None:
     texto = (RAIZ / "SETUP.md").read_text(encoding="utf-8")
     assert "## O Ahrena no Claude Code" in texto
     assert "`/agents`" in texto and "athena" in texto
+
+
+def test_settings_local_fica_fora_do_git() -> None:
+    """formacao-fde-ops#56/AC-3: o fix instala no escopo local, e o settings.local.json não entra no fork."""
+    assert ".claude/settings.local.json" in (RAIZ / ".gitignore").read_text(encoding="utf-8").splitlines()

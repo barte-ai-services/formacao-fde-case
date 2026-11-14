@@ -11,3 +11,6 @@ __pycache__/
 .DS_Store
 saidas/*
 !saidas/.gitkeep
+
+# Plugins do Claude Code instalados por máquina (o setup-fde grava aqui)
+.claude/settings.local.json
