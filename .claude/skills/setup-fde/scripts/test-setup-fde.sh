@@ -13,7 +13,7 @@ set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
 SCRIPT="$HERE/setup-fde.sh"
 ORIGINAL="https://github.com/barte-ai-services/formacao-fde-case.git"
-INSTALLS='apt-get|brew install|curl|dpkg|uv python install|uv sync$|git .*remote (add|set-url)|gh auth (login|setup-git|refresh)|gh repo fork'
+INSTALLS='apt-get|brew (install|upgrade)|curl|dpkg|uv python install|uv self update|uv sync$|git .*remote (add|set-url)|gh auth (login|setup-git|refresh)|gh repo fork'
 FAILURES=0
 SANDBOX=""
 
@@ -55,7 +55,7 @@ healthy_machine() {
   stub uname 'case "$1" in -s) echo "${FAKE_SYSTEM:-Linux}" ;; *) echo x86_64 ;; esac'
   # Nunca root, e o sudo só repassa para os dublês: nada toca o /etc de verdade.
   stub id 'echo 1000'
-  stub sudo '[ "$1" = -n ] && shift
+  stub sudo 'if [ "$1" = -n ]; then [ -z "${FAKE_SUDO_PASSWORD:-}" ] || exit 1; shift; fi
   case "$1" in apt-get | dpkg | true) "$@" ;; tee) cat > /dev/null ;; esac'
   # Instalar o claude o põe no PATH, como o instalador de verdade.
   stub curl 'case "$*" in *claude.ai/install.sh*) printf "#!/bin/sh\n" > "$(dirname "$0")/claude"; chmod +x "$(dirname "$0")/claude" ;; esac'
@@ -76,6 +76,8 @@ healthy_machine() {
     "python find"*) [ -z "${FAKE_NO_PYTHON:-}" ] || exit 1 ;;
     "sync --check") [ -f .synced ] ;;
     sync) : > .synced ;;
+    "sync --help") [ -n "${FAKE_OLD_UV:-}" ] && [ ! -f "$(dirname "$CALLS")/uv-updated" ] || echo "      --check" ;;
+    "self update") : > "$(dirname "$CALLS")/uv-updated" ;;
   esac'
   stub python3 '[ -z "${FAKE_CHECK_FAILS:-}" ]'
   # Instalar o gh pelo apt o põe no PATH.
@@ -86,6 +88,7 @@ healthy_machine() {
 healthy_mac() {
   healthy_machine
   rm "$SANDBOX/bin/apt-get"
+  stub xcode-select '[ -z "${FAKE_NO_CLT:-}" ]'
   stub brew 'case "$*" in "install gh") printf "#!/bin/sh\n" > "$(dirname "$0")/gh"; chmod +x "$(dirname "$0")/gh" ;; esac'
 }
 
@@ -159,6 +162,27 @@ run fix FAKE_SYSTEM=Darwin
 expect "um Mac sem Homebrew tem o brew manual" line_is manual brew
 expect "a linha do brew diz onde instalar" detail_has brew "https://brew.sh"
 expect "um Mac sem Homebrew não instala o brew" no_install_ran
+
+healthy_mac
+rm "$SANDBOX/bin/brew"
+run check FAKE_SYSTEM=Darwin FAKE_NO_CLT=1
+expect "um Mac sem as ferramentas da Apple tem o git manual" line_is manual git
+expect "a linha do git manda instalar as ferramentas da Apple" detail_has git "xcode-select --install"
+expect "sem as ferramentas da Apple, o check não chama o git" never_ran "git "
+expect "sem as ferramentas da Apple, o check não chama o python3" never_ran "python3"
+
+healthy_machine
+rm "$SANDBOX/bin/gh"
+run fix FAKE_SUDO_PASSWORD=1
+expect "quando o sudo pede senha, o gh continua missing" line_is missing gh
+expect "quando o sudo pede senha, nada entra pelo apt" never_ran "apt-get install"
+
+healthy_machine
+run check FAKE_OLD_UV=1
+expect "um uv sem o uv sync --check sai outdated" line_is outdated uv
+run fix FAKE_OLD_UV=1
+expect "o fix atualiza o uv e mais nada" only_install_is "uv self update"
+expect "depois da atualização o uv fica ok" line_is ok uv
 
 healthy_machine
 rm "$SANDBOX/bin/gh"

@@ -27,6 +27,16 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 
 have() { command -v "$1" >/dev/null 2>&1; }
 
+# No macOS, o git e o python3 de /usr/bin são atalhos para as ferramentas de
+# linha de comando da Apple: sem elas, chamar qualquer um abre uma janela de
+# instalação. Por isso nada chama o git antes de saber que ele funciona.
+git_works() {
+  case "$SYSTEM" in
+    macos*) xcode-select -p >/dev/null 2>&1 && git --version >/dev/null 2>&1 ;;
+    *) have git ;;
+  esac
+}
+
 detect_system() {
   case "$(uname -s)" in
     Darwin) if have brew; then echo macos; else echo macos-without-brew; fi ;;
@@ -45,6 +55,7 @@ find_case_dir() {
   if [ -n "${FDE_CASE_DIR:-}" ]; then echo "$FDE_CASE_DIR"; return; fi
   dir="$(cd "$HERE/../../../.." 2>/dev/null && pwd)"
   if [ -n "$dir" ] && [ -f "$dir/scripts/check_setup.py" ]; then echo "$dir"; return; fi
+  git_works || return 0
   dir="$(git rev-parse --show-toplevel 2>/dev/null)"
   if [ -n "$dir" ] && [ -f "$dir/scripts/check_setup.py" ]; then echo "$dir"; fi
 }
@@ -87,7 +98,11 @@ is_case_repo() {
 # O comando que a pessoa roda para um item que o `fix` não resolve.
 manual_hint() {
   case "$1" in
-    brew) echo 'instale o Homebrew pelo https://brew.sh (ele pede a senha do Mac) e rode o fix de novo' ;;
+    brew) echo 'instale o Homebrew pelo https://brew.sh (ele pede a senha do Mac e instala as ferramentas da Apple) e rode o fix de novo' ;;
+    git) case "$SYSTEM" in
+        macos*) echo 'xcode-select --install (aceite a janela da Apple), ou instale o Homebrew, e rode o fix de novo' ;;
+        *) echo 'não há instalador para este sistema; instale o git do seu jeito, como no SETUP.md' ;;
+      esac ;;
     git-identity) echo 'git config --global user.name "Seu Nome" && git config --global user.email "seu-email@exemplo.com" (o mesmo e-mail da conta do GitHub)' ;;
     gh-login) echo 'gh auth login (GitHub.com, HTTPS, Login with a web browser) e depois gh auth setup-git' ;;
     check-setup) echo 'rode python3 scripts/check_setup.py na pasta do case e siga o que ele disser' ;;
@@ -102,6 +117,7 @@ needs_person() {
 
 check_case_clone() {
   local origin upstream
+  git_works || { STATUS=manual; DETAIL="depende do git"; return; }
   if [ -z "$CASE_DIR" ]; then
     STATUS=manual
     DETAIL="gh repo fork $UPSTREAM_REPO --clone, e depois abra uma sessão nova do Claude Code na pasta formacao-fde-case"
@@ -129,6 +145,18 @@ check_case_clone() {
   fi
 }
 
+# Um uv sem o `uv sync --check` é velho demais para o uv-sync.
+check_uv() {
+  have uv || { STATUS=missing; return; }
+  uv sync --help 2>/dev/null | grep -q -- '--check' && return
+  STATUS=outdated
+  DETAIL="$(uv --version 2>/dev/null), sem o uv sync --check"
+}
+
+update_uv() {
+  uv self update || { [ "$SYSTEM" = macos ] && brew upgrade uv; }
+}
+
 check_uv_sync() {
   if [ -z "$CASE_DIR" ]; then STATUS=manual; DETAIL="depende do case-clone"; return; fi
   have uv || { STATUS=missing; DETAIL="depende do uv"; return; }
@@ -137,6 +165,7 @@ check_uv_sync() {
 
 check_check_setup() {
   if [ -z "$CASE_DIR" ]; then STATUS=manual; DETAIL="depende do case-clone"; return; fi
+  git_works || { STATUS=manual; DETAIL="depende do git"; return; }
   if have python3; then
     (cd "$CASE_DIR" && python3 scripts/check_setup.py) >/dev/null 2>&1 && return
   elif have uv; then
@@ -150,9 +179,12 @@ inspect() {
   STATUS=ok
   DETAIL=""
   case "$1" in
-    brew | git | gh | uv | claude) have "$1" || STATUS=missing ;;
+    brew | gh | claude) have "$1" || STATUS=missing ;;
+    git) git_works || STATUS=missing ;;
+    uv) check_uv ;;
     python) uv python find ">=$PYTHON_FLOOR" >/dev/null 2>&1 || STATUS=missing ;;
     git-identity)
+      git_works || { STATUS=manual; DETAIL="depende do git"; return 0; }
       DETAIL="$(git config user.email 2>/dev/null)"
       [ -n "$DETAIL" ] && [ -n "$(git config user.name 2>/dev/null)" ] || needs_person git-identity ;;
     gh-login) gh auth status >/dev/null 2>&1 || needs_person gh-login ;;
@@ -227,7 +259,7 @@ install_on_debian() {
 
 install() {
   case "$1" in
-    uv) ensure_curl && curl -LsSf https://astral.sh/uv/install.sh | sh ;;
+    uv) if have uv; then update_uv; else ensure_curl && curl -LsSf https://astral.sh/uv/install.sh | sh; fi ;;
     python) uv python install "$PYTHON_FLOOR" ;;
     claude) ensure_curl && curl -fsSL https://claude.ai/install.sh | bash ;;
     case-clone) git -C "$CASE_DIR" remote add upstream "$UPSTREAM_URL" ;;

@@ -23,7 +23,7 @@ O caminho principal é deixar o Claude Code configurar a máquina com você, pel
    configura o meu setup de FDE
    ```
 
-A skill só aparece numa sessão aberta dentro da pasta `formacao-fde-case`. Quem ainda não tem o clone pode abrir o Claude Code numa pasta qualquer e pedir para instalar o git e o GitHub CLI e clonar o seu fork, ou seguir o passo a passo à mão até o clone; depois, abre uma sessão nova na pasta do case. O [SETUP.md](SETUP.md) explica os dois caminhos e traz o passo a passo à mão, no macOS ou no Windows (com WSL 2).
+A skill só aparece numa sessão aberta dentro da pasta `formacao-fde-case`. Quem ainda não tem o clone abre o terminal, roda `cd ~` e depois `claude`, e pede para instalar o git e o GitHub CLI e clonar o seu fork (ou segue o passo a passo à mão até o clone). Se ele pedir a senha do computador ou para entrar no GitHub, rode você mesmo o comando que ele mostrar, no seu terminal. Depois, feche o Claude Code, rode `cd ~/formacao-fde-case` e abra uma sessão nova com `claude`. O [SETUP.md](SETUP.md) explica os dois caminhos e traz o passo a passo à mão, no macOS ou no Windows (com WSL 2).
 
 No fim, o verificador diz o que está pronto e o que falta:
 

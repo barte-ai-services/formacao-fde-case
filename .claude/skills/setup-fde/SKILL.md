@@ -30,7 +30,9 @@ Os itens, na ordem:
 | Item | O que confere |
 |---|---|
 | `brew` | o Homebrew, só no macOS |
-| `git`, `gh`, `uv`, `claude` | as ferramentas estão instaladas |
+| `git` | o git funciona; no macOS, também as ferramentas de linha de comando da Apple, que trazem o git |
+| `gh`, `claude` | as ferramentas estão instaladas |
+| `uv` | o uv está instalado e é novo o bastante para o `uv sync --check` (senão sai `outdated`, e o `fix` atualiza) |
 | `python` | o uv tem um Python 3.12 ou mais novo |
 | `git-identity` | o git sabe o nome e o e-mail da pessoa |
 | `gh-login` | o GitHub CLI está logado na conta da pessoa |
@@ -50,9 +52,15 @@ Ele instala cada item `missing` ou `outdated`, deixa os `ok` como estão e impri
 
 Duas falhas aparecem aqui.
 
-**A instalação pede senha.** No Ubuntu (e no Ubuntu do WSL) o git e o gh entram pelo `sudo`, e esta sessão não tem terminal para a pessoa digitar a senha. O item continua `missing` e o script diz `não deu para corrigir`. Dê à pessoa o mesmo comando `fix` para ela rodar no terminal dela e depois continue do passo 1.
+**A instalação pede senha.** No Ubuntu (e no Ubuntu do WSL) o git e o gh entram pelo `sudo`, e esta sessão não tem terminal para a pessoa digitar a senha. O item continua `missing` e o script diz `não deu para corrigir`. Veja o caminho da pasta do case com `pwd` e dê à pessoa o comando completo para ela rodar no terminal dela, com o caminho de verdade no lugar de `<pasta do case>`:
 
-**O sistema não tem instalador.** O macOS precisa do Homebrew antes, e mostra `brew` como `manual` até ele estar lá. Um sistema que não é macOS, Debian nem Ubuntu mostra as ferramentas como `manual`: a pessoa instala do jeito dela, seguindo o `SETUP.md`.
+```sh
+cd <pasta do case> && bash .claude/skills/setup-fde/scripts/setup-fde.sh fix
+```
+
+Depois continue do passo 1.
+
+**O sistema não tem instalador.** O macOS precisa do Homebrew antes, e mostra `brew` como `manual` até ele estar lá. O Homebrew também instala as ferramentas de linha de comando da Apple; sem ele, o `git` sai `manual` com `xcode-select --install`, e a pessoa aceita a janela da Apple. Um sistema que não é macOS, Debian nem Ubuntu mostra as ferramentas como `manual`: a pessoa instala do jeito dela, seguindo o `SETUP.md`.
 
 ## 3. Acompanhar a pessoa em cada item manual
 

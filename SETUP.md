@@ -31,10 +31,10 @@ O repositório traz uma skill do Claude Code, a `setup-fde` (em `.claude/skills/
 
 **Ainda não tem o case na sua máquina?** A skill mora dentro do repositório, então ela só aparece numa sessão do Claude Code aberta na pasta `formacao-fde-case`. Quem ainda não tem essa pasta tem dois jeitos de começar:
 
-- abra o Claude Code numa pasta qualquer e peça: "instala o git e o GitHub CLI e clona o meu fork do barte-ai-services/formacao-fde-case". Ele vai pedir para você entrar na sua conta do GitHub (`gh auth login`, que você mesmo roda) e depois roda `gh repo fork barte-ai-services/formacao-fde-case --clone`; ou
+- abra o terminal, rode `cd ~` e depois `claude`, e peça: "instala o git e o GitHub CLI e clona o meu fork do barte-ai-services/formacao-fde-case". Se ele pedir a senha do computador ou para entrar no GitHub, rode você mesmo o comando que ele mostrar, no seu terminal. No fim, ele roda `gh repo fork barte-ai-services/formacao-fde-case --clone`, que cria a pasta `~/formacao-fde-case`; ou
 - siga o [passo a passo à mão](#passo-a-passo-à-mão) até o clone (seções Git, Conta no GitHub e GitHub CLI, e o passo a passo do fork no [README.md](README.md#passo-a-passo-fazer-o-fork-e-clonar)).
 
-Depois, feche o Claude Code, entre na pasta (`cd formacao-fde-case`), abra uma sessão nova com `claude` e peça de novo "configura o meu setup de FDE".
+Depois, feche o Claude Code, rode `cd ~/formacao-fde-case` e abra uma sessão nova com `claude`. Nela, peça de novo "configura o meu setup de FDE".
 
 ## Passo a passo à mão
 

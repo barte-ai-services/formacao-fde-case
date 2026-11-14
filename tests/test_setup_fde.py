@@ -44,7 +44,7 @@ def test_skill_tem_nome_e_descricao_que_disparam():
 
 @pytest.mark.skipif(shutil.which("bash") is None, reason="a suíte do script precisa do bash")
 def test_suite_do_script_passa():
-    """#50/AC-2, AC-3 e AC-6: a suíte adaptada do test-workstation.sh roda no make check."""
+    """#50/AC-2, AC-3 e AC-6: a suíte do script roda no make check."""
     resultado = subprocess.run(["bash", str(SUITE)], capture_output=True, text=True, check=False)
     assert resultado.returncode == 0, resultado.stdout + resultado.stderr
     assert resultado.stdout.strip().endswith("all passed")
