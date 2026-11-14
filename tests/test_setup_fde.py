@@ -107,3 +107,10 @@ def test_setup_explica_o_ahrena() -> None:
 def test_settings_local_fica_fora_do_git() -> None:
     """formacao-fde-ops#56/AC-3: o fix instala no escopo local, e o settings.local.json não entra no fork."""
     assert ".claude/settings.local.json" in (RAIZ / ".gitignore").read_text(encoding="utf-8").splitlines()
+
+
+def test_agents_md_tem_a_diretiva_do_ahrena() -> None:
+    """formacao-fde-ops#65/AC-1: o AGENTS.md tem o bloco que o instalador do Ahrena escreve, como o CLAUDE.md."""
+    for arquivo in ("AGENTS.md", "CLAUDE.md"):
+        texto = (RAIZ / arquivo).read_text(encoding="utf-8")
+        assert "<!-- ahrena:agency:start -->" in texto and "<!-- ahrena:agency:end -->" in texto, arquivo
