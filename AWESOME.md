@@ -1,6 +1,6 @@
 # Awesome tools para builders
 
-As ferramentas que um FDE da Barte usa para construir e entregar, com os links que valem a pena. Quase todas têm plano gratuito para começar e um servidor MCP, o que deixa o Claude Code operar a ferramenta por você.
+As ferramentas que um FDE da Barte usa para construir e entregar, com os links que valem a pena. Quase todas têm plano gratuito para começar, e várias têm um servidor MCP oficial, o que deixa o Claude Code operar a ferramenta por você.
 
 ## Onde estamos
 
@@ -35,7 +35,7 @@ O ambiente onde o trabalho acontece: lê o repositório, roda comandos, usa MCPs
 
 ## Supabase
 
-Postgres gerenciado, com autenticação, storage, funções e uma API pronta em cima das tabelas.
+Um banco Postgres que o Supabase mantém por você, com autenticação, storage, funções e uma API pronta em cima das tabelas.
 
 - [Documentação](https://supabase.com/docs)
 - [CLI](https://supabase.com/docs/guides/cli): `supabase start` sobe tudo local com Docker
@@ -43,11 +43,11 @@ Postgres gerenciado, com autenticação, storage, funções e uma API pronta em 
 - [SDK de Python](https://github.com/supabase/supabase-py)
 - [Servidor MCP](https://supabase.com/docs/guides/getting-started/mcp): o Claude Code consulta e altera o projeto
 
-**Use quando:** o projeto precisa guardar dados do cliente, com login e permissões por linha.
+**Use quando:** o projeto precisa guardar dados do cliente, com login e regras de quem vê cada registro.
 
 ## Cloudflare
 
-Workers rodam código na borda, sem servidor para manter. O Wrangler publica.
+Workers rodam o seu código nos servidores da Cloudflare, perto de quem acessa, sem servidor para você manter. O Wrangler publica.
 
 - [Workers](https://developers.cloudflare.com/workers/)
 - [Wrangler](https://developers.cloudflare.com/workers/wrangler/): `wrangler deploy`, `wrangler secret put`
@@ -73,7 +73,7 @@ API de e-mail transacional, simples de integrar.
 Pagamentos, assinaturas e faturas, com modo de teste completo.
 
 - [Documentação](https://docs.stripe.com)
-- [Stripe CLI](https://docs.stripe.com/stripe-cli): `stripe listen` repassa os webhooks para a sua máquina
+- [Stripe CLI](https://docs.stripe.com/stripe-cli): `stripe listen` repassa para a sua máquina os avisos que o Stripe envia (os webhooks)
 - [SDK de Python](https://github.com/stripe/stripe-python)
 - [Servidor MCP e ferramentas para agentes](https://docs.stripe.com/mcp)
 
@@ -91,6 +91,8 @@ A linguagem do kit e das tools.
 - [FastAPI](https://fastapi.tiangolo.com): uma API em minutos
 - [SDK de MCP em Python](https://github.com/modelcontextprotocol/python-sdk): escrever as suas próprias tools
 
+**Use quando:** as tools, os scripts e os testes do projeto. É a linguagem do kit de domingo.
+
 ## Evolution API
 
 API aberta para WhatsApp, que você hospeda.
@@ -98,7 +100,7 @@ API aberta para WhatsApp, que você hospeda.
 - [Documentação](https://doc.evolution-api.com)
 - [Repositório](https://github.com/EvolutionAPI/evolution-api)
 
-**Use quando:** a pessoa que decide vive no WhatsApp. Cuidado: a integração pelo WhatsApp Web não é oficial, e o número pode ser bloqueado. Para produção, compare com a [WhatsApp Cloud API](https://developers.facebook.com/docs/whatsapp/cloud-api), que é a oficial.
+**Use quando:** a pessoa que decide vive no WhatsApp. A Evolution API conecta de dois jeitos: pelo WhatsApp Web, que não é oficial e pode levar ao bloqueio do número, ou pela [WhatsApp Cloud API](https://developers.facebook.com/docs/whatsapp/cloud-api), a oficial da Meta. Para produção, use a oficial.
 
 ## Temporal
 
