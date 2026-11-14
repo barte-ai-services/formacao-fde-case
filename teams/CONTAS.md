@@ -94,7 +94,13 @@ O exemplo pede o Python 3.14. A `setup-fde` instala o 3.12, mas o `uv run` baixa
 O servidor não usa a chave secreta do Supabase, que passa por cima de todas as regras. Ele entra como um usuário comum, o `agente`, e o banco só deixa esse usuário ler o caso e gravar propostas.
 
 1. No painel do Supabase, em **Authentication** → **Users**, o líder cria o usuário do agente com **Add user**, com um e-mail do grupo e uma senha forte.
-2. Dê a esse usuário o papel `agente`, como manda a arquitetura de referência.
+2. Dê a esse usuário o papel `agente`. A tabela `pessoas` e o Custom Access Token Hook, que põe o papel dentro do token, vêm das migrações da arquitetura de referência. Confira que o hook está ligado em **Authentication** → **Hooks**. Depois, no **SQL Editor**, rode:
+
+   ```sql
+   insert into public.pessoas (id, papel) values ('<id do usuário agente>', 'agente');
+   ```
+
+   O id aparece na lista de **Users**. Sem essa linha, o token do agente sai sem papel, e o banco recusa tudo o que ele pedir.
 3. Grave os dados de entrada como segredos do Worker, dentro de `servidor-mcp/`. Cada comando pede o valor no terminal:
 
 ```bash
@@ -104,7 +110,7 @@ wrangler secret put AGENTE_EMAIL
 wrangler secret put AGENTE_SENHA
 ```
 
-O `SUPABASE_URL` e a chave publicável (`sb_publishable_...`) estão no painel do projeto, em **Project Settings** → **API Keys**.
+O `SUPABASE_URL` e a chave publicável (`sb_publishable_...`) aparecem no botão **Connect**, no topo do projeto. A chave também fica em **Project Settings** → **API Keys**.
 
 Para testar na sua máquina, os mesmos quatro valores vão no arquivo `servidor-mcp/.dev.vars`, um por linha (`NOME=valor`). Esse arquivo não entra no git.
 
