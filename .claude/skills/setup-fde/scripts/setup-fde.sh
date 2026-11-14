@@ -234,7 +234,8 @@ check_ahrena() {
   fi
   [ -n "$AHRENA_MISSING" ] || return 0
   DETAIL="faltam: $AHRENA_MISSING"
-  if ! version_at_least "$(git_version)" "$GIT_FLOOR"; then
+  # formacao-fde-ops #64: git_works antes do git --version, que no Mac sem as ferramentas da Apple abre a janela delas.
+  if ! git_works || ! version_at_least "$(git_version)" "$GIT_FLOOR"; then
     STATUS=manual
     DETAIL="$DETAIL; depende do git $GIT_FLOOR ou mais novo"
     return

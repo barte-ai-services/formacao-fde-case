@@ -95,7 +95,9 @@ JSON
   esac'
   stub gh 'case "$*" in "auth status") [ -z "${FAKE_LOGGED_OUT:-}" ] || exit 1 ;; esac'
   # O `uv sync` deixa a .venv em dia, e o `uv sync --check` lê isso.
+  # formacao-fde-ops #64: sem o python3, o ahrena lê os plugins pelo Python do uv.
   stub uv 'case "$*" in
+    "run --no-project --quiet python "*) shift 4; exec '"$REAL_PYTHON"' "$@" ;;
     "python find"*) [ -z "${FAKE_NO_PYTHON:-}" ] || exit 1 ;;
     "sync --check") [ -f .synced ] ;;
     sync) : > .synced ;;
@@ -195,6 +197,10 @@ expect "um Mac sem as ferramentas da Apple tem o git manual" line_is manual git
 expect "a linha do git manda instalar as ferramentas da Apple" detail_has git "xcode-select --install"
 expect "sem as ferramentas da Apple, o check não chama o git" never_ran "git "
 expect "sem as ferramentas da Apple, o check não chama o python3" never_ran "python3"
+# covers formacao-fde-ops #64/AC-1, AC-2
+run check FAKE_SYSTEM=Darwin FAKE_NO_CLT=1 FAKE_PLUGINS='[{"id":"ahrena-contributing@ahrena","scope":"user","enabled":true}]'
+expect "sem as ferramentas da Apple, o ahrena não chama o git" never_ran "git "
+expect "sem as ferramentas da Apple, o ahrena espera o git" detail_has ahrena "depende do git"
 
 healthy_machine
 rm "$SANDBOX/bin/gh"
