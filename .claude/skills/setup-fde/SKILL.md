@@ -95,7 +95,7 @@ O setup terminou quando o `check` sai 0. Se não sair, diga exatamente quais ite
 
 ## 5. Entregar
 
-Com tudo `ok`, aponte o [README](../../../README.md) para o jeito de trabalhar com o fork e o fork líder, e o [DOMINGO.md](../../../DOMINGO.md) para o kit de domingo. Lembre a pessoa de abrir uma sessão nova do Claude Code na pasta do case depois de um `git pull`.
+Com tudo `ok`, aponte o [README](../../../README.md) para o jeito de trabalhar com o fork e o fork líder. O kit de domingo chega ao repositório no domingo de manhã, como o README avisa. Lembre a pessoa de abrir uma sessão nova do Claude Code na pasta do case depois de um `git pull`.
 
 ## O ovo e a galinha
 
@@ -116,4 +116,4 @@ Depois, abrir uma sessão nova do Claude Code dentro da pasta `formacao-fde-case
 
 **Uma ferramenta instalada que não funciona.** O script decide se a ferramenta está lá, não se está saudável. Uma instalação quebrada é um diagnóstico, e começa pela mensagem de erro.
 
-**O kit de domingo.** Rodar o agente, as skills dele e o eval está no `DOMINGO.md`.
+**O kit de domingo.** Ele chega ao repositório no domingo de manhã, com as instruções dele. Até lá, não há o que rodar.
