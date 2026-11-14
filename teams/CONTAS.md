@@ -1,8 +1,8 @@
-# Contas do grupo no Supabase, na Cloudflare e no FastMCP Gateway
+# Contas do grupo no Supabase e na Cloudflare
 
-O grupo constrói com o Supabase (banco e autenticação) e publica com a Cloudflare (Workers). O servidor MCP do grupo pode ficar na Cloudflare ou no FastMCP Gateway, que hospeda servidores MCP escritos em Python. Quem cria as contas é o **líder do grupo**, o dono do fork líder. Depois ele convida os integrantes, quando o serviço deixa, e todo mundo trabalha nas mesmas contas.
+O grupo constrói com o Supabase (banco e autenticação) e publica com a Cloudflare (Workers). Quem cria as duas contas é o **líder do grupo**, o dono do fork líder. Depois ele convida os integrantes, e todo mundo trabalha nas mesmas contas.
 
-As três contas são gratuitas. O Supabase e a Cloudflare não pedem cartão de crédito.
+As duas contas são gratuitas. Ninguém precisa de cartão de crédito.
 
 ## Já tem conta? Crie uma segunda só para a formação
 
@@ -73,55 +73,63 @@ wrangler login
 
 Quem tem acesso a mais de uma conta na Cloudflare (a pessoal e a do grupo) escolhe a do grupo no primeiro `wrangler deploy`, quando ele perguntar, ou fixa o `account_id` da conta do grupo no arquivo de configuração do Wrangler (`wrangler.jsonc` ou `wrangler.toml`).
 
-## FastMCP Gateway: o líder cria
+## Servidor MCP em Python: na conta do grupo na Cloudflare
 
-O [FastMCP Gateway](https://gofastmcp.com/deployment/prefect-horizon), da Prefect, publica um servidor MCP em Python direto do GitHub e entrega um endereço `https://<nome>.fastmcp.app/mcp` para o Claude Code. Ele se chamava Horizon, e o painel e a documentação ainda usam esse nome no endereço (`horizon.prefect.io`). O antigo FastMCP Cloud virou o Gateway.
+O servidor MCP do grupo roda como um **Python Worker** na mesma conta da Cloudflare. Não tem conta nova, ninguém precisa ser convidado de novo, e não tem servidor para manter: a Cloudflare sobe o Worker quando o Claude Code chama, sem custo no plano gratuito.
 
-O plano gratuito é o **Personal**: um desenvolvedor, até 200 servidores e um dia de logs. Os convites para o grupo só existem no plano pago, então no plano gratuito quem publica é o líder, e o grupo usa o endereço que ele publicar. Os limites estão em [prefect.io/pricing](https://www.prefect.io/pricing?product=horizon).
+O ponto de partida é o exemplo oficial da Cloudflare, um servidor MCP em Python com o SDK oficial do MCP: [python-workers-examples/mcp-server](https://github.com/cloudflare/python-workers-examples/tree/main/mcp-server).
 
-1. Entre em [horizon.prefect.io/signup](https://horizon.prefect.io/signup) com o GitHub do líder, o mesmo do fork líder. Aqui a regra do e-mail com `+` não vale: o FastMCP Gateway só entra pelo GitHub.
-2. Na primeira entrada, crie a **organização** com o nome do grupo (por exemplo, `formacao-fde-grupo-1`).
-3. Conecte o GitHub: autorize o app e dê acesso só ao fork líder (**Only select repositories**).
+### Criar o servidor no fork
 
-### FastMCP Gateway: preparar o servidor no fork
+No fork líder, peça ao Claude Code:
 
-O Gateway roda servidores do pacote `fastmcp`. No fork líder, o servidor do grupo precisa de:
+> Copie o exemplo `mcp-server` do repositório `cloudflare/python-workers-examples` para a pasta `servidor-mcp/` deste fork, troque o nome do Worker no `wrangler.jsonc` para o nome do grupo e troque as tools do exemplo pelas tools do caso.
 
-- **o `fastmcp` nas dependências:** `uv add fastmcp`, que grava no `pyproject.toml` e no `uv.lock`;
-- **o import do pacote:** `from fastmcp import FastMCP`;
-- **um objeto do servidor num arquivo Python**, por exemplo `mcp = FastMCP("ja-chegou")` em `servidor/main.py`. O `if __name__ == "__main__"` é ignorado.
+O exemplo guarda os dados no D1, o banco da própria Cloudflare. Para o caso, o grupo pode começar no D1 e depois ler o Supabase, como na [arquitetura de referência](https://claude.ai/artifact/8MzayYjsfMepQohd1b3DVJ).
 
-Antes de publicar, confira na sua máquina:
+Na sua máquina, dentro de `servidor-mcp/`, teste antes de publicar:
 
 ```bash
-uv run fastmcp inspect servidor/main.py:mcp
+uv run pywrangler dev
 ```
 
-Ele lista as tools. Se der erro aqui, também vai dar erro no Gateway.
+O servidor sobe em `http://localhost:8787/mcp`.
 
-### FastMCP Gateway: publicar
-
-1. No painel, escolha o fork líder e preencha:
-   - **Server name:** o nome do grupo. Ele vira o endereço `https://<nome>.fastmcp.app/mcp`;
-   - **Entrypoint:** o arquivo e o objeto, no formato `servidor/main.py:mcp`;
-   - **Authentication:** desligada. Veja abaixo por quê;
-   - **Environment variables:** as chaves de que o servidor precisa, como a do Supabase. Elas ficam guardadas no Gateway e não aparecem de novo depois de salvas.
-2. Clique em **Deploy Server** e acompanhe o log. Em geral leva menos de um minuto, e o servidor aparece como **Live**.
-3. Cada push na branch principal do fork líder publica de novo. Cada pull request ganha uma prévia.
-
-**Por que a autenticação desligada.** Com ela ligada, só quem é da organização chama o servidor, e no plano gratuito a organização tem só o líder. Desligada, quem tem o endereço usa o servidor. Por isso:
-
-- **o endereço é a senha:** passe-o ao grupo pelo gerenciador de senhas ou numa mensagem direta, nunca no fork;
-- **o servidor só mexe nos dados fictícios do caso:** nada de dado real, e nenhuma tool devolve uma chave;
-- **no fim da imersão,** o líder religa a autenticação ou apaga o servidor.
-
-### FastMCP Gateway: cada um liga o Claude Code
+### Publicar
 
 ```bash
-claude mcp add --transport http ja-chegou https://<nome>.fastmcp.app/mcp
+uv run pywrangler deploy
 ```
 
-Abra o Claude Code e rode `/mcp`: o servidor `ja-chegou` precisa aparecer conectado. O botão **Connect** de cada servidor, no painel, mostra o comando pronto.
+O `pywrangler` usa o `wrangler` que a `setup-fde` já instalou, e a conta em que você entrou com o `wrangler login`. O servidor fica em:
+
+```
+https://<nome-do-worker>.<subdominio-do-grupo>.workers.dev/mcp
+```
+
+Qualquer integrante convidado na conta da Cloudflare publica de novo do mesmo jeito.
+
+### Proteger com um token
+
+O exemplo não confere quem chama. Peça ao Claude Code para o servidor recusar a chamada sem o cabeçalho `Authorization: Bearer <token>` e grave o token como segredo do Worker:
+
+```bash
+wrangler secret put MCP_TOKEN
+```
+
+Ele pede o valor no terminal. Gere um token longo e guarde no gerenciador de senhas do grupo.
+
+### Cada um liga o Claude Code
+
+```bash
+claude mcp add --transport http ja-chegou \
+  https://<nome-do-worker>.<subdominio-do-grupo>.workers.dev/mcp \
+  --header "Authorization: Bearer $MCP_TOKEN"
+```
+
+Abra o Claude Code e rode `/mcp`: o servidor `ja-chegou` precisa aparecer conectado.
+
+No plano gratuito, cada chamada tem 10 ms de CPU e o dia tem 100 mil chamadas ([limites](https://developers.cloudflare.com/workers/platform/pricing/)). Para tools que leem e gravam os dados do caso, sobra.
 
 ## O que nunca entra no fork
 
@@ -130,10 +138,10 @@ O fork é público. Nada disto entra em commit, no código ou em arquivo version
 - a senha do banco do Supabase;
 - as chaves do projeto Supabase (a chave secreta e a `service_role`);
 - os tokens de API da Cloudflare;
-- o endereço do servidor no FastMCP Gateway, enquanto a autenticação estiver desligada, e as chaves `fmcp_` do Gateway.
+- o `MCP_TOKEN` do servidor MCP.
 
-Elas ficam no seu gerenciador de senhas, nos secrets do Worker (`wrangler secret put`), nas variáveis de ambiente do FastMCP Gateway, nos secrets do repositório ou nos arquivos locais `.env` e `.dev.vars`, que não entram no git.
+Elas ficam no seu gerenciador de senhas, nos secrets do Worker (`wrangler secret put`), nos secrets do repositório ou nos arquivos locais `.env` e `.dev.vars`, que não entram no git.
 
 ## Registre na pasta do grupo
 
-No `README.md` da pasta do grupo, em `teams/`, o líder preenche o campo **Contas** com o nome da organização no Supabase, o nome da conta na Cloudflare e o nome da organização no FastMCP Gateway. Só os nomes, nunca as chaves nem o endereço do servidor.
+No `README.md` da pasta do grupo, em `teams/`, o líder preenche o campo **Contas** com o nome da organização no Supabase e o nome da conta na Cloudflare. Só os nomes, nunca as chaves.

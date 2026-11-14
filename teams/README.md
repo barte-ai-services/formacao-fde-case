@@ -9,9 +9,9 @@ No `README.md` da pasta do seu grupo:
 - **Nome do grupo**
 - **Integrantes**
 - **Fork líder**: o link do fork onde o grupo junta o trabalho (por exemplo, `https://github.com/<usuario-do-lider>/formacao-fde-case`)
-- **Contas**: o nome da organização no Supabase, o nome da conta na Cloudflare e o nome da organização no FastMCP Gateway. Só os nomes, nunca as chaves
+- **Contas**: o nome da organização no Supabase e o nome da conta na Cloudflare. Só os nomes, nunca as chaves
 
-O líder cria as contas do grupo no Supabase, na Cloudflare e no FastMCP Gateway e convida os integrantes, onde o plano gratuito deixa. O passo a passo está em [CONTAS.md](CONTAS.md).
+O líder cria as contas do grupo no Supabase e na Cloudflare e convida os integrantes. O passo a passo está em [CONTAS.md](CONTAS.md).
 
 Preencham no fork líder, por pull request, como qualquer outra entrega do grupo (veja [Como funciona o PR do grupo](../README.md#como-funciona-o-pr-do-grupo)).
 
