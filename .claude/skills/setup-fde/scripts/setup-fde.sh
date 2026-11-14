@@ -175,8 +175,7 @@ check_check_setup() {
   needs_person check-setup
 }
 
-# O Python que lê JSON: o python3 da máquina ou, sem ele, o do uv. No macOS, o
-# python3 só vale com as ferramentas da Apple, como o git.
+# formacao-fde-ops #57: o Python que lê JSON é o python3, ou o do uv sem ele.
 run_python() {
   if have python3 && git_works; then
     python3 "$@"
@@ -187,10 +186,7 @@ run_python() {
   fi
 }
 
-# Os plugins do Ahrena que o .claude/settings.json do case liga precisam estar
-# instalados e habilitados no Claude Code. Quem instala é o próprio Claude Code,
-# quando a pessoa abre a pasta do case e aceita; o fix não tenta, porque o
-# `claude plugin install` reescreve o settings.json e deixa o fork alterado.
+# formacao-fde-ops #57: os plugins do Ahrena do case, instalados pela pessoa; o fix não instala.
 check_ahrena() {
   local missing
   if [ -z "$CASE_DIR" ]; then STATUS=manual; DETAIL="depende do case-clone"; return; fi
@@ -206,7 +202,7 @@ check_ahrena() {
   fi
 }
 
-# Define STATUS e DETAIL de um item, lendo a máquina sem mudar nada.
+# formacao-fde-ops #57: Define STATUS e DETAIL de um item, lendo a máquina sem mudar nada.
 inspect() {
   STATUS=ok
   DETAIL=""
