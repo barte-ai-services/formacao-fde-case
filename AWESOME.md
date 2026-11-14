@@ -123,6 +123,28 @@ Orquestração de fluxos duráveis: o código espera dias por um evento e retoma
 
 **Use quando:** o processo tem esperas longas e passos que não podem se perder, como pedir uma aprovação, esperar a resposta e só então seguir para o pagamento.
 
+## Para ir além
+
+Ferramentas que fecham os buracos da arquitetura de referência quando o projeto cresce.
+
+### Testar e observar o agente
+
+- **[MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector):** abre o servidor MCP sem o Claude Code, lista as tools e chama uma por uma. **Use quando:** subir o MCP no Worker e ele não responder como esperado. Roda com `npx @modelcontextprotocol/inspector`.
+- **[Langfuse](https://langfuse.com/docs):** rastreia cada chamada do agente, com prompt, tools, custo e tempo, e guarda os resultados dos evals. **Use quando:** precisar comparar uma versão do agente com a anterior.
+- **[PostHog](https://posthog.com/docs):** analytics de produto, gravação de sessões, feature flags e acompanhamento das chamadas de LLM ([LLM analytics](https://posthog.com/docs/ai-engineering)). **Use quando:** pessoas de verdade começarem a usar o produto.
+- **[Grafana](https://grafana.com/docs/grafana/latest/):** painéis de métricas e logs, com plano gratuito no [Grafana Cloud](https://grafana.com/products/cloud/). **Use quando:** a operação precisar acompanhar o agente em produção: volume, erros, tempo de resposta.
+
+### Dados e segredos
+
+- **[DuckDB](https://duckdb.org/docs/):** SQL direto sobre CSV e Parquet, sem servidor. **Use quando:** analisar as notas, os pedidos e os erros do eval no seu computador.
+- **[1Password CLI](https://developer.1password.com/docs/cli/):** guarda as chaves fora do repositório e as injeta no `.env` e nos comandos. **Use quando:** o grupo dividir chaves de API entre si.
+
+### Interface, integrações e APIs
+
+- **[Playwright](https://playwright.dev/python/):** testa a interface ponta a ponta, num navegador de verdade. **Use quando:** o grupo tiver uma tela, como a de quem aprova.
+- **[n8n](https://docs.n8n.io):** automações entre ferramentas, montadas visualmente. **Use quando:** o fluxo for curto e não justificar o Temporal.
+- **[Bruno](https://docs.usebruno.com):** chama e versiona as chamadas de API no próprio repositório. **Use quando:** testar as APIs do Supabase, do Resend ou do Stripe sem escrever código.
+
 ## Regra para todas
 
 O fork é público. Chave de API, token e senha nunca entram em commit: ficam no `.env`, nos secrets do Worker ou nos secrets do repositório. O passo a passo está em [teams/CONTAS.md](teams/CONTAS.md).
