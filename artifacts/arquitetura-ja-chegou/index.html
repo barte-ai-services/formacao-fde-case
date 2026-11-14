@@ -317,7 +317,7 @@ footer { color: var(--faint); font-size: 14px; border-top: 1px solid var(--hair)
         <rect class="box" x="30" y="690" width="1020" height="44" rx="12"/>
         <use href="#i-github" x="48" y="701" width="22" height="22" class="ic-fg"/>
         <text class="t" x="80" y="718">Fork e Actions</text>
-        <text class="s" x="210" y="718">publicam os dois Workers e o MCP, aplicam as migrações e rodam o lote do agente num schedule.</text>
+        <text class="s" x="210" y="718">publicam os dois Workers, aplicam as migrações e rodam o lote do agente num schedule. O MCP sai do Gateway.</text>
 
         <!-- setas: quem usa → borda -->
         <path class="edge" d="M245 134V222" marker-end="url(#ar)"/>
@@ -370,10 +370,10 @@ footer { color: var(--faint); font-size: 14px; border-top: 1px solid var(--hair)
     <ol class="steps">
       <li><b>A nota chega.</b><span>O XML e o PDF vão para um bucket privado do Storage, e a nota vira uma linha em <code>notas</code> com o caminho dos arquivos.</span><span class="who">Storage · notas</span></li>
       <li><b>O lote acorda o agente.</b><span>Um workflow agendado nas Actions roda o Claude Code com as skills do caso. Ele entra no MCP como o usuário do agente, que tem o papel <code>agente</code>.</span><span class="who">GitHub Actions · Claude Code</span></li>
-      <li><b>O agente lê e propõe.</b><span>As tools do FastMCP leem a nota, a ordem de compra e o recebimento da doca com o token do agente. O resultado é uma linha em <code>propostas</code>, com a alçada calculada pelo valor.</span><span class="who">FastMCP · RLS: o agente só insere em propostas</span></li>
-      <li><b>O banco avisa quem decide.</b><span>Um webhook do banco chama o <code>/api</code> a cada proposta nova. O FastAPI busca quem tem o papel daquela alçada e manda o e-mail pelo Resend, com o link da tela.</span><span class="who">Webhook · FastAPI · Resend</span></li>
+      <li><b>O agente lê e propõe.</b><span>As tools do FastMCP leem a nota, a ordem de compra e o recebimento da doca com o token do agente. O resultado é uma linha em <code>propostas</code>, com a justificativa. A alçada não vem do agente: o banco a calcula pelo valor da nota.</span><span class="who">FastMCP · RLS: o agente só insere em propostas</span></li>
+      <li><b>O banco avisa quem decide.</b><span>Um webhook do banco chama o <code>/api</code> a cada proposta nova. O FastAPI chama a função <code>quem_avisar</code>, que devolve só os e-mails de quem tem o papel daquela alçada, e manda o aviso pelo Resend com o link da tela.</span><span class="who">Webhook · FastAPI · Resend</span></li>
       <li><b>Uma pessoa decide.</b><span>Ela entra no Astro com o login do Supabase e vê a nota ao lado da ordem e do recebimento. Ao aprovar ou recusar, o front chama o <code>/api</code> com o JWT dela.</span><span class="who">Astro com React · FastAPI</span></li>
-      <li><b>O banco confere e registra.</b><span>A policy compara o papel do JWT com a alçada da proposta e recusa o que não bate. Se passar, um trigger grava em <code>auditoria</code> quem decidiu, quando e o quê.</span><span class="who">Banco Supabase · RLS · trigger de auditoria</span></li>
+      <li><b>O banco confere e registra.</b><span>A policy compara o papel do JWT com a alçada que o banco tirou do valor da nota e recusa o que não bate. Se passar, um trigger grava em <code>auditoria</code> quem decidiu, quando e o quê.</span><span class="who">Banco Supabase · RLS · trigger de auditoria</span></li>
     </ol>
     <p class="sub">De hora em hora, o Cron do Python Worker procura propostas paradas há mais de dois dias e manda um lembrete. As faixas de alçada vêm do caso (R$ 5 mil, R$ 20 mil, R$ 100 mil e acima). Os papéis de cada faixa aqui são exemplo: quem decide cada uma é pergunta para o cliente.</p>
   </section>
@@ -412,14 +412,27 @@ wrangler deploy</pre>
           </ul>
 <pre tabindex="0"><span class="c">-- o hook que põe o papel no token</span>
 create or replace function public.custom_access_token_hook(event jsonb)
-returns jsonb language plpgsql stable as $$
-declare claims jsonb; papel text;
-begin
-  select p.papel into papel from public.pessoas p
-   where p.id = (event->>'user_id')::uuid;
-  claims := jsonb_set(event->'claims', '{papel}', to_jsonb(papel));
-  return jsonb_set(event, '{claims}', claims);
-end $$;</pre>
+returns jsonb language sql stable as $$
+  select jsonb_set(event, '{claims,papel}', coalesce(
+    (select to_jsonb(p.papel) from public.pessoas p
+      where p.id = (event->>'user_id')::uuid),
+    'null'::jsonb));
+$$;
+
+<span class="c">-- só o Auth executa o hook e lê os papéis</span>
+grant usage on schema public to supabase_auth_admin;
+grant execute on function public.custom_access_token_hook
+  to supabase_auth_admin;
+revoke execute on function public.custom_access_token_hook
+  from authenticated, anon, public;
+grant select on public.pessoas to supabase_auth_admin;
+create policy "o hook lê os papéis" on public.pessoas
+  for select to supabase_auth_admin using (true);
+
+<span class="c"># supabase/config.toml (na nuvem: Authentication › Hooks)</span>
+<span class="c"># [auth.hook.custom_access_token]</span>
+<span class="c"># enabled = true</span>
+<span class="c"># uri = "pg-functions://postgres/public/custom_access_token_hook"</span></pre>
         </article>
       </div>
     </div>
@@ -431,7 +444,7 @@ end $$;</pre>
           <div class="head"><svg class="logo" role="img" aria-label="Python" style="color:var(--python)"><use href="#i-python"/></svg><h4>FastMCP no FastMCP Gateway</h4></div>
           <ul>
             <li>As tools do caso: listar as notas pendentes, ler a nota, a ordem e o recebimento, e registrar a proposta.</li>
-            <li>O <code>SupabaseProvider</code> troca o token Bearer fixo por OAuth 2.1, com o Supabase como servidor de login. Ative o OAuth Server e o registro dinâmico de clientes no projeto.</li>
+            <li>O <code>SupabaseProvider</code> troca o token Bearer fixo por OAuth 2.1, com o Supabase como servidor de login. Ative o OAuth Server e o registro dinâmico de clientes no projeto. O projeto precisa assinar o JWT com chave assimétrica: o padrão do <code>SupabaseProvider</code> é ES256, e com RSA você passa <code>algorithm="RS256"</code>.</li>
             <li>Cada tool pega o token de quem chamou (<code>get_access_token().token</code>) e o repassa ao Supabase. Assim, o RLS vale também para o agente.</li>
             <li>Ele é publicado no FastMCP Gateway, da Prefect: você conecta o fork, aponta <code>main.py:mcp</code> e a URL sai em <code>*.fastmcp.app/mcp</code>.</li>
           </ul>
@@ -461,6 +474,7 @@ async def ler_nota(chave: str) -&gt; dict:
             <li>Cada chamada repassa ao Supabase o JWT de quem está logado. O backend não usa a chave secreta para decidir nada.</li>
             <li>A rota <code>/api/avisos</code> recebe o webhook do banco, confere o segredo compartilhado e manda o e-mail pelo Resend.</li>
             <li>O mesmo Worker tem um Cron Trigger para os lembretes.</li>
+            <li>O aviso e o Cron são os únicos que rodam sem uma pessoa logada. Eles usam a chave secreta só para chamar duas funções do banco, <code>quem_avisar</code> e <code>propostas_paradas</code>, que devolvem e-mails e links e nada mais.</li>
           </ul>
 <pre tabindex="0"><span class="c"># criar e rodar</span>
 uvx --from workers-py pywrangler init
@@ -478,7 +492,9 @@ app = FastAPI()
 async def decidir(id: int):
     ...
 
-Default = asgi.entrypoint(app)
+class Default(asgi.entrypoint(app)):
+    async def scheduled(self, controller, env, ctx):
+        ...  <span class="c"># lembra as propostas paradas</span>
 
 <span class="c"># wrangler.jsonc: "triggers": { "crons": ["0 * * * *"] }</span></pre>
         </article>
@@ -492,7 +508,7 @@ Default = asgi.entrypoint(app)
           <div class="head"><svg class="logo" role="img" aria-label="Supabase" style="color:var(--supabase)"><use href="#i-supabase"/></svg><h4>O banco no Supabase: RLS, Storage e o webhook</h4></div>
           <ul>
             <li>O esquema vive em migrações versionadas no fork, e o desenvolvimento usa o Supabase local com Docker.</li>
-            <li>Todas as tabelas têm RLS ligado. O agente insere em <code>propostas</code> e não toca em <code>aprovacoes</code>. Uma pessoa só aprova até o limite do papel dela.</li>
+            <li>Todas as tabelas têm RLS ligado. O agente insere em <code>propostas</code> e não toca em <code>aprovacoes</code>. Uma pessoa só aprova até o limite do papel dela, e a alçada sai do valor da nota, nunca do texto do agente.</li>
             <li>O webhook é um trigger com <code>pg_net</code>. A URL e o segredo dele ficam no Vault, fora das migrações.</li>
             <li>O bucket <code>notas</code> é privado, e o PDF só abre por URL assinada.</li>
           </ul>
@@ -544,12 +560,12 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
       <table>
         <thead><tr><th>Tabela</th><th>O que guarda</th><th>Quem escreve</th></tr></thead>
         <tbody>
-          <tr><td><code>pessoas</code></td><td>Quem usa o sistema e o papel de cada um, que o hook põe no JWT</td><td>Só a diretoria</td></tr>
+          <tr><td><code>pessoas</code></td><td>O papel de cada usuário do Auth, que o hook põe no JWT. O e-mail vem de <code>auth.users</code></td><td>Só a diretoria</td></tr>
           <tr><td><code>fornecedores</code></td><td>CNPJ, razão social e dados de pagamento</td><td>Cadastro, pela importação</td></tr>
           <tr><td><code>notas</code></td><td>Chave de acesso, emitente, valor, itens e o caminho do XML e do PDF no Storage</td><td>A importação das notas</td></tr>
           <tr><td><code>ordens</code></td><td>Ordens de compra: itens, quantidades e preços combinados</td><td>A importação do ERP</td></tr>
           <tr><td><code>recebimentos</code></td><td>O que a doca conferiu de cada ordem</td><td>A importação da doca</td></tr>
-          <tr><td><code>propostas</code></td><td>O que o agente sugere para cada nota, com a justificativa, o valor e a alçada</td><td>Só o papel <code>agente</code></td></tr>
+          <tr><td><code>propostas</code></td><td>O que o agente sugere para cada nota, com a justificativa. A alçada é calculada por um trigger a partir de <code>notas.valor</code>, e o agente não consegue mudá-la</td><td>Só o papel <code>agente</code></td></tr>
           <tr><td><code>aprovacoes</code></td><td>A decisão de uma pessoa sobre uma proposta: aprovar ou recusar, e o motivo</td><td>Só uma pessoa com o papel da alçada</td></tr>
           <tr><td><code>auditoria</code></td><td>Cada mudança: quem, quando, a tabela e o antes e o depois</td><td>Só os triggers; ninguém altera nem apaga</td></tr>
           <tr><td>bucket <code>notas</code></td><td>XML e PDF originais, num bucket privado</td><td>A importação. A leitura é só por URL assinada</td></tr>
@@ -560,7 +576,7 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
 
   <section aria-labelledby="auth">
     <h2 id="auth">Quem se autentica onde</h2>
-    <p class="sub">Em uso, nenhum salto tem uma chave que passe por cima do RLS. Só os passos de publicação têm acesso amplo, e as credenciais deles ficam nos secrets do repositório.</p>
+    <p class="sub">Em uso, só o aviso (o webhook e o Cron) lê fora do RLS, e só o que precisa para avisar: os e-mails e os links. Os passos de publicação têm acesso amplo, e as credenciais deles ficam nos secrets do repositório.</p>
     <div class="table-wrap" tabindex="0" role="region" aria-label="Credenciais por salto">
       <table>
         <thead><tr><th>Salto</th><th>Credencial</th><th>Onde fica</th></tr></thead>
@@ -571,6 +587,7 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
           <tr><td>Lote → <code>/mcp</code></td><td>O JWT do usuário do agente, com o papel <code>agente</code>, pedido ao Supabase Auth no início do workflow</td><td>O e-mail e a senha desse usuário nos secrets do repositório</td></tr>
           <tr><td><code>/api</code> e <code>/mcp</code> → Supabase</td><td>A chave publicável mais o JWT de quem chamou, e o RLS vale</td><td>A chave publicável nas variáveis do Worker e do Gateway</td></tr>
           <tr><td>Banco → <code>/api/avisos</code></td><td>Um segredo compartilhado no cabeçalho do webhook</td><td>No Vault do Supabase e num secret do Worker</td></tr>
+          <tr><td>Aviso e Cron → Supabase</td><td>A chave secreta, usada só para chamar <code>quem_avisar</code> e <code>propostas_paradas</code></td><td>Num secret do Worker (<code>wrangler secret put SUPABASE_SECRET_KEY</code>)</td></tr>
           <tr><td><code>/api</code> → Resend</td><td>API key do Resend</td><td>Num secret do Worker (<code>wrangler secret put RESEND_API_KEY</code>)</td></tr>
           <tr><td>Actions → Cloudflare e Supabase</td><td>API token e ID da conta; access token e senha do banco</td><td>Nos secrets do repositório</td></tr>
         </tbody>
@@ -610,7 +627,7 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
         <article class="tool">
           <div class="tool-head"><svg class="logo" role="img" aria-label="Cloudflare" style="color:var(--cloudflare)"><use href="#i-cloudflare"/></svg><h4>Cloudflare</h4></div>
           <p class="role">O front em Astro e o FastAPI, cada um num Worker, com o Cron dos lembretes.</p>
-          <p class="when">Publicar uma API, um MCP ou uma página sem cuidar de infraestrutura.</p>
+          <p class="when">Publicar uma API ou uma página sem cuidar de infraestrutura.</p>
           <ul><li><a href="https://developers.cloudflare.com/workers/" target="_blank" rel="noopener">Workers</a></li><li><a href="https://developers.cloudflare.com/workers/wrangler/" target="_blank" rel="noopener">Wrangler</a></li><li><a href="https://developers.cloudflare.com/workers/configuration/cron-triggers/" target="_blank" rel="noopener">Cron Triggers</a></li><li><a href="https://developers.cloudflare.com/workers/languages/python/" target="_blank" rel="noopener">Workers em Python</a></li></ul>
         </article>
         <article class="tool">
@@ -626,7 +643,7 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
           <ul><li><a href="https://gofastmcp.com" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://gofastmcp.com/integrations/supabase" target="_blank" rel="noopener">Login com o Supabase</a></li><li><a href="https://gofastmcp.com/deployment/fastmcp-cloud" target="_blank" rel="noopener">FastMCP Gateway</a></li></ul>
         </article>
         <article class="tool">
-          <div class="tool-head"><svg class="logo" role="img" aria-label="Python" style="color:#3776AB"><use href="#i-python"/></svg><h4>Python</h4></div>
+          <div class="tool-head"><svg class="logo" role="img" aria-label="Python" style="color:var(--python)"><use href="#i-python"/></svg><h4>Python</h4></div>
           <p class="role">A linguagem do backend, do kit e das tools.</p>
           <p class="when">O FastAPI, o FastMCP, os scripts e os testes do projeto.</p>
           <ul><li><a href="https://docs.astral.sh/uv/" target="_blank" rel="noopener">uv</a></li><li><a href="https://docs.pytest.org" target="_blank" rel="noopener">pytest</a></li><li><a href="https://docs.pydantic.dev" target="_blank" rel="noopener">Pydantic</a></li><li><a href="https://fastapi.tiangolo.com" target="_blank" rel="noopener">FastAPI</a></li><li><a href="https://developers.cloudflare.com/workers/languages/python/packages/fastapi/" target="_blank" rel="noopener">FastAPI num Python Worker</a></li></ul>
