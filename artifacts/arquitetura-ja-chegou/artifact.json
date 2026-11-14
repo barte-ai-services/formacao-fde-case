@@ -1,0 +1,14 @@
+{
+  "pages": {
+    "arquitetura-ja-chegou": {
+      "file": "index.html",
+      "title": "Arquitetura Já Chegou",
+      "home": "team",
+      "links": {
+        "team": "https://claude.ai/artifact/8MzayYjsfMepQohd1b3DVJ"
+      },
+      "capabilities": {}
+    }
+  },
+  "publishOrder": ["arquitetura-ja-chegou"]
+}

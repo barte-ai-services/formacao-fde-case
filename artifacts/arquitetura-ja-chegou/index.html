@@ -1,0 +1,289 @@
+<title>Arquitetura Já Chegou</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+/* Layout: a mesma moldura do deck da Formação FDE. Um fluxo de três peças, a peça que fica embaixo (GitHub), e depois as peças uma a uma. */
+:root {
+  --bg: #FAF8F4;
+  --surface: #FFFFFF;
+  --surface-2: #F1EEE8;
+  --fg: #171717;
+  --muted: #5B5853;
+  --faint: #8A867F;
+  --hair: rgba(23,23,23,.10);
+  --grid: rgba(23,23,23,.045);
+  --pink: #DF285D;
+  --claude: #D97757;
+  --cloudflare: #F38020;
+  --supabase: #3ECF8E;
+  --ink-card: #171717;
+  --ink-card-fg: #FAF8F4;
+  --ink-card-muted: #BDB8B0;
+  --code-bg: #171717;
+  --code-fg: #F1EEE8;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141312; --surface: #1D1C1A; --surface-2: #232220; --fg: #F1EEE8; --muted: #B5B0A8; --faint: #8F8A82;
+    --hair: rgba(241,238,232,.12); --grid: rgba(241,238,232,.04); --pink: #F0567F;
+    --ink-card: #0B0B0A; --ink-card-fg: #F1EEE8; --ink-card-muted: #A8A39B; --code-bg: #0B0B0A; --code-fg: #F1EEE8;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141312; --surface: #1D1C1A; --surface-2: #232220; --fg: #F1EEE8; --muted: #B5B0A8; --faint: #8F8A82;
+  --hair: rgba(241,238,232,.12); --grid: rgba(241,238,232,.04); --pink: #F0567F;
+  --ink-card: #0B0B0A; --ink-card-fg: #F1EEE8; --ink-card-muted: #A8A39B; --code-bg: #0B0B0A; --code-fg: #F1EEE8;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  background-image: linear-gradient(to right, var(--grid) 1px, transparent 1px), linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 64px 64px;
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-block: 56px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+.eyebrow { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); font-weight: 500; margin: 0; }
+h1 { font-weight: 400; font-size: clamp(40px, 7vw, 76px); line-height: 1.02; letter-spacing: -0.035em; margin: 10px 0 0; text-wrap: balance; }
+h1 em, h2 em { font-family: var(--serif); font-style: italic; letter-spacing: -0.01em; }
+h1 em { color: var(--pink); }
+h2 { font-weight: 400; font-size: clamp(28px, 4vw, 40px); line-height: 1.1; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+.lead { font-size: 19px; color: var(--muted); max-width: 64ch; margin: 18px 0 0; }
+p { margin: 0; }
+section { display: flex; flex-direction: column; gap: 22px; }
+
+/* ícones */
+.logo { width: 28px; height: 28px; flex: none; }
+.logo path { fill: currentColor; }
+
+/* fluxo */
+.flow { display: grid; grid-template-columns: minmax(0,1fr) 88px minmax(0,1fr) 88px minmax(0,1fr); align-items: stretch; }
+.node { border-radius: 20px; padding: 22px 22px 24px; display: flex; flex-direction: column; gap: 10px; background: var(--surface); border: 1px solid var(--hair); box-shadow: 0 10px 30px rgba(23,23,23,.06); min-width: 0; }
+.node .head { display: flex; align-items: center; gap: 10px; }
+.node .vendor { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
+.node .name { font-size: 24px; letter-spacing: -0.01em; }
+.node .what { color: var(--muted); font-size: 15.5px; }
+.node.claude { background: var(--ink-card); border-color: var(--ink-card); color: var(--ink-card-fg); }
+.node.claude .name { color: var(--claude); }
+.node.claude .what, .node.claude .vendor { color: var(--ink-card-muted); }
+.node.claude .logo { color: var(--claude); }
+.node.cf { border-color: color-mix(in srgb, var(--cloudflare) 45%, transparent); }
+.node.cf .logo { color: var(--cloudflare); }
+.node.sb .logo { color: var(--supabase); }
+.edge { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 0 6px; text-align: center; }
+.edge .arrow { width: 100%; height: 14px; color: var(--faint); }
+.edge .proto { font-size: 13px; color: var(--fg); font-weight: 500; }
+.edge .auth { font-size: 12px; color: var(--faint); line-height: 1.35; }
+.below { display: grid; grid-template-columns: minmax(0,1fr) 88px minmax(0,2fr) ; margin-top: 18px; }
+.node.gh .logo { color: var(--fg); }
+.node.gh { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 18px; flex-wrap: wrap; }
+.node.gh .text { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1 1 320px; }
+
+/* peças */
+.pieces { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; }
+.piece { background: var(--surface); border: 1px solid var(--hair); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.piece .head { display: flex; align-items: center; gap: 10px; }
+.piece h3 { font-weight: 500; font-size: 19px; margin: 0; }
+.piece ul { margin: 0; padding-left: 18px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
+.piece.claude .logo { color: var(--claude); }
+.piece.cf .logo { color: var(--cloudflare); }
+.piece.sb .logo { color: var(--supabase); }
+.piece.gh .logo { color: var(--fg); }
+pre { margin: 0; background: var(--code-bg); color: var(--code-fg); border-radius: 12px; padding: 14px 16px; overflow-x: auto; font-family: var(--mono); font-size: 13.5px; line-height: 1.6; }
+pre .c { color: #8F8A82; }
+code { font-family: var(--mono); font-size: .92em; }
+
+/* autenticação */
+.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--hair); border-radius: 20px; }
+table { width: 100%; border-collapse: collapse; font-size: 15.5px; min-width: 640px; }
+th { text-align: left; font-weight: 500; font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); padding: 16px 20px 12px; border-bottom: 1px solid var(--hair); }
+td { padding: 14px 20px; border-bottom: 1px solid var(--hair); vertical-align: top; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+td:first-child { color: var(--fg); white-space: nowrap; }
+
+.note { border-left: 3px solid var(--pink); padding: 4px 0 4px 18px; color: var(--muted); max-width: 70ch; }
+.note strong { color: var(--fg); font-weight: 500; }
+footer { color: var(--faint); font-size: 14px; border-top: 1px solid var(--hair); padding-top: 18px; }
+
+@media (max-width: 860px) {
+  .flow { grid-template-columns: minmax(0,1fr); }
+  .edge { flex-direction: row; justify-content: flex-start; padding: 10px 6px; text-align: left; gap: 12px; }
+  .edge .arrow { width: 14px; height: 40px; transform: none; }
+  .edge .arrow.h { display: none; }
+  .edge .arrow.v { display: block; }
+  .below { grid-template-columns: minmax(0,1fr); }
+  .pieces { grid-template-columns: minmax(0,1fr); }
+}
+.edge .arrow.v { display: none; }
+@media (max-width: 860px) { .edge .arrow.v { display: block; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-claude" viewBox="0 0 24 24"><path fill="currentColor" d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></symbol>
+  <symbol id="i-cloudflare" viewBox="0 0 24 24"><path fill="currentColor" d="M16.5088 16.8447c.1475-.5068.0908-.9707-.1553-1.3154-.2246-.3164-.6045-.499-1.0615-.5205l-8.6592-.1123a.1559.1559 0 0 1-.1333-.0713c-.0283-.042-.0351-.0986-.021-.1553.0278-.084.1123-.1484.2036-.1562l8.7359-.1123c1.0351-.0489 2.1601-.8868 2.5537-1.9136l.499-1.3013c.0215-.0561.0293-.1128.0147-.168-.5625-2.5463-2.835-4.4453-5.5499-4.4453-2.5039 0-4.6284 1.6177-5.3876 3.8614-.4927-.3658-1.1187-.5625-1.794-.499-1.2026.119-2.1665 1.083-2.2861 2.2856-.0283.31-.0069.6128.0635.894C1.5683 13.171 0 14.7754 0 16.752c0 .1748.0142.3515.0352.5273.0141.083.0844.1475.1689.1475h15.9814c.0909 0 .1758-.0645.2032-.1553l.12-.4268zm2.7568-5.5634c-.0771 0-.1611 0-.2383.0112-.0566 0-.1054.0415-.127.0976l-.3378 1.1744c-.1475.5068-.0918.9707.1543 1.3164.2256.3164.6055.498 1.0625.5195l1.8437.1133c.0557 0 .1055.0263.1329.0703.0283.043.0351.1074.0214.1562-.0283.084-.1132.1485-.204.1553l-1.921.1123c-1.041.0488-2.1582.8867-2.5527 1.914l-.1406.3585c-.0283.0713.0215.1416.0986.1416h6.5977c.0771 0 .1474-.0489.169-.126.1122-.4082.1757-.837.1757-1.2803 0-2.6025-2.125-4.727-4.7344-4.727"/></symbol>
+  <symbol id="i-supabase" viewBox="0 0 24 24"><path fill="currentColor" d="M11.9 1.036c-.015-.986-1.26-1.41-1.874-.637L.764 12.05C-.33 13.427.65 15.455 2.409 15.455h9.579l.113 7.51c.014.985 1.259 1.408 1.873.636l9.262-11.653c1.093-1.375.113-3.403-1.645-3.403h-9.642z"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></symbol>
+</svg>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Formação FDE · caso Já Chegou</p>
+    <h1>Arquitetura de referência.<br><em>Claude Code, um MCP na Cloudflare e o Supabase.</em></h1>
+    <p class="lead">Uma proposta de stack para o grupo partir: o agente roda no Claude Code, as tools do caso ficam num servidor MCP próprio num Cloudflare Worker, e os dados ficam no Supabase. O GitHub guarda o código e publica as duas pontas.</p>
+  </header>
+
+  <section aria-labelledby="fluxo">
+    <h2 id="fluxo">O fluxo</h2>
+    <div class="flow">
+      <div class="node claude">
+        <div class="head"><svg class="logo" role="img" aria-label="Claude"><use href="#i-claude"/></svg><span class="vendor">Agente</span></div>
+        <p class="name">Claude Code</p>
+        <p class="what">Lê as notas pelo MCP, aplica as skills e grava a proposta. No terminal, no app ou num job.</p>
+      </div>
+      <div class="edge">
+        <svg class="arrow h" viewBox="0 0 88 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 7H82M76 2l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        <svg class="arrow v" viewBox="0 0 14 40" aria-hidden="true"><path d="M7 2V34M2 28l5 6 5-6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        <div><p class="proto">MCP por HTTP</p><p class="auth">token Bearer</p></div>
+      </div>
+      <div class="node cf">
+        <div class="head"><svg class="logo" role="img" aria-label="Cloudflare"><use href="#i-cloudflare"/></svg><span class="vendor">Cloudflare Workers</span></div>
+        <p class="name">Servidor MCP</p>
+        <p class="what">As tools do caso: ler nota, pedido e recebimento, e registrar a proposta. Publicado com o Wrangler.</p>
+      </div>
+      <div class="edge">
+        <svg class="arrow h" viewBox="0 0 88 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 7H82M76 2l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        <svg class="arrow v" viewBox="0 0 14 40" aria-hidden="true"><path d="M7 2V34M2 28l5 6 5-6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        <div><p class="proto">supabase-js</p><p class="auth">chave secreta no Worker</p></div>
+      </div>
+      <div class="node sb">
+        <div class="head"><svg class="logo" role="img" aria-label="Supabase"><use href="#i-supabase"/></svg><span class="vendor">Supabase</span></div>
+        <p class="name">Banco e auth</p>
+        <p class="what">Postgres com notas, pedidos de compra, recebimentos da doca e as propostas do agente. Auth e Storage se precisar.</p>
+      </div>
+    </div>
+    <div class="below">
+      <div class="node gh">
+        <svg class="logo" role="img" aria-label="GitHub"><use href="#i-github"/></svg>
+        <div class="text">
+          <span class="vendor">GitHub</span>
+          <p class="name">Repositório e Actions</p>
+          <p class="what">O fork guarda o código do Worker e as migrações do Supabase. Cada merge na main publica o Worker e aplica as migrações. O Claude Code também pode rodar num job, com o token do <code>claude setup-token</code>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="pecas">
+    <h2 id="pecas">Peça a peça</h2>
+    <div class="pieces">
+      <article class="piece claude">
+        <div class="head"><svg class="logo" role="img" aria-label="Claude"><use href="#i-claude"/></svg><h3>Claude Code</h3></div>
+        <ul>
+          <li>Na máquina, entra com a conta de cada um.</li>
+          <li>Fora dela, num job ou servidor, usa um token de longa duração da assinatura, gerado uma vez.</li>
+          <li>O servidor MCP entra como qualquer outro, apontando para a URL do Worker.</li>
+        </ul>
+<pre><span class="c"># token de longa duração, para jobs</span>
+claude setup-token
+<span class="c"># no job: CLAUDE_CODE_OAUTH_TOKEN=&lt;token&gt;</span>
+
+<span class="c"># ligar o MCP do caso</span>
+claude mcp add --transport http ja-chegou \
+  https://ja-chegou-mcp.&lt;conta&gt;.workers.dev/mcp \
+  --header "Authorization: Bearer $MCP_TOKEN"</pre>
+      </article>
+
+      <article class="piece cf">
+        <div class="head"><svg class="logo" role="img" aria-label="Cloudflare"><use href="#i-cloudflare"/></svg><h3>Servidor MCP no Worker</h3></div>
+        <ul>
+          <li>Um Worker que fala MCP por HTTP, com as tools do caso.</li>
+          <li>Confere o token Bearer antes de qualquer tool.</li>
+          <li>Os segredos ficam no Worker, nunca no código nem no repositório.</li>
+        </ul>
+<pre><span class="c"># criar o projeto</span>
+npm create cloudflare@latest -- ja-chegou-mcp
+
+<span class="c"># segredos do Worker</span>
+wrangler secret put MCP_TOKEN
+wrangler secret put SUPABASE_SECRET_KEY
+
+<span class="c"># publicar</span>
+wrangler deploy</pre>
+      </article>
+
+      <article class="piece sb">
+        <div class="head"><svg class="logo" role="img" aria-label="Supabase"><use href="#i-supabase"/></svg><h3>Supabase</h3></div>
+        <ul>
+          <li>Local com Docker para desenvolver, na nuvem para publicar.</li>
+          <li>O esquema vive em migrações versionadas no repositório.</li>
+          <li>Só o Worker conhece a chave secreta. O Claude Code nunca fala direto com o banco.</li>
+        </ul>
+<pre><span class="c"># local</span>
+supabase init
+supabase start
+supabase migration new criar_tabelas
+
+<span class="c"># nuvem</span>
+supabase link --project-ref &lt;ref&gt;
+supabase db push --remote</pre>
+      </article>
+
+      <article class="piece gh">
+        <div class="head"><svg class="logo" role="img" aria-label="GitHub"><use href="#i-github"/></svg><h3>GitHub</h3></div>
+        <ul>
+          <li>Fork, branch e pull request, como em qualquer projeto.</li>
+          <li>Actions publica o Worker e aplica as migrações depois do merge.</li>
+          <li>Os tokens da Cloudflare, do Supabase e do Claude ficam nos secrets do repositório.</li>
+        </ul>
+<pre><span class="c"># secrets do repositório</span>
+gh secret set CLOUDFLARE_API_TOKEN
+gh secret set CLOUDFLARE_ACCOUNT_ID
+gh secret set SUPABASE_ACCESS_TOKEN
+gh secret set SUPABASE_DB_PASSWORD
+gh secret set CLAUDE_CODE_OAUTH_TOKEN
+
+<span class="c"># actions: cloudflare/wrangler-action@v4</span>
+<span class="c">#          supabase/setup-cli@v3</span>
+<span class="c">#          anthropics/claude-code-action@v1</span></pre>
+      </article>
+    </div>
+  </section>
+
+  <section aria-labelledby="auth">
+    <h2 id="auth">Quem se autentica onde</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Salto</th><th>Credencial</th><th>Onde fica</th></tr></thead>
+        <tbody>
+          <tr><td>Você → Claude Code</td><td>Login da sua conta, ou o token do <code>claude setup-token</code> num job</td><td>Na sua máquina, ou em <code>CLAUDE_CODE_OAUTH_TOKEN</code> nos secrets do repositório</td></tr>
+          <tr><td>Claude Code → MCP</td><td>Token Bearer no cabeçalho <code>Authorization</code></td><td>No <code>claude mcp add</code> de cada um e no secret <code>MCP_TOKEN</code> do Worker</td></tr>
+          <tr><td>MCP → Supabase</td><td>Chave secreta do projeto</td><td>Só no secret <code>SUPABASE_SECRET_KEY</code> do Worker</td></tr>
+          <tr><td>Actions → Cloudflare</td><td>API token e ID da conta</td><td><code>CLOUDFLARE_API_TOKEN</code> e <code>CLOUDFLARE_ACCOUNT_ID</code> nos secrets do repositório</td></tr>
+          <tr><td>Actions → Supabase</td><td>Access token pessoal e senha do banco</td><td><code>SUPABASE_ACCESS_TOKEN</code> e <code>SUPABASE_DB_PASSWORD</code> nos secrets do repositório</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><strong>O fork é público.</strong> Nenhum desses tokens entra em commit, no código ou no <code>.env</code> versionado. Eles vivem nos secrets do Worker, nos secrets do repositório ou na sua máquina.</p>
+  </section>
+
+  <footer>Um ponto de partida, não a solução do caso: cada peça pode ser trocada. Ícones de Simple Icons; as marcas são de seus donos.</footer>
+</div>
