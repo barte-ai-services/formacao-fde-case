@@ -18,6 +18,7 @@
   --claude: #D97757;
   --cloudflare: #F38020;
   --supabase: #3ECF8E;
+  --astro: #BC52EE;
   --ink-card: #171717;
   --ink-card-fg: #FAF8F4;
   --ink-card-muted: #BDB8B0;
@@ -107,6 +108,7 @@ section { display: flex; flex-direction: column; gap: 22px; }
 .piece.claude .logo { color: var(--claude); }
 .piece.cf .logo { color: var(--cloudflare); }
 .piece.sb .logo { color: var(--supabase); }
+.piece.astro .logo { color: var(--astro); }
 .piece.gh .logo { color: var(--fg); }
 pre { margin: 0; background: var(--code-bg); color: var(--code-fg); border-radius: 12px; padding: 14px 16px; overflow-x: auto; font-family: var(--mono); font-size: 13.5px; line-height: 1.6; }
 pre .c { color: #8F8A82; }
@@ -166,13 +168,14 @@ footer { color: var(--faint); font-size: 14px; border-top: 1px solid var(--hair)
   <symbol id="i-1password" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c6.627 0 12 5.373 12 12 0 6.628-5.373 12-12 12S0 18.628 0 12C0 5.373 5.373 0 12 0m-.893 4.86c-.485 0-.727.001-.913.095a.87.87 0 0 0-.378.379c-.094.185-.095.428-.095.912v2.747c0 .12 0 .182.016.238q.02.075.065.138a1 1 0 0 0 .175.162l.695.564c.113.092.17.139.19.194a.22.22 0 0 1 0 .15c-.02.056-.077.102-.19.194l-.695.564a1 1 0 0 0-.175.162.4.4 0 0 0-.065.138 1 1 0 0 0-.016.238v6.019c0 .485 0 .728.095.913a.87.87 0 0 0 .378.378c.186.094.428.094.913.094h1.786c.485 0 .727 0 .913-.094a.87.87 0 0 0 .378-.378c.095-.185.095-.428.095-.913v-2.747c0-.12 0-.182-.016-.238a.4.4 0 0 0-.065-.138 1 1 0 0 0-.175-.162l-.695-.564c-.113-.092-.17-.138-.191-.193a.22.22 0 0 1 0-.152c.02-.055.078-.1.19-.193l.696-.564a1 1 0 0 0 .175-.162.4.4 0 0 0 .065-.138 1 1 0 0 0 .016-.238V6.246c0-.484 0-.727-.095-.912a.87.87 0 0 0-.378-.379c-.186-.094-.428-.094-.913-.094Z"/></symbol>
   <symbol id="i-n8n" viewBox="0 0 24 24"><path fill="currentColor" d="M4.8 16.8c.45 0 .6-.15.6-.6V15c0-1.8.6-2.4 2.4-2.4H9c1.8 0 2.4.6 2.4 2.4v1.2c0 .45.15.6.6.6s.6-.15.6-.6V15c0-1.8.6-2.4 2.4-2.4h1.2c1.8 0 2.4.6 2.4 2.4v1.2c0 .45.15.6.6.6s.6-.15.6-.6V15c0-1.8.6-2.4 2.4-2.4h1.2c.45 0 .6-.15.6-.6s-.15-.6-.6-.6h-1.2c-1.8 0-2.4-.6-2.4-2.4V7.8c0-.45-.15-.6-.6-.6s-.6.15-.6.6V9c0 1.8-.6 2.4-2.4 2.4H15c-1.8 0-2.4-.6-2.4-2.4V7.8c0-.45-.15-.6-.6-.6s-.6.15-.6.6V9c0 1.8-.6 2.4-2.4 2.4H7.8c-1.8 0-2.4-.6-2.4-2.4V7.8c0-.45-.15-.6-.6-.6s-.6.15-.6.6V9c0 1.8-.6 2.4-2.4 2.4H.6c-.45 0-.6.15-.6.6s.15.6.6.6h1.2c1.8 0 2.4.6 2.4 2.4v1.2c0 .45.15.6.6.6"/></symbol>
   <symbol id="i-bruno" viewBox="0 0 24 24"><path fill="currentColor" d="M9.394 9.583s-.742.511-1.13.275c-.387-.236-.51-.742-.274-1.129.236-.388.742-.511 1.129-.275.388.236.275 1.129.275 1.129m1.48 3.245-.308.82.582.24c.04-.224.254-.372.477-.332.224.041.372.254.332.478-.093.515-.638.813-1.122.613l-.95-.391a.41.41 0 0 1-.228-.524l.448-1.193c.12-.32.426-.533.769-.533h2.525l.239.036c.076.023.148.057.214.101a.817.817 0 0 1 .303.363l.476 1.12c.083.197.002.425-.187.524l-.896.471c-.505.266-1.121-.053-1.196-.62a.411.411 0 0 1 .353-.461.411.411 0 0 1 .461.353l.56-.294-.327-.771zM9.353 17.98c-.959-.514-2.183-1.54-1.961-3.22.029-.225.236-.383.461-.354.225.03.383.236.353.461-.167 1.272.822 2.009 1.546 2.395.348.185.771.151 1.081-.092l.903-.708v-1.045c0-.226.184-.41.411-.41s.411.184.411.41v1.045l.903.708c.19.15.423.22.655.209a.45.45 0 0 1 .074-.019.42.42 0 0 1 .093-.003c.089-.02.176-.051.259-.095.724-.386 1.713-1.123 1.546-2.395a.411.411 0 0 1 .353-.461c.225-.029.432.129.461.354.223 1.688-1.013 2.716-1.974 3.227-.072.038-.145.071-.22.099.148 1.424-.14 2.562-.449 3.24-.169.37-.355.617-.49.732-.194.167-.517.305-.933.366-.531.078-1.227.039-1.945-.182-.576-.177-.973-.686-1.208-1.343-.362-1.009-.352-2.368-.33-2.919m4.54.213a1.81 1.81 0 0 1-.939-.376l-.807-.633-.807.633c-.341.268-.758.397-1.173.384-.012.453-.001 1.219.15 1.922.072.333.174.652.329.908.122.2.275.361.486.425.586.18 1.152.218 1.585.155.227-.033.412-.086.518-.176.115-.099.259-.363.395-.744.213-.597.367-1.46.263-2.498m-8.683-.955-.191.402c-.384.81-1.475.955-2.053.27-.81-.961-1.948-2.505-2.548-4.068-.427-1.115-.576-2.241-.213-3.198C2.894 3.559 6.247 2.969 6.98 2.928c1.34-.865 5.583-2.807 10.424.342.795-.051 4.042.203 6.424 7.252.325.961.162 2.081-.263 3.186-.599 1.557-1.709 3.088-2.5 4.046-.574.695-1.675.553-2.061-.262l-.133-.28c-.219.369-.524.832-.901 1.281-.57.679-1.306 1.32-2.154 1.598a.412.412 0 0 1-.519-.263.4114.4114 0 0 1 .263-.518c.705-.231 1.306-.78 1.781-1.345.556-.662.938-1.355 1.097-1.666l-.245-.518c-.126-.264-.154-.56-.078-.842.246-.924.981-4.015.071-6.043a.4105.4105 0 1 1 .749-.336c.993 2.212.243 5.583-.026 6.591a.405.405 0 0 0 .026.278l.811 1.712c.129.27.494.32.685.089.748-.904 1.801-2.346 2.367-3.817.351-.912.52-1.834.252-2.628-2.447-7.241-5.667-6.687-5.667-6.687a.416.416 0 0 1-.309-.061C12.48.972 8.456 2.917 7.339 3.676a.41.41 0 0 1-.252.07S3.739 3.649.973 10.935c-.297.783-.137 1.701.213 2.612.565 1.475 1.644 2.927 2.408 3.833.192.228.555.177.683-.092l.816-1.723a.4.4 0 0 0 .027-.278c-.269-1.008-1.02-4.38-.027-6.592a.4113.4113 0 0 1 .543-.206c.207.093.3.336.207.543-.911 2.028-.176 5.119.071 6.043.075.282.047.578-.078.842l-.203.427c.117.226 1.249 2.351 2.958 2.911.216.071.334.303.263.519a.4115.4115 0 0 1-.519.262c-1.484-.487-2.606-1.983-3.125-2.798m10.247-7.655s-.114-.893.274-1.129a.821.821 0 0 1 1.129.275c.236.387.113.893-.274 1.129-.388.236-1.129-.275-1.129-.275"/></symbol>
+  <symbol id="i-astro" viewBox="0 0 24 24"><path fill="currentColor" d="M8.358 20.162c-1.186-1.07-1.532-3.316-1.038-4.944.856 1.026 2.043 1.352 3.272 1.535 1.897.283 3.76.177 5.522-.678.202-.098.388-.229.608-.36.166.473.209.95.151 1.437-.14 1.185-.738 2.1-1.688 2.794-.38.277-.782.525-1.175.787-1.205.804-1.531 1.747-1.078 3.119l.044.148a3.158 3.158 0 0 1-1.407-1.188 3.31 3.31 0 0 1-.544-1.815c-.004-.32-.004-.642-.048-.958-.106-.769-.472-1.113-1.161-1.133-.707-.02-1.267.411-1.415 1.09-.012.053-.028.104-.045.165h.002zm-5.961-4.445s3.24-1.575 6.49-1.575l2.451-7.565c.092-.366.36-.614.662-.614.302 0 .57.248.662.614l2.45 7.565c3.85 0 6.491 1.575 6.491 1.575L16.088.727C15.93.285 15.663 0 15.303 0H8.697c-.36 0-.615.285-.784.727l-5.516 14.99z"/></symbol>
 </svg>
 
 <div class="wrap">
   <header>
     <p class="eyebrow">Formação FDE · caso Já Chegou</p>
     <h1>Arquitetura de referência.<br><em>Claude Code, um MCP na Cloudflare e o Supabase.</em></h1>
-    <p class="lead">Uma proposta de stack para o grupo partir: o agente roda no Claude Code, as tools do caso ficam num servidor MCP próprio num Cloudflare Worker, e os dados ficam no Supabase. O GitHub guarda o código e publica as duas pontas.</p>
+    <p class="lead">Uma proposta de stack para o grupo partir: o agente roda no Claude Code, as tools do caso ficam num servidor MCP próprio num Cloudflare Worker, e os dados ficam no Supabase. A tela de quem aprova é um front-end em Astro, também na Cloudflare. O GitHub guarda o código e publica tudo.</p>
   </header>
 
   <section aria-labelledby="fluxo">
@@ -251,6 +254,24 @@ wrangler secret put MCP_TOKEN
 wrangler secret put SUPABASE_SECRET_KEY
 
 <span class="c"># publicar</span>
+wrangler deploy</pre>
+      </article>
+
+      <article class="piece astro">
+        <div class="head"><svg class="logo" role="img" aria-label="Astro"><use href="#i-astro"/></svg><h3>Front-end em Astro</h3></div>
+        <ul>
+          <li>A tela de quem aprova: as propostas do agente, a nota ao lado do pedido e do recebimento, aprovar ou recusar.</li>
+          <li>Páginas estáticas onde der; renderizadas no servidor onde precisam dos dados de quem está logado.</li>
+          <li>Publicado num Worker da Cloudflare com o adaptador <code>@astrojs/cloudflare</code>, como o MCP.</li>
+        </ul>
+<pre><span class="c"># criar o projeto</span>
+npm create astro@latest
+
+<span class="c"># adaptador da Cloudflare</span>
+npx astro add cloudflare
+
+<span class="c"># publicar</span>
+npm run build
 wrangler deploy</pre>
       </article>
 
@@ -343,6 +364,12 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
           <p class="role">O servidor MCP num Worker.</p>
           <p class="when">Publicar uma API, um MCP ou uma página sem cuidar de infraestrutura.</p>
           <ul><li><a href="https://developers.cloudflare.com/workers/" target="_blank" rel="noopener">Workers</a></li><li><a href="https://developers.cloudflare.com/workers/wrangler/" target="_blank" rel="noopener">Wrangler</a></li><li><a href="https://developers.cloudflare.com/agents/guides/remote-mcp-server/" target="_blank" rel="noopener">Servidor MCP remoto num Worker</a></li><li><a href="https://developers.cloudflare.com/workers/languages/python/" target="_blank" rel="noopener">Workers em Python</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="Astro" style="color:var(--astro)"><use href="#i-astro"/></svg><h4>Astro</h4></div>
+          <p class="role">O framework de front-end: a tela de quem aprova.</p>
+          <p class="when">O agente precisa de uma interface: listar as propostas, mostrar a nota e registrar a decisão de uma pessoa.</p>
+          <ul><li><a href="https://docs.astro.build/en/getting-started/" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://docs.astro.build/en/guides/deploy/cloudflare/" target="_blank" rel="noopener">Deploy na Cloudflare</a></li><li><a href="https://docs.astro.build/en/guides/backend/supabase/" target="_blank" rel="noopener">Astro com Supabase</a></li></ul>
         </article>
         <article class="tool">
           <div class="tool-head"><svg class="logo" role="img" aria-label="Python" style="color:#3776AB"><use href="#i-python"/></svg><h4>Python</h4></div>
