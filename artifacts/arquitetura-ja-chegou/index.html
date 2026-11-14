@@ -125,7 +125,7 @@ a { color: inherit; text-decoration-color: color-mix(in srgb, var(--pink) 60%, t
 a:hover { color: var(--pink); }
 .tools-group { display: flex; flex-direction: column; gap: 14px; }
 .tools-group h3 { font-weight: 500; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin: 0; }
-.tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+.tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 18px; }
 .tool { background: var(--surface); border: 1px solid var(--hair); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .tool .top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
 .tool h4 { font-weight: 500; font-size: 19px; margin: 0; }
@@ -319,7 +319,7 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
           <div class="top"><h4>Supabase</h4><span class="tag">CLI instalado</span></div>
           <p class="role">Banco, autenticação e storage.</p>
           <p class="when">O projeto precisa guardar dados do cliente, com login e regras de quem vê cada registro.</p>
-          <ul><li><a href="https://supabase.com/docs" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://supabase.com/docs/guides/cli" target="_blank" rel="noopener">CLI</a></li><li><a href="https://supabase.com/docs/guides/deployment/database-migrations" target="_blank" rel="noopener">Migrações</a></li><li><a href="https://supabase.com/docs/guides/getting-started/mcp" target="_blank" rel="noopener">Servidor MCP</a></li></ul>
+          <ul><li><a href="https://supabase.com/docs" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://supabase.com/docs/reference/cli" target="_blank" rel="noopener">CLI</a></li><li><a href="https://supabase.com/docs/guides/deployment/database-migrations" target="_blank" rel="noopener">Migrações</a></li><li><a href="https://supabase.com/docs/guides/getting-started/mcp" target="_blank" rel="noopener">Servidor MCP</a></li></ul>
         </article>
         <article class="tool stack">
           <div class="top"><h4>Cloudflare</h4><span class="tag">Wrangler instalado</span></div>
@@ -353,7 +353,7 @@ gh secret set CLAUDE_CODE_OAUTH_TOKEN
         <article class="tool">
           <div class="top"><h4>Evolution API</h4><span class="tag">fora do curso</span></div>
           <p class="role">WhatsApp: pedir a aprovação onde a pessoa está.</p>
-          <p class="when">Quem decide vive no WhatsApp. Para produção, use a WhatsApp Cloud API, a oficial da Meta.</p>
+          <p class="when">Quem decide vive no WhatsApp. O modo pelo WhatsApp Web não é oficial e pode levar ao bloqueio do número: para produção, use a WhatsApp Cloud API, a oficial da Meta.</p>
           <ul><li><a href="https://doc.evolution-api.com" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://developers.facebook.com/docs/whatsapp/cloud-api" target="_blank" rel="noopener">WhatsApp Cloud API</a></li></ul>
         </article>
         <article class="tool">
