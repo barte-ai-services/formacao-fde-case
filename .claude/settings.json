@@ -16,6 +16,9 @@
     "ahrena-engineering-security@ahrena": true,
     "ahrena-contributing@ahrena": true,
     "ahrena-foundation@ahrena": true,
-    "ahrena-engineering-python@ahrena": true
+    "ahrena-engineering-python@ahrena": true,
+    "ahrena-engineering-development@ahrena": true,
+    "ahrena-engineering-code-review@ahrena": true,
+    "ahrena-engineering-data@ahrena": true
   }
 }

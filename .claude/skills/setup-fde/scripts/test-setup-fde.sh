@@ -16,6 +16,7 @@ ORIGINAL="https://github.com/barte-ai-services/formacao-fde-case.git"
 INSTALLS='apt-get|brew (install|upgrade)|curl|dpkg|uv python install|uv self update|uv sync$|git .*remote (add|set-url)|gh auth (login|setup-git|refresh)|gh repo fork'
 FAILURES=0
 SANDBOX=""
+REAL_PYTHON="$(type -P python3)"
 
 # Todas as caixas de areia ficam numa pasta só, apagada no fim. Os dublês são
 # executáveis, então a pasta precisa aceitar execução: há máquinas com /tmp
@@ -40,16 +41,23 @@ healthy_machine() {
   SANDBOX="$(mktemp -d "$ROOT/caso.XXXXXX")"
   mkdir -p "$SANDBOX/bin" "$SANDBOX/home" "$SANDBOX/case/scripts" "$SANDBOX/case/.claude/skills/setup-fde/scripts"
   cp "$SCRIPT" "$SANDBOX/case/.claude/skills/setup-fde/scripts/setup-fde.sh"
+  cp "$HERE/ahrena_faltando.py" "$SANDBOX/case/.claude/skills/setup-fde/scripts/"
+  # O case liga dois plugins do Ahrena; um de outro marketplace e um desligado
+  # não contam.
+  cat > "$SANDBOX/case/.claude/settings.json" <<'JSON'
+{"enabledPlugins": {"ahrena-engineering-development@ahrena": true, "ahrena-contributing@ahrena": true,
+ "outro@outro-marketplace": true, "ahrena-engineering-go@ahrena": false}}
+JSON
   : > "$SANDBOX/case/scripts/check_setup.py"
   : > "$SANDBOX/case/.synced"
   : > "$SANDBOX/calls"
-  for tool in sh sed grep head mktemp rm mkdir cat chmod dirname ln tr tee; do
+  for tool in sh sed grep head mktemp rm mkdir cat chmod cp dirname ln tr tee; do
     ln -s "$(type -P "$tool")" "$SANDBOX/bin/$tool"
   done
   # O bash do sistema, não o primeiro do PATH: no macOS é o 3.2, o mais velho
   # em que o script precisa rodar.
   ln -s /bin/bash "$SANDBOX/bin/bash"
-  for tool in claude apt-get dpkg; do
+  for tool in apt-get dpkg; do
     stub "$tool" ''
   done
   stub uname 'case "$1" in -s) echo "${FAKE_SYSTEM:-Linux}" ;; *) echo x86_64 ;; esac'
@@ -57,8 +65,17 @@ healthy_machine() {
   stub id 'echo 1000'
   stub sudo 'if [ "$1" = -n ]; then [ -z "${FAKE_SUDO_PASSWORD:-}" ] || exit 1; shift; fi
   case "$1" in apt-get | dpkg | true) "$@" ;; tee) cat > /dev/null ;; esac'
+  # O claude plugin list --json: os dois plugins do case instalados para a pasta
+  # dele. FAKE_PLUGINS troca a lista inteira.
+  stub claude 'case "$*" in "plugin list --json")
+    if [ -n "${FAKE_PLUGINS:-}" ]; then echo "$FAKE_PLUGINS"; exit; fi
+    c="$(dirname "$CALLS")/case"
+    echo "[{\"id\":\"ahrena-engineering-development@ahrena\",\"scope\":\"project\",\"enabled\":true,\"projectPath\":\"$c\"},
+      {\"id\":\"ahrena-contributing@ahrena\",\"scope\":\"user\",\"enabled\":true}]" ;;
+  esac'
+  cp "$SANDBOX/bin/claude" "$SANDBOX/claude-instalado"
   # Instalar o claude o põe no PATH, como o instalador de verdade.
-  stub curl 'case "$*" in *claude.ai/install.sh*) printf "#!/bin/sh\n" > "$(dirname "$0")/claude"; chmod +x "$(dirname "$0")/claude" ;; esac'
+  stub curl 'case "$*" in *claude.ai/install.sh*) cp "$(dirname "$CALLS")/claude-instalado" "$(dirname "$0")/claude" ;; esac'
   stub git 'case "$*" in
     "config user.name") [ -n "${FAKE_NO_IDENTITY:-}" ] || echo Ada ;;
     "config user.email") [ -n "${FAKE_NO_IDENTITY:-}" ] || echo ada@exemplo.com ;;
@@ -79,7 +96,9 @@ healthy_machine() {
     "sync --help") [ -n "${FAKE_OLD_UV:-}" ] && [ ! -f "$(dirname "$CALLS")/uv-updated" ] || echo "      --check" ;;
     "self update") : > "$(dirname "$CALLS")/uv-updated" ;;
   esac'
-  stub python3 '[ -z "${FAKE_CHECK_FAILS:-}" ]'
+  # O python3 de verdade lê os plugins; o resto é o verificador do case.
+  stub python3 'case "$1" in *ahrena_faltando.py) exec '"$REAL_PYTHON"' "$@" ;; esac
+  [ -z "${FAKE_CHECK_FAILS:-}" ]'
   # Instalar o gh pelo apt o põe no PATH.
   stub apt-get 'case "$*" in "install -y gh") printf "#!/bin/sh\n" > "$(dirname "$0")/gh"; chmod +x "$(dirname "$0")/gh" ;; esac'
 }
@@ -125,7 +144,7 @@ healthy_machine
 run check
 expect "uma máquina pronta tem todas as linhas ok" every_line_is_ok
 expect "uma máquina pronta sai 0" exits 0
-expect "os itens saem nesta ordem" lists_items "git gh uv python claude git-identity gh-login case-clone uv-sync check-setup "
+expect "os itens saem nesta ordem" lists_items "git gh uv python claude git-identity gh-login case-clone uv-sync check-setup ahrena "
 rm "$SANDBOX/bin/claude"
 run check
 expect "uma ferramenta que falta sai missing" line_is missing claude
@@ -245,6 +264,33 @@ healthy_machine
 run fix FAKE_CHECK_FAILS=1
 expect "o verificador falhando é manual" line_is manual check-setup
 expect "a linha manda rodar o verificador" detail_has check-setup "python3 scripts/check_setup.py"
+
+# covers formacao-fde-ops#56/AC-2
+healthy_machine
+run check
+expect "com os plugins do case instalados, o ahrena fica ok" line_is ok ahrena
+run check FAKE_PLUGINS='[{"id":"ahrena-contributing@ahrena","scope":"user","enabled":true}]'
+expect "um plugin do case que não está instalado deixa o ahrena manual" line_is manual ahrena
+expect "a linha do ahrena diz qual plugin falta" detail_has ahrena "Faltam: ahrena-engineering-development"
+expect "a linha do ahrena não cita o que já está instalado" eval '! detail_has ahrena ahrena-contributing'
+expect "a linha do ahrena diz para aceitar a instalação no Claude Code" detail_has ahrena "aceite instalar os plugins do Ahrena"
+expect "o ahrena faltando sai 1" exits 1
+run check FAKE_PLUGINS="[{\"id\":\"ahrena-engineering-development@ahrena\",\"scope\":\"project\",\"enabled\":true,\"projectPath\":\"/outra/pasta\"},{\"id\":\"ahrena-contributing@ahrena\",\"scope\":\"user\",\"enabled\":true}]"
+expect "um plugin instalado para outra pasta não conta" line_is manual ahrena
+run check FAKE_PLUGINS="[{\"id\":\"ahrena-engineering-development@ahrena\",\"scope\":\"user\",\"enabled\":false},{\"id\":\"ahrena-contributing@ahrena\",\"scope\":\"user\",\"enabled\":true}]"
+expect "um plugin desabilitado não conta" line_is manual ahrena
+run check FAKE_PLUGINS='nada disso é json'
+expect "uma lista que não se lê deixa o ahrena manual" detail_has ahrena "não deu para ler os plugins"
+
+# covers formacao-fde-ops#56/AC-3
+run fix FAKE_PLUGINS='[]'
+expect "o fix não instala plugin pela pessoa" never_ran "claude plugin install"
+expect "o fix não toca o settings.json do case" eval 'grep -q outro-marketplace "$SANDBOX/case/.claude/settings.json"'
+
+healthy_machine
+rm "$SANDBOX/bin/claude"
+run check
+expect "sem o claude, o ahrena espera por ele" detail_has ahrena "depende do claude"
 
 [ "$FAILURES" -eq 0 ] || { echo "$FAILURES falharam"; exit 1; }
 echo "all passed"
