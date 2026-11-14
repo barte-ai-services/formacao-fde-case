@@ -179,7 +179,7 @@ uv python install 3.12
 
 ## Node.js e npm
 
-O **Node.js** roda programas em JavaScript; o **npm** vem junto com ele e instala esses programas. Precisamos da versão 22 ou mais nova.
+O **Node.js** roda programas em JavaScript; o **npm** vem junto com ele e instala esses programas. Precisamos da versão 22.12 ou mais nova.
 
 **macOS** (com o [Homebrew](https://brew.sh)):
 
@@ -196,7 +196,7 @@ echo "deb [signed-by=/etc/apt/keyrings/nodesource.asc] https://deb.nodesource.co
 sudo apt update && sudo apt install -y nodejs
 ```
 
-Confira com `node --version` (deve começar com `v22` ou mais) e `npm --version`.
+Confira com `node --version` (deve mostrar `v22.12` ou mais novo, como `v24.11.1`) e `npm --version`.
 
 ## Docker
 

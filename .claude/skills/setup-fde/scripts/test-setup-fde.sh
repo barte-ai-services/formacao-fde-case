@@ -250,7 +250,11 @@ expect "num sistema sem instalador, nada é instalado" no_install_ran
 healthy_machine
 run check FAKE_NODE_VERSION=v18.19.1
 expect "um Node.js 18 sai outdated" line_is outdated node
-expect "a linha do node diz a versão pedida" detail_has node "22 ou mais novo"
+expect "a linha do node diz a versão pedida" detail_has node "22.12 ou mais novo"
+run check FAKE_NODE_VERSION=v22.11.0
+expect "um Node.js 22.11 sai outdated, porque o Wrangler pede o 22.12" line_is outdated node
+run check FAKE_NODE_VERSION=v22.12.0
+expect "um Node.js 22.12 fica ok" line_is ok node
 healthy_machine
 rm "$SANDBOX/bin/node" "$SANDBOX/bin/npm" "$SANDBOX/bin/wrangler"
 run check

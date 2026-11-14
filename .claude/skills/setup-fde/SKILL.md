@@ -32,7 +32,7 @@ Os itens, na ordem:
 | `brew` | o Homebrew, só no macOS |
 | `git` | o git funciona e é 2.45 ou mais novo (o Claude Code precisa dele para instalar os plugins do Ahrena); no macOS, também as ferramentas de linha de comando da Apple. Um git velho sai `outdated`: no Ubuntu o `fix` traz o git atual do PPA `git-core`, no Mac o do Homebrew |
 | `gh`, `claude` | as ferramentas estão instaladas |
-| `node` | o Node.js e o npm estão instalados, e o Node.js é o 22 ou mais novo, que o Wrangler pede (senão sai `outdated`, e o `fix` atualiza) |
+| `node` | o Node.js e o npm estão instalados, e o Node.js é o 22.12 ou mais novo, que o Wrangler pede (senão sai `outdated`, e o `fix` atualiza) |
 | `uv` | o uv está instalado e é novo o bastante para o `uv sync --check` (senão sai `outdated`, e o `fix` atualiza) |
 | `python` | o uv tem um Python 3.12 ou mais novo |
 | `docker` | o cliente do Docker está instalado: no macOS pelo Homebrew, no Ubuntu o Docker Engine pelo repositório apt da Docker. Nunca o Docker Desktop |

@@ -22,7 +22,7 @@ GIT_FLOOR="2.45"
 AHRENA_MARKETPLACE="ahrenatechnology/ahrena-framework"
 
 # formacao-fde-ops #58: O Wrangler pede um Node.js ainda com suporte. O `fix` instala a LTS de NODE_MAJOR.
-NODE_FLOOR=22
+NODE_FLOOR="22.12"
 NODE_MAJOR=24
 # formacao-fde-ops #58: versões fixas e conferidas. Subir uma é trocar o número e, no Supabase, os dois hashes do checksums.txt do release.
 WRANGLER_VERSION="4.162.0"
@@ -209,14 +209,11 @@ update_uv() {
 
 # formacao-fde-ops #58: O Node.js com o npm, numa versão que o Wrangler aceita.
 check_node() {
-  local version major
+  local version
   have node && have npm || { STATUS=missing; return; }
   version="$(node --version 2>/dev/null)"
-  major="${version#v}"
-  major="${major%%.*}"
   DETAIL="$version"
-  case "$major" in '' | *[!0-9]*) major=0 ;; esac
-  [ "$major" -ge "$NODE_FLOOR" ] && return
+  version_at_least "${version#v}" "$NODE_FLOOR" && return
   STATUS=outdated
   DETAIL="$version, o Wrangler pede o $NODE_FLOOR ou mais novo"
 }
