@@ -181,9 +181,15 @@ def test_skill_no_formato_agent_skills(skill):
     assert re.search(r"^# Skill [123] — ", corpo, re.M), "o título numerado fica"
 
 
+SKILL_DE_SETUP = "setup-fde"
+
+
 def test_so_as_tres_skills_e_nada_que_o_agente_nao_consiga_ler():
-    """O agente não tem Read nem Bash: o que a skill precisa está no SKILL.md ou numa tool do ja-chegou."""
-    assert sorted(p.name for p in SKILLS_DIR.iterdir() if p.is_dir()) == sorted(SKILLS)
+    """O agente não tem Read nem Bash: o que a skill precisa está no SKILL.md ou numa tool do ja-chegou.
+
+    Além das três do agente, o projeto tem a `setup-fde`, da sessão principal: o agente só carrega as três pelo campo `skills`.
+    """
+    assert sorted(p.name for p in SKILLS_DIR.iterdir() if p.is_dir()) == sorted([*SKILLS, SKILL_DE_SETUP])
     for skill in SKILLS:
         assert [p.name for p in (SKILLS_DIR / skill).iterdir()] == ["SKILL.md"]
 
