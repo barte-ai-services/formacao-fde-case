@@ -450,7 +450,11 @@ create policy "o hook lê os papéis" on public.pessoas
             <li>O exemplo guarda os dados no D1. Aqui, o D1 sai: os dados ficam no Supabase.</li>
           </ul>
 <pre tabindex="0"><span class="c"># a partir do exemplo mcp-server, na pasta mcp/</span>
+<span class="c"># no wrangler.jsonc: "name": "ja-chegou-mcp" e sem o bloco d1_databases</span>
+<span class="c"># local: os cinco valores abaixo num .dev.vars, que o git ignora</span>
 uv run pywrangler dev        <span class="c"># http://localhost:8787/mcp</span>
+
+<span class="c"># na nuvem: os mesmos valores como secrets do Worker</span>
 wrangler secret put MCP_TOKEN
 wrangler secret put SUPABASE_URL
 wrangler secret put SUPABASE_PUBLISHABLE_KEY
@@ -460,19 +464,23 @@ uv run pywrangler deploy     <span class="c"># ja-chegou-mcp.&lt;subdominio&gt;.
 
 <span class="c"># src/entry.py</span>
 import hmac
+from workers import Response, WorkerEntrypoint, asgi
 
 class Default(WorkerEntrypoint):
     async def fetch(self, request):
         token = request.headers.get("Authorization") or ""
         if not hmac.compare_digest(token, f"Bearer {self.env.MCP_TOKEN}"):
             return Response("Unauthorized", status=401)
-        ...  <span class="c"># como no exemplo: asgi.fetch(self.app, ...)</span>
+        ...  <span class="c"># como no exemplo: asgi.fetch(self.app, request, self.env)</span>
 
-<span class="c"># cada tool lê e grava com o JWT do agente:</span>
-<span class="c"># POST {SUPABASE_URL}/auth/v1/token?grant_type=password</span>
-<span class="c"># e depois {SUPABASE_URL}/rest/v1/... com Authorization: Bearer &lt;jwt&gt;</span>
+<span class="c"># cada tool lê e grava com o JWT do agente, sempre com o</span>
+<span class="c"># cabeçalho apikey: SUPABASE_PUBLISHABLE_KEY</span>
+<span class="c"># 1. POST {SUPABASE_URL}/auth/v1/token?grant_type=password</span>
+<span class="c">#    corpo: {"email": AGENTE_EMAIL, "password": AGENTE_SENHA}</span>
+<span class="c"># 2. {SUPABASE_URL}/rest/v1/... com Authorization: Bearer &lt;jwt&gt;</span>
 
-<span class="c"># ligar no Claude</span>
+<span class="c"># ligar no Claude, no escopo local (o padrão). Nunca use</span>
+<span class="c"># --scope project: o token iria para o .mcp.json do fork, que é público</span>
 claude mcp add --transport http ja-chegou \
   https://ja-chegou-mcp.&lt;subdominio&gt;.workers.dev/mcp \
   --header "Authorization: Bearer $MCP_TOKEN"</pre>
