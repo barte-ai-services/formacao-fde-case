@@ -9,7 +9,7 @@ Este guia é para quem não programa no dia a dia. Há dois caminhos: o **caminh
 
 ## Caminho principal: o Claude Code configura a máquina com você
 
-O repositório traz uma skill do Claude Code, a `setup-fde` (em `.claude/skills/setup-fde/`). Ela confere a máquina, instala o que falta (Git, GitHub CLI, uv, Python 3.12), deixa o seu fork com `origin` e `upstream` certos, prepara o projeto e roda o verificador. O que só você pode fazer, como entrar na sua conta do GitHub, ela explica e espera você fazer: ela nunca pede senha, token ou chave na conversa.
+O repositório traz uma skill do Claude Code, a `setup-fde` (em `.claude/skills/setup-fde/`). Ela confere a máquina, instala o que falta (Git, GitHub CLI, Node.js, uv, Python 3.12, Docker, Supabase CLI e Wrangler), deixa o seu fork com `origin` e `upstream` certos, prepara o projeto e roda o verificador. O que só você pode fazer, como entrar na sua conta do GitHub, do Supabase e da Cloudflare, ela explica e espera você fazer: ela nunca pede senha, token ou chave na conversa.
 
 1. **Instale o Claude Code.** Abra o terminal (veja [Como abrir o terminal](#como-abrir-o-terminal); no Windows, primeiro a seção [Windows (WSL 2)](#windows-wsl-2)) e rode:
 
@@ -46,7 +46,7 @@ O **Ahrena** é um conjunto de plugins do Claude Code que a Barte usa para traba
 
 ## Passo a passo à mão
 
-Se preferir fazer sozinho, siga na ordem, copiando e colando os comandos. Reserve uns 30 a 45 minutos.
+Se preferir fazer sozinho, siga na ordem, copiando e colando os comandos. Reserve uns 45 a 60 minutos.
 
 Você vai instalar:
 
@@ -55,6 +55,10 @@ Você vai instalar:
 3. **GitHub CLI (`gh`)**: o programa que faz o login do Git na sua conta do GitHub, para você conseguir enviar (`git push`) o seu trabalho.
 4. **Claude Code**: o assistente de código que vamos usar na imersão.
 5. **uv e Python 3.12**: o uv instala o Python e as bibliotecas do projeto.
+6. **Node.js e npm**: o Node.js roda programas escritos em JavaScript, e o npm instala esses programas. O Wrangler é um deles.
+7. **Docker**: roda programas dentro de "caixas" isoladas, chamadas contêineres. O Supabase usa o Docker para subir um banco de dados de teste no seu computador.
+8. **Supabase CLI e conta no Supabase**: o Supabase guarda os dados e o login dos usuários do que você publica.
+9. **Wrangler e conta na Cloudflare**: o Wrangler publica o seu projeto na Cloudflare, que entrega ele na internet.
 
 No fim, você roda um verificador que diz o que está pronto e o que falta.
 
@@ -172,6 +176,108 @@ Agora instale o Python 3.12 pelo uv:
 ```bash
 uv python install 3.12
 ```
+
+## Node.js e npm
+
+O **Node.js** roda programas em JavaScript; o **npm** vem junto com ele e instala esses programas. Precisamos da versão 22 ou mais nova.
+
+**macOS** (com o [Homebrew](https://brew.sh)):
+
+```bash
+brew install node
+```
+
+**Windows (Ubuntu no WSL):** o Node.js que vem no Ubuntu é velho demais, então ele vem do repositório da NodeSource:
+
+```bash
+curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+Confira com `node --version` (deve começar com `v22` ou mais) e `npm --version`.
+
+## Docker
+
+O **Docker** roda programas dentro de contêineres, caixas isoladas que não bagunçam o resto do computador. Não usamos o Docker Desktop: no Mac, o motor é o **Colima**; no Ubuntu, o **Docker Engine**. Os dois são gratuitos e não pedem conta.
+
+**macOS:**
+
+```bash
+brew install docker colima
+colima start
+```
+
+O `colima start` liga o motor. Depois de reiniciar o Mac, rode `colima start` de novo antes de usar o Docker.
+
+**Windows (Ubuntu no WSL):**
+
+```bash
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker "$USER"
+```
+
+O segundo comando deixa você usar o Docker sem `sudo`. Ele só vale num terminal novo: no Ubuntu do WSL, abra o PowerShell, rode `wsl --shutdown` e abra o Ubuntu de novo. No Ubuntu fora do WSL, saia da sua sessão e entre de novo.
+
+Se o Docker disser que não consegue falar com o motor (`Cannot connect to the Docker daemon`), ligue o serviço:
+
+```bash
+sudo systemctl start docker
+```
+
+Confira com `docker info`: ele deve mostrar os detalhes do motor, sem erro.
+
+## Supabase CLI e conta no Supabase
+
+O **Supabase** guarda os dados e o login dos usuários do que você publica. O **Supabase CLI** é o programa que conversa com ele pelo terminal.
+
+1. Se ainda não tem, crie uma conta em [supabase.com](https://supabase.com/dashboard/sign-up). Dá para entrar com a sua conta do GitHub.
+2. Instale o CLI.
+
+   **macOS:**
+
+   ```bash
+   brew install supabase/tap/supabase
+   ```
+
+   **Windows (Ubuntu no WSL):** o CLI não se instala pelo npm. Baixe o programa pronto para a sua pasta pessoal:
+
+   ```bash
+   mkdir -p ~/.local/bin
+   curl -fsSL https://github.com/supabase/cli/releases/latest/download/supabase_linux_$(dpkg --print-architecture).tar.gz | tar -xz -C ~/.local/bin supabase
+   ```
+
+   Feche e abra o terminal de novo e confira com `supabase --version`.
+
+3. Entre na sua conta:
+
+   ```bash
+   supabase login
+   ```
+
+   Ele abre o navegador (ou mostra um link para você abrir). Entre com a sua conta do Supabase e autorize. Se ele mostrar um código de verificação no navegador, copie e cole no terminal. Confira com `supabase projects list`: deve aparecer a lista dos seus projetos, mesmo que vazia.
+
+## Wrangler e conta na Cloudflare
+
+A **Cloudflare** entrega o que você publica na internet. O **Wrangler** é o programa que publica, pelo terminal. Ele vem pelo npm, então instale o Node.js antes.
+
+1. Se ainda não tem, crie uma conta gratuita em [dash.cloudflare.com/sign-up](https://dash.cloudflare.com/sign-up).
+2. Instale o Wrangler, na sua pasta pessoal (assim ele não pede a senha do computador):
+
+   ```bash
+   npm install -g --prefix ~/.local wrangler
+   ```
+
+   Feche e abra o terminal de novo e confira com `wrangler --version`. Se o terminal disser que `wrangler` não existe, rode `echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc` (no Mac, `~/.zshrc` no lugar de `~/.bashrc`) e abra o terminal de novo.
+
+3. Entre na sua conta:
+
+   ```bash
+   wrangler login
+   ```
+
+   Ele abre o navegador numa página da Cloudflare. Entre com a sua conta e clique em **Allow** para autorizar o Wrangler. Confira com `wrangler whoami`: deve aparecer o seu e-mail.
+
+   No Ubuntu do WSL, se o navegador não abrir sozinho, copie o link que aparece no terminal e abra no navegador do Windows.
 
 ## Preparar o projeto
 

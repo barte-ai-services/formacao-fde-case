@@ -1,6 +1,6 @@
 ---
 name: setup-fde
-description: Prepara ou confere a máquina para a Formação FDE. Inspeciona o computador, instala o que falta (git, GitHub CLI, uv, Python 3.12, Claude Code, os plugins do Ahrena), deixa o fork do case com origin e upstream certos, roda o uv sync e o verificador do case, e acompanha a pessoa nos logins que só ela pode fazer. Use quando a pessoa pedir "configura o meu setup", "configura o meu setup de FDE", "setup de FDE", "prepara a minha máquina", "o que falta instalar", "meu ambiente não funciona", ou quando uma ferramenta, o login do GitHub ou o fork do case estiver faltando.
+description: Prepara ou confere a máquina para a Formação FDE. Inspeciona o computador, instala o que falta (git, GitHub CLI, Node.js com npm, uv, Python 3.12, Docker com Colima no macOS e Docker Engine no Linux, Supabase CLI, Cloudflare Wrangler, Claude Code, os plugins do Ahrena), deixa o fork do case com origin e upstream certos, roda o uv sync e o verificador do case, e acompanha a pessoa nos logins que só ela pode fazer (GitHub, Supabase, Cloudflare). Use quando a pessoa pedir "configura o meu setup", "configura o meu setup de FDE", "setup de FDE", "prepara a minha máquina", "o que falta instalar", "meu ambiente não funciona", ou quando uma ferramenta, o login do GitHub ou o fork do case estiver faltando.
 ---
 
 # Setup de FDE
@@ -32,10 +32,18 @@ Os itens, na ordem:
 | `brew` | o Homebrew, só no macOS |
 | `git` | o git funciona e é 2.45 ou mais novo (o Claude Code precisa dele para instalar os plugins do Ahrena); no macOS, também as ferramentas de linha de comando da Apple. Um git velho sai `outdated`: no Ubuntu o `fix` traz o git atual do PPA `git-core`, no Mac o do Homebrew |
 | `gh`, `claude` | as ferramentas estão instaladas |
+| `node` | o Node.js e o npm estão instalados, e o Node.js é o 22 ou mais novo, que o Wrangler pede (senão sai `outdated`, e o `fix` atualiza) |
 | `uv` | o uv está instalado e é novo o bastante para o `uv sync --check` (senão sai `outdated`, e o `fix` atualiza) |
 | `python` | o uv tem um Python 3.12 ou mais novo |
+| `docker` | o cliente do Docker está instalado: no macOS pelo Homebrew, no Ubuntu o Docker Engine pelo `get.docker.com`. Nunca o Docker Desktop |
+| `colima` | o motor do Docker no macOS, só lá. Um Mac em que o `docker` já responde com outro motor fica `ok` |
+| `docker-daemon` | o motor responde ao `docker info`. No macOS o `fix` roda `colima start`; no Ubuntu é `manual`, porque ligar o serviço e entrar no grupo `docker` pedem `sudo` e um terminal novo |
+| `supabase` | o Supabase CLI: no macOS pelo `supabase/tap/supabase`, no Ubuntu o binário do último release em `~/.local/bin`. Nunca pelo `npm -g`, que o Supabase não aceita |
+| `wrangler` | o Wrangler da Cloudflare, pelo npm em `~/.local` (sem `sudo`). Espera o `node` |
 | `git-identity` | o git sabe o nome e o e-mail da pessoa |
 | `gh-login` | o GitHub CLI está logado na conta da pessoa |
+| `supabase-login` | o Supabase CLI está logado (`supabase projects list` responde) |
+| `wrangler-login` | o Wrangler está logado (`wrangler whoami` mostra a conta) |
 | `case-clone` | a pasta é o clone do fork da pessoa: `origin` é o fork e `upstream` é o `barte-ai-services/formacao-fde-case` |
 | `uv-sync` | a `.venv` do case está em dia com o `uv.lock` |
 | `check-setup` | o verificador do case (`python3 scripts/check_setup.py`) passa |
@@ -53,7 +61,7 @@ Ele instala cada item `missing` ou `outdated`, deixa os `ok` como estão e impri
 
 Duas falhas aparecem aqui.
 
-**A instalação pede senha.** No Ubuntu (e no Ubuntu do WSL) o git e o gh entram pelo `sudo`, e esta sessão não tem terminal para a pessoa digitar a senha. O item continua `missing` e o script diz `não deu para corrigir`. Veja o caminho da pasta do case com `pwd` e dê à pessoa o comando completo para ela rodar no terminal dela, com o caminho de verdade no lugar de `<pasta do case>`:
+**A instalação pede senha.** No Ubuntu (e no Ubuntu do WSL) o git, o gh, o Node.js e o Docker entram pelo `sudo`, e esta sessão não tem terminal para a pessoa digitar a senha. O item continua `missing` e o script diz `não deu para corrigir`. Veja o caminho da pasta do case com `pwd` e dê à pessoa o comando completo para ela rodar no terminal dela, com o caminho de verdade no lugar de `<pasta do case>`:
 
 ```sh
 cd <pasta do case> && bash .claude/skills/setup-fde/scripts/setup-fde.sh fix
@@ -67,11 +75,11 @@ Depois continue do passo 1.
 
 Pegue as linhas `manual` na ordem em que aparecem. A ordem importa: o `gh-login` vem antes do `case-clone`, porque o fork é feito com a conta do GitHub.
 
-Para cada uma, passe o comando do detalhe e espere a pessoa rodar. Abra `references/acessos.md` para os itens que pedem mais de um comando: o login do GitHub, o fork e o clone, e o Windows.
+Para cada uma, passe o comando do detalhe e espere a pessoa rodar. Abra `references/acessos.md` para os itens que pedem mais de um comando: o login do GitHub, o fork e o clone, os logins do Supabase e da Cloudflare, o motor do Docker no Ubuntu, e o Windows.
 
 **Regras de segurança, sem exceção:**
 
-- Nunca faça um login pela pessoa. O `gh auth login` e o login do Claude Code abrem o navegador do lado dela, e é ela quem roda.
+- Nunca faça um login pela pessoa. O `gh auth login`, o `supabase login`, o `wrangler login` e o login do Claude Code abrem o navegador do lado dela, e é ela quem roda.
 - Nunca peça para colar um token, uma senha ou uma chave na conversa. Um segredo digitado aqui é um segredo vazado. Se a pessoa colar um mesmo assim, diga para ela revogar e gerar outro.
 - Quando o comando precisa de `sudo` e esta sessão não tem terminal, não tente contornar: passe o comando para a pessoa rodar no terminal dela.
 

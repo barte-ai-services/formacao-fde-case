@@ -13,7 +13,7 @@ set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
 SCRIPT="$HERE/setup-fde.sh"
 ORIGINAL="https://github.com/barte-ai-services/formacao-fde-case.git"
-INSTALLS='apt-get|brew (install|upgrade)|curl|dpkg|uv python install|uv self update|uv sync$|git .*remote (add|set-url)|gh auth (login|setup-git|refresh)|gh repo fork|add-apt-repository|claude plugin (install|marketplace add)'
+INSTALLS='apt-get|brew (install|upgrade)|curl|dpkg -i|npm install|colima start|tar|usermod|supabase login|wrangler login|uv python install|uv self update|uv sync$|git .*remote (add|set-url)|gh auth (login|setup-git|refresh)|gh repo fork|add-apt-repository|claude plugin (install|marketplace add)'
 FAILURES=0
 SANDBOX=""
 REAL_PYTHON="$(type -P python3)"
@@ -57,14 +57,29 @@ JSON
   # O bash do sistema, não o primeiro do PATH: no macOS é o 3.2, o mais velho
   # em que o script precisa rodar.
   ln -s /bin/bash "$SANDBOX/bin/bash"
-  for tool in apt-get dpkg add-apt-repository; do
+  for tool in apt-get add-apt-repository supabase usermod; do
     stub "$tool" ''
   done
+  stub dpkg 'echo amd64'
+  # Os dublês das ferramentas novas ficam numa pasta à parte, e cada instalador
+  # de mentira cria o dublê dele ali.
+  stub node 'echo "${FAKE_NODE_VERSION:-v24.1.0}"'
+  stub npm 'case "$*" in "install -g --prefix "*" wrangler") mkdir -p "$4/bin"; printf "#!/bin/sh\\n" > "$4/bin/wrangler"; chmod +x "$4/bin/wrangler" ;; esac'
+  stub wrangler 'case "$*" in whoami) [ -n "${FAKE_WRANGLER_LOGGED_OUT:-}" ] && echo "You are not authenticated. Please run wrangler login." ;; esac; exit 0'
+  stub supabase 'case "$*" in "projects list") [ -z "${FAKE_SUPABASE_LOGGED_OUT:-}" ] ;; esac'
+  # O docker responde quando o motor está ligado; o colima start liga.
+  stub docker 'case "$*" in info) [ -z "${FAKE_DOCKER_DOWN:-}" ] || [ -f "$(dirname "$CALLS")/colima-started" ] ;; esac'
+  # O tar do release do Supabase deixa o binário na pasta que recebeu.
+  stub tar 'printf "#!/bin/sh\\n" > "$3/supabase"; chmod +x "$3/supabase"'
+  # Uma cópia de cada dublê fica de reserva: o instalador de mentira põe a cópia
+  # de volta no PATH, e a ferramenta instalada se comporta como a de verdade.
+  mkdir -p "$SANDBOX/spare"
+  cp "$SANDBOX/bin/node" "$SANDBOX/bin/npm" "$SANDBOX/bin/docker" "$SANDBOX/spare/"
   stub uname 'case "$1" in -s) echo "${FAKE_SYSTEM:-Linux}" ;; *) echo x86_64 ;; esac'
   # Nunca root, e o sudo só repassa para os dublês: nada toca o /etc de verdade.
   stub id 'echo 1000'
   stub sudo 'if [ "$1" = -n ]; then [ -z "${FAKE_SUDO_PASSWORD:-}" ] || exit 1; shift; fi
-  case "$1" in apt-get | dpkg | add-apt-repository | true) "$@" ;; tee) cat > /dev/null ;; esac'
+  case "$1" in apt-get | dpkg | add-apt-repository | usermod | true) "$@" ;; tee) cat > /dev/null ;; sh) cat > /dev/null; cp "$(dirname "$CALLS")/spare/docker" "$(dirname "$0")/" ;; esac'
   # formacao-fde-ops #57: claude plugin list --json; FAKE_PLUGINS troca a lista.
   # Instalar um plugin deixa a lista completa; FAKE_INSTALL_FAILS faz a instalação falhar.
   stub claude 'd="$(dirname "$CALLS")"
@@ -106,7 +121,10 @@ JSON
   stub python3 'case "$1" in *ahrena_faltando.py) exec '"$REAL_PYTHON"' "$@" ;; esac
   [ -z "${FAKE_CHECK_FAILS:-}" ]'
   # formacao-fde-ops #57: Instalar o gh pelo apt o põe no PATH.
-  stub apt-get 'case "$*" in "install -y gh") printf "#!/bin/sh\n" > "$(dirname "$0")/gh"; chmod +x "$(dirname "$0")/gh" ;; esac'
+  stub apt-get 'case "$*" in
+    "install -y gh") printf "#!/bin/sh\n" > "$(dirname "$0")/gh"; chmod +x "$(dirname "$0")/gh" ;;
+    "install -y nodejs") cp "$(dirname "$CALLS")/spare/node" "$(dirname "$CALLS")/spare/npm" "$(dirname "$0")/" ;;
+  esac'
 }
 
 # A mesma máquina como um Mac: Homebrew no lugar do apt.
@@ -114,7 +132,14 @@ healthy_mac() {
   healthy_machine
   rm "$SANDBOX/bin/apt-get"
   stub xcode-select '[ -z "${FAKE_NO_CLT:-}" ]'
-  stub brew 'case "$*" in "install gh") printf "#!/bin/sh\n" > "$(dirname "$0")/gh"; chmod +x "$(dirname "$0")/gh" ;; esac'
+  stub colima 'case "$*" in start) : > "$(dirname "$CALLS")/colima-started" ;; esac'
+  cp "$SANDBOX/bin/colima" "$SANDBOX/spare/"
+  stub brew 'case "$*" in
+    "list node") exit 0 ;;
+    "install docker" | "install colima") cp "$(dirname "$CALLS")/spare/$2" "$(dirname "$0")/" ;;
+    "install gh" | "install supabase/tap/supabase")
+      t="${2##*/}"; printf "#!/bin/sh\n" > "$(dirname "$0")/$t"; chmod +x "$(dirname "$0")/$t" ;;
+  esac'
 }
 
 # run <check|fix> [VAR=valor...]: deixa a saída em OUTPUT e o código em CODE.
@@ -150,7 +175,7 @@ healthy_machine
 run check
 expect "uma máquina pronta tem todas as linhas ok" every_line_is_ok
 expect "uma máquina pronta sai 0" exits 0
-expect "os itens saem nesta ordem" lists_items "git gh uv python claude git-identity gh-login case-clone uv-sync check-setup ahrena "
+expect "os itens saem nesta ordem" lists_items "git gh node uv python docker docker-daemon supabase wrangler claude git-identity gh-login supabase-login wrangler-login case-clone uv-sync check-setup ahrena "
 rm "$SANDBOX/bin/claude"
 run check
 expect "uma ferramenta que falta sai missing" line_is missing claude
@@ -176,6 +201,7 @@ healthy_mac
 run check FAKE_SYSTEM=Darwin
 expect "um Mac pronto tem todas as linhas ok" every_line_is_ok
 expect "o Mac começa pelo brew" line_is ok brew
+expect "o Mac confere o colima" lists_items "brew git gh node uv python docker colima docker-daemon supabase wrangler claude git-identity gh-login supabase-login wrangler-login case-clone uv-sync check-setup ahrena "
 rm "$SANDBOX/bin/gh"
 run fix FAKE_SYSTEM=Darwin
 expect "no Mac o gh vem do Homebrew" only_install_is "brew install gh"
@@ -214,6 +240,96 @@ rm "$SANDBOX/bin/gh"
 run fix FAKE_SYSTEM=FreeBSD
 expect "num sistema sem instalador, o que falta é manual" line_is manual gh
 expect "num sistema sem instalador, nada é instalado" no_install_ran
+
+# covers barte-ai-services/formacao-fde-ops#58/AC-1, AC-2
+# O Node.js com o npm, e numa versão que o Wrangler aceita.
+healthy_machine
+run check FAKE_NODE_VERSION=v18.19.1
+expect "um Node.js 18 sai outdated" line_is outdated node
+expect "a linha do node diz a versão pedida" detail_has node "22 ou mais novo"
+healthy_machine
+rm "$SANDBOX/bin/node" "$SANDBOX/bin/npm" "$SANDBOX/bin/wrangler"
+run check
+expect "sem Node.js, o node sai missing" line_is missing node
+expect "sem npm, o wrangler espera o node" detail_has wrangler "depende do node"
+run fix
+expect "no Ubuntu o Node.js vem da NodeSource" ran "deb.nodesource.com/gpgkey/nodesource-repo.gpg.key"
+expect "no Ubuntu o Node.js entra pelo apt" ran "apt-get install -y nodejs"
+expect "o wrangler entra pelo npm, sem sudo" ran "npm install -g --prefix $SANDBOX/home/.local wrangler"
+expect "depois do fix o node fica ok" line_is ok node
+expect "depois do fix o wrangler fica ok" line_is ok wrangler
+
+healthy_mac
+run fix FAKE_SYSTEM=Darwin FAKE_NODE_VERSION=v20.0.0
+expect "no Mac o Node.js velho é atualizado pelo Homebrew" ran "brew upgrade node"
+
+# O Supabase CLI: Homebrew no Mac, o binário do release no Linux.
+healthy_machine
+rm "$SANDBOX/bin/supabase"
+run check
+expect "sem o Supabase CLI, o supabase sai missing" line_is missing supabase
+expect "sem o Supabase CLI, o login espera ele" detail_has supabase-login "depende do supabase"
+run fix
+expect "no Ubuntu o Supabase CLI vem do release do GitHub" ran "curl -fsSL https://github.com/supabase/cli/releases/latest/download/supabase_linux_amd64.tar.gz"
+expect "no Ubuntu o Supabase CLI não passa pelo npm" never_ran "npm install -g --prefix $SANDBOX/home/.local supabase"
+expect "no Ubuntu o Supabase CLI não pede sudo" never_ran "sudo"
+expect "depois do fix o supabase fica ok" line_is ok supabase
+
+healthy_mac
+rm "$SANDBOX/bin/supabase"
+run fix FAKE_SYSTEM=Darwin
+expect "no Mac o Supabase CLI vem do tap do Supabase" only_install_is "brew install supabase/tap/supabase"
+expect "no Mac o supabase fica ok" line_is ok supabase
+
+# O Docker: Colima no Mac, Docker Engine no Linux, nunca o Docker Desktop.
+healthy_mac
+rm "$SANDBOX/bin/docker" "$SANDBOX/bin/colima"
+run fix FAKE_SYSTEM=Darwin FAKE_DOCKER_DOWN=1
+expect "no Mac o docker vem do Homebrew" ran "brew install docker"
+expect "no Mac o motor é o Colima" ran "brew install colima"
+expect "no Mac o fix liga o Colima" ran "colima start"
+expect "no Mac nada instala o Docker Desktop" never_ran "cask"
+expect "depois do fix o motor do Mac responde" line_is ok docker-daemon
+
+healthy_mac
+rm "$SANDBOX/bin/colima"
+run check FAKE_SYSTEM=Darwin
+expect "um Mac em que o docker já responde não precisa do Colima" line_is ok colima
+
+healthy_machine
+rm "$SANDBOX/bin/docker"
+run check
+expect "sem o docker, o docker sai missing" line_is missing docker
+expect "sem o docker, o motor espera ele" detail_has docker-daemon "depende do docker"
+run fix
+expect "no Ubuntu o Docker Engine vem do get.docker.com" ran "curl -fsSL https://get.docker.com"
+expect "no Ubuntu a pessoa entra no grupo docker" ran "usermod -aG docker ada"
+expect "no Ubuntu o docker fica ok" line_is ok docker
+
+healthy_machine
+rm "$SANDBOX/bin/docker"
+run fix FAKE_SUDO_PASSWORD=1
+expect "quando o sudo pede senha, o docker continua missing" line_is missing docker
+expect "quando o sudo pede senha, o get.docker.com não roda" never_ran "usermod"
+
+healthy_machine
+run fix FAKE_DOCKER_DOWN=1
+expect "no Ubuntu o motor parado é manual" line_is manual docker-daemon
+expect "a linha do motor traz o systemctl e o grupo" detail_has docker-daemon "sudo usermod -aG docker"
+expect "no Ubuntu o fix não liga o motor" no_install_ran
+
+# covers barte-ai-services/formacao-fde-ops#58/AC-3
+healthy_machine
+run fix FAKE_SUPABASE_LOGGED_OUT=1 FAKE_WRANGLER_LOGGED_OUT=1
+expect "o login do Supabase é manual" line_is manual supabase-login
+expect "a linha do login do Supabase traz o comando" detail_has supabase-login "supabase login"
+expect "o login da Cloudflare é manual" line_is manual wrangler-login
+expect "a linha do login da Cloudflare traz o comando" detail_has wrangler-login "wrangler login"
+expect "o fix não faz nenhum dos dois logins" no_install_ran
+healthy_machine
+rm "$SANDBOX/bin/wrangler"
+run check
+expect "sem o wrangler, o login espera ele" detail_has wrangler-login "depende do wrangler"
 
 # covers #50/AC-5
 healthy_machine

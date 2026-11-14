@@ -52,6 +52,39 @@ Quem tem o fork clonado mas não tem o `upstream` recebe ele do `fix`. Se o `ups
 git remote set-url upstream https://github.com/barte-ai-services/formacao-fde-case.git
 ```
 
+## Login do Supabase
+
+```sh
+supabase login
+```
+
+Ele abre o navegador, ou mostra um link para abrir. A pessoa entra com a conta do Supabase (dá para entrar com a do GitHub) e autoriza; se aparecer um código de verificação, ela cola no terminal. Quem não tem conta cria uma em https://supabase.com/dashboard/sign-up antes.
+
+Confira com `supabase projects list`: a lista dos projetos aparece, mesmo vazia.
+
+## Login da Cloudflare
+
+```sh
+wrangler login
+```
+
+Ele abre uma página da Cloudflare no navegador. A pessoa entra com a conta e clica em **Allow**. No Ubuntu do WSL, se o navegador não abrir sozinho, ela copia o link do terminal para o navegador do Windows. Quem não tem conta cria uma gratuita em https://dash.cloudflare.com/sign-up antes.
+
+Confira com `wrangler whoami`: o e-mail da conta aparece.
+
+## O motor do Docker no Ubuntu
+
+O `fix` instala o Docker Engine e põe a pessoa no grupo `docker`, mas o grupo só vale num terminal novo. Se o `docker-daemon` continua `manual`:
+
+```sh
+sudo systemctl start docker
+sudo usermod -aG docker "$USER"
+```
+
+Depois, feche e abra o terminal. No Ubuntu do WSL, isso é `wsl --shutdown` no PowerShell e abrir o Ubuntu de novo. Se o `systemctl` disser que o sistema não foi iniciado com o systemd, o WSL está sem ele: a pessoa acrescenta `[boot]` e `systemd=true` ao `/etc/wsl.conf` (`sudo nano /etc/wsl.conf`) e roda o `wsl --shutdown`.
+
+No macOS o motor é o Colima, e o `fix` liga ele com `colima start`. Depois de reiniciar o Mac, ele precisa de um `colima start` de novo.
+
 ## Conta do Claude Code
 
 ```sh

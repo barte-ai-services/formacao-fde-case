@@ -21,9 +21,14 @@ PYTHON_FLOOR="3.12"
 GIT_FLOOR="2.45"
 AHRENA_MARKETPLACE="ahrenatechnology/ahrena-framework"
 
-ITEMS="git gh uv python claude git-identity gh-login case-clone uv-sync check-setup ahrena"
+# O Wrangler pede um Node.js ainda com suporte. O `fix` instala a LTS de NODE_MAJOR.
+NODE_FLOOR=22
+NODE_MAJOR=24
 
-# O uv, o Python dele e o claude se instalam aqui, e um terminal aberto antes da
+# O colima só existe no macOS: o all_items tira ele dos outros sistemas.
+ITEMS="git gh node uv python docker colima docker-daemon supabase wrangler claude git-identity gh-login supabase-login wrangler-login case-clone uv-sync check-setup ahrena"
+
+# O uv, o Python dele, o claude, o supabase do Linux e o wrangler se instalam aqui, e um terminal aberto antes da
 # instalação ainda não tem essa pasta no PATH.
 PATH="$HOME/.local/bin:$PATH"
 export PATH
@@ -71,7 +76,8 @@ CASE_DIR="$(find_case_dir)"
 fixable_items() {
   local anywhere="uv python claude case-clone uv-sync ahrena"
   case "$SYSTEM" in
-    macos | debian) echo "$anywhere git gh" ;;
+    macos) echo "$anywhere git gh node docker colima docker-daemon supabase wrangler" ;;
+    debian) echo "$anywhere git gh node docker supabase wrangler" ;;
     *) echo "$anywhere" ;;
   esac
 }
@@ -110,6 +116,9 @@ manual_hint() {
       esac ;;
     git-identity) echo 'git config --global user.name "Seu Nome" && git config --global user.email "seu-email@exemplo.com" (o mesmo e-mail da conta do GitHub)' ;;
     gh-login) echo 'gh auth login (GitHub.com, HTTPS, Login with a web browser) e depois gh auth setup-git' ;;
+    supabase-login) echo 'supabase login (abre o navegador; entre com a sua conta do Supabase)' ;;
+    wrangler-login) echo 'wrangler login (abre o navegador; entre com a sua conta da Cloudflare e clique em Allow)' ;;
+    docker-daemon) echo 'sudo systemctl start docker && sudo usermod -aG docker "$USER", e depois feche e abra o terminal (no WSL: wsl --shutdown no PowerShell e abra o Ubuntu de novo)' ;;
     check-setup) echo 'rode python3 scripts/check_setup.py na pasta do case e siga o que ele disser' ;;
     git-outdated) case "$SYSTEM" in
         macos*) echo "o git da Apple é mais velho que o $GIT_FLOOR; instale o Homebrew e rode o fix de novo, que ele instala o git do Homebrew" ;;
@@ -193,6 +202,46 @@ update_uv() {
   uv self update || { [ "$SYSTEM" = macos ] && brew upgrade uv; }
 }
 
+# O Node.js com o npm, numa versão que o Wrangler aceita.
+check_node() {
+  local version major
+  have node && have npm || { STATUS=missing; return; }
+  version="$(node --version 2>/dev/null)"
+  major="${version#v}"
+  major="${major%%.*}"
+  DETAIL="$version"
+  case "$major" in '' | *[!0-9]*) major=0 ;; esac
+  [ "$major" -ge "$NODE_FLOOR" ] && return
+  STATUS=outdated
+  DETAIL="$version, o Wrangler pede o $NODE_FLOOR ou mais novo"
+}
+
+# O motor do Docker responde. No Mac é o Colima; no Linux, o serviço do Docker Engine.
+check_docker_daemon() {
+  have docker || { STATUS=manual; DETAIL="depende do docker"; return; }
+  docker info >/dev/null 2>&1 || STATUS=missing
+}
+
+# O wrangler vem do npm, então espera o Node.js.
+check_wrangler() {
+  have wrangler && return
+  STATUS=missing
+  have npm || DETAIL="depende do node"
+}
+
+# Os logins leem a conta pela internet. A pessoa faz o login; o fix nunca tenta.
+check_supabase_login() {
+  have supabase || { STATUS=manual; DETAIL="depende do supabase"; return; }
+  supabase projects list >/dev/null 2>&1 || needs_person supabase-login
+}
+
+check_wrangler_login() {
+  local out
+  have wrangler || { STATUS=manual; DETAIL="depende do wrangler"; return; }
+  out="$(wrangler whoami 2>&1)" || { needs_person wrangler-login; return; }
+  case "$out" in *"not authenticated"*) needs_person wrangler-login ;; esac
+}
+
 check_uv_sync() {
   if [ -z "$CASE_DIR" ]; then STATUS=manual; DETAIL="depende do case-clone"; return; fi
   have uv || { STATUS=missing; DETAIL="depende do uv"; return; }
@@ -259,7 +308,14 @@ inspect() {
   STATUS=ok
   DETAIL=""
   case "$1" in
-    brew | gh | claude) have "$1" || STATUS=missing ;;
+    brew | gh | docker | supabase | claude) have "$1" || STATUS=missing ;;
+    node) check_node ;;
+    # Uma máquina em que o docker já responde roda outro motor, e fica com ele.
+    colima) have colima || docker info >/dev/null 2>&1 || STATUS=missing ;;
+    docker-daemon) check_docker_daemon ;;
+    wrangler) check_wrangler ;;
+    supabase-login) check_supabase_login ;;
+    wrangler-login) check_wrangler_login ;;
     git) check_git ;;
     uv) check_uv ;;
     python) uv python find ">=$PYTHON_FLOOR" >/dev/null 2>&1 || STATUS=missing ;;
@@ -281,14 +337,17 @@ inspect() {
 }
 
 all_items() {
-  case "$SYSTEM" in macos*) echo "brew $ITEMS" ;; *) echo "$ITEMS" ;; esac
+  case "$SYSTEM" in
+    macos*) echo "brew $ITEMS" ;;
+    *) echo "$ITEMS" | sed 's/ colima / /' ;;
+  esac
 }
 
 report() {
   local item failed=0
   for item in $(all_items); do
     inspect "$item"
-    printf '%-9s%-14s%s\n' "$STATUS" "$item" "$DETAIL"
+    printf '%-9s%-16s%s\n' "$STATUS" "$item" "$DETAIL"
     [ "$STATUS" = ok ] || failed=1
   done
   return "$failed"
@@ -325,9 +384,36 @@ add_github_cli_repository() {
       | as_root tee /etc/apt/sources.list.d/github-cli.list >/dev/null
 }
 
+# O repositório da NodeSource para o apt, com a LTS de NODE_MAJOR. O Ubuntu traz um
+# Node.js velho demais para o Wrangler. A chave vem em texto, e o apt lê o .asc.
+add_nodesource_repository() {
+  local keyring=/etc/apt/keyrings/nodesource.asc
+  ensure_curl || return 1
+  as_root mkdir -p -m 755 /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | as_root tee "$keyring" >/dev/null \
+    && as_root chmod go+r "$keyring" \
+    && echo "deb [signed-by=$keyring] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" \
+      | as_root tee /etc/apt/sources.list.d/nodesource.list >/dev/null
+}
+
+# O Supabase CLI não se instala pelo npm global. No Linux, o binário do último
+# release vai para ~/.local/bin, sem sudo.
+install_supabase_binary() {
+  local arch
+  ensure_curl || return 1
+  arch="$(dpkg --print-architecture)"
+  mkdir -p "$HOME/.local/bin" \
+    && curl -fsSL "https://github.com/supabase/cli/releases/latest/download/supabase_linux_$arch.tar.gz" \
+      | tar -xz -C "$HOME/.local/bin" supabase
+}
+
+# O motor é o Colima, não o Docker Desktop: o docker do Homebrew é só o cliente.
 install_on_macos() {
   case "$1" in
-    git | gh) brew install "$1" && hash -r ;;
+    git | gh | docker | colima) brew install "$1" && hash -r ;;
+    node) if brew list node >/dev/null 2>&1; then brew upgrade node; else brew install node; fi ;;
+    supabase) brew install supabase/tap/supabase ;;
+    docker-daemon) colima start ;;
   esac
 }
 
@@ -337,10 +423,15 @@ add_git_core_repository() {
   as_root add-apt-repository -y ppa:git-core/ppa
 }
 
+# O Docker Engine vem do script oficial, que também liga o serviço. Entrar no
+# grupo docker só vale depois que a pessoa abre o terminal de novo.
 install_on_debian() {
   case "$1" in
     git) if have git && is_ubuntu; then add_git_core_repository && apt_install git; else apt_install git; fi ;;
     gh) add_github_cli_repository && apt_install gh ;;
+    node) add_nodesource_repository && apt_install nodejs ;;
+    docker) ensure_curl && curl -fsSL https://get.docker.com | as_root sh && as_root usermod -aG docker "$USER" ;;
+    supabase) install_supabase_binary ;;
   esac
 }
 
@@ -349,6 +440,8 @@ install() {
     uv) if have uv; then update_uv; else ensure_curl && curl -LsSf https://astral.sh/uv/install.sh | sh; fi ;;
     python) uv python install "$PYTHON_FLOOR" ;;
     claude) ensure_curl && curl -fsSL https://claude.ai/install.sh | bash ;;
+    # Num prefixo da pessoa, o npm instala sem sudo, e o wrangler cai no ~/.local/bin.
+    wrangler) npm install -g --prefix "$HOME/.local" wrangler ;;
     case-clone) git -C "$CASE_DIR" remote add upstream "$UPSTREAM_URL" ;;
     uv-sync) (cd "$CASE_DIR" && uv sync) ;;
     ahrena) install_ahrena ;;

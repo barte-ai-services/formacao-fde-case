@@ -1,4 +1,4 @@
-"""Testes da skill setup-fde (formacao-fde-ops#50). Offline: a suíte do script roda numa caixa de areia de dublês."""
+"""Testes da skill setup-fde (formacao-fde-ops#50 e #58). Offline: a suíte do script roda numa caixa de areia de dublês."""
 
 from __future__ import annotations
 
@@ -15,7 +15,9 @@ SKILL = RAIZ / ".claude" / "skills" / "setup-fde"
 SCRIPT = SKILL / "scripts" / "setup-fde.sh"
 SUITE = SKILL / "scripts" / "test-setup-fde.sh"
 GATILHOS = ("configura o meu setup", "setup de FDE", "o que falta instalar", "meu ambiente não funciona")
-PROIBIDOS = re.compile(r"aws|terraform|docker|colima|ghcr|cfn-lint|session-manager", re.I)
+# O Docker entrou na stack da turma pela #58; a nuvem e o registro de imagens do time, não.
+PROIBIDOS = re.compile(r"aws|terraform|ghcr|cfn-lint|session-manager|--cask|docker-desktop", re.I)
+STACK = ("node", "docker", "colima", "docker-daemon", "supabase", "wrangler", "supabase-login", "wrangler-login")
 PEDIDO = "configura o meu setup de FDE"
 INSTALAR_CLAUDE = "curl -fsSL https://claude.ai/install.sh | bash"
 
@@ -59,8 +61,17 @@ def test_script_tem_check_e_fix():
         assert re.search(rf"\b{re.escape(item)}\b", texto), item
 
 
+def test_script_tem_a_stack_de_build_e_publicacao():
+    """#58/AC-1: o script confere o Node.js, o Docker, o Supabase CLI, o Wrangler e os logins deles."""
+    texto = SCRIPT.read_text(encoding="utf-8")
+    itens = re.search(r'^ITEMS="([^"]*)"', texto, re.M)
+    assert itens, "o script não declara ITEMS"
+    for item in STACK:
+        assert item in itens.group(1).split(), item
+
+
 def test_nenhum_item_fala_do_que_e_do_time():
-    """#50/AC-4: a skill não fala de nuvem, de contêiner nem de registro de imagens."""
+    """#50/AC-4 e #58/AC-2: a skill não fala da nuvem do time nem do registro de imagens, e não instala o Docker Desktop."""
     achados = []
     for caminho in SKILL.rglob("*"):
         if caminho.is_file():
@@ -75,8 +86,16 @@ def test_skill_nunca_faz_login_nem_pede_segredo():
     assert "Nunca faça um login pela pessoa" in corpo
     assert "Nunca peça para colar um token, uma senha ou uma chave na conversa" in corpo
     codigo = [linha for linha in SCRIPT.read_text(encoding="utf-8").splitlines() if not linha.lstrip().startswith("#")]
-    chamadas = [linha for linha in codigo if re.search(r"^\s*[^'\"]*\bgh auth (login|refresh)\b", linha)]
+    login = r"^\s*[^'\"]*\b(gh auth (login|refresh)|supabase login|wrangler login)\b"
+    chamadas = [linha for linha in codigo if re.search(login, linha)]
     assert not chamadas, chamadas
+
+
+def test_setup_explica_os_logins_novos():
+    """#58/AC-5: o SETUP.md explica cada ferramenta nova e cada login."""
+    texto = (RAIZ / "SETUP.md").read_text(encoding="utf-8")
+    for trecho in ("## Node.js e npm", "## Docker", "colima start", "get.docker.com", "supabase login", "wrangler login"):
+        assert trecho in texto, trecho
 
 
 @pytest.mark.parametrize("arquivo", ["README.md", "SETUP.md"])
