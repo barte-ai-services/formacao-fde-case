@@ -16,11 +16,11 @@ O que o curso já tem e o que ainda falta, em 14/11/2026.
 | **Cloudflare** | sim, o Wrangler (com Node.js e npm) | o servidor MCP num Worker | Wrangler pronto; o líder de cada grupo cria a conta ([teams/CONTAS.md](teams/CONTAS.md)) |
 | **Docker** | sim (Colima no Mac) | sobe o Supabase local | pronto |
 | **Resend** | não | e-mail: avisar quem aprova | fora do curso; candidato para notificações |
-| **Stripe** | não | pagamentos | fora do curso; o caso não cobra ninguém |
+| **Barte** | não | pagamentos: cobrar, receber e pagar | fora do curso; o caso não cobra ninguém |
 | **Evolution API** | não | WhatsApp: pedir a aprovação onde a pessoa está | fora do curso; exige servidor próprio |
 | **Temporal** | não | fluxos longos: esperar a aprovação e retomar | fora do curso; o próximo passo quando o fluxo ficar longo |
 
-A leitura: a stack de build e publicação (Claude Code, GitHub, Supabase, Cloudflare) está instalada e documentada. As outras quatro resolvem problemas que o caso vai encontrar logo depois do primeiro agente: avisar alguém (Resend, Evolution API), esperar uma resposta que demora dias (Temporal) e cobrar (Stripe). Nenhuma delas é pré-requisito para o fim de semana.
+A leitura: a stack de build e publicação (Claude Code, GitHub, Supabase, Cloudflare) está instalada e documentada. As outras quatro resolvem problemas que o caso vai encontrar logo depois do primeiro agente: avisar alguém (Resend, Evolution API), esperar uma resposta que demora dias (Temporal) e cobrar ou pagar (Barte). Nenhuma delas é pré-requisito para o fim de semana.
 
 ## Claude Code
 
@@ -78,16 +78,18 @@ API de e-mail transacional, simples de integrar.
 
 **Use quando:** o agente precisa avisar uma pessoa: uma aprovação pendente, um resumo do dia, uma exceção.
 
-## Stripe
+## Barte
 
-Pagamentos, assinaturas e faturas, com modo de teste completo.
+A plataforma de pagamentos da casa: pedidos, links de pagamento, assinaturas, cartão com 3DS e antifraude, Pix e conta digital, com sandbox para testar.
 
-- [Documentação](https://docs.stripe.com)
-- [Stripe CLI](https://docs.stripe.com/stripe-cli): `stripe listen` repassa para a sua máquina os avisos que o Stripe envia (os webhooks)
-- [SDK de Python](https://github.com/stripe/stripe-python)
-- [Servidor MCP e ferramentas para agentes](https://docs.stripe.com/mcp)
+- [Documentação para desenvolvedores](https://docs.barte.com)
+- [Referência da API](https://docs.barte.com/api-reference): compradores, pedidos, estornos e 3DS
+- [Primeiros passos do vendedor](https://docs.barte.com/guias/passo-a-passo-do-vendedor/1o-preparacao): preparar a conta e criar pedidos, links de pagamento e assinaturas
+- [Cartões para testes](https://docs.barte.com/guias/inicio/cartoes-para-testes) e [métodos de pagamento](https://docs.barte.com/guias/inicio/metodos-de-pagamento)
+- [Banking](https://docs.barte.com/banking): Pix com QR Code, transferências e os avisos por webhook
+- [SDK web](https://docs.barte.com/sdks): captura os dados do cartão com segurança, sem que eles passem pelo seu servidor
 
-**Use quando:** o produto cobra o cliente. Desenvolva sempre no modo de teste, com as chaves de teste.
+**Use quando:** o produto cobra o cliente ou paga um fornecedor. Desenvolva sempre no sandbox, com as chaves de teste.
 
 ## Python
 
@@ -143,7 +145,7 @@ Ferramentas que fecham os buracos da arquitetura de referência quando o projeto
 
 - **[Playwright](https://playwright.dev/python/):** testa a interface ponta a ponta, num navegador de verdade. **Use quando:** o grupo tiver uma tela, como a de quem aprova.
 - **[n8n](https://docs.n8n.io):** automações entre ferramentas, montadas visualmente. **Use quando:** o fluxo for curto e não justificar o Temporal.
-- **[Bruno](https://docs.usebruno.com):** chama e versiona as chamadas de API no próprio repositório. As chaves ficam no `.env`, lidas como `{{process.env.NOME}}`, nunca escritas no arquivo da coleção. **Use quando:** testar as APIs do Supabase, do Resend ou do Stripe sem escrever código.
+- **[Bruno](https://docs.usebruno.com):** chama e versiona as chamadas de API no próprio repositório. As chaves ficam no `.env`, lidas como `{{process.env.NOME}}`, nunca escritas no arquivo da coleção. **Use quando:** testar as APIs do Supabase, do Resend ou da Barte sem escrever código.
 
 ## Regra para todas
 
