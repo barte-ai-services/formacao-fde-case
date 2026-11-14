@@ -21,6 +21,6 @@ Para atualizar, copie de novo as duas pastas e o script de uma versão nova do p
 
 ## Quem publica a arquitetura
 
-A página de `artifacts/arquitetura-ja-chegou/` mora na org da Barte (`home: team`), e só a Barte a republica, no link gravado no `artifact.json`. Num fork, não rode o `plan` dessa pasta para o link oficial: a sua sessão não alcança esse link. Para ver uma cópia sua, publique um rascunho (`plan --local`, publicação sem `url`) e não grave esse link no manifesto.
+A página de `artifacts/arquitetura-ja-chegou/` mora na org da Barte (`home: team`), e só a Barte a republica, no link gravado no `artifact.json`. Num fork, não rode o `plan` dessa pasta para o link oficial: a sua sessão não alcança esse link. Para ver uma cópia sua, publique um rascunho (`plan --local --move`, publicação sem `url`) e não grave esse link no manifesto.
 
 A pasta `scripts/` não é uma skill: não tem `SKILL.md`, e o Claude Code não a carrega como skill.
