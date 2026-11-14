@@ -65,8 +65,7 @@ JSON
   stub id 'echo 1000'
   stub sudo 'if [ "$1" = -n ]; then [ -z "${FAKE_SUDO_PASSWORD:-}" ] || exit 1; shift; fi
   case "$1" in apt-get | dpkg | add-apt-repository | true) "$@" ;; tee) cat > /dev/null ;; esac'
-  # formacao-fde-ops #57: claude plugin list --json; FAKE_PLUGINS troca a lista.
-  # Instalar um plugin deixa a lista completa; FAKE_INSTALL_FAILS faz a instalação falhar.
+  # formacao-fde-ops #57: claude plugin list --json; FAKE_PLUGINS troca a lista; instalar um plugin deixa a lista completa; FAKE_INSTALL_FAILS faz a instalação falhar.
   stub claude 'd="$(dirname "$CALLS")"
   case "$*" in
   "plugin marketplace list") [ -n "${FAKE_NO_MARKETPLACE:-}" ] && [ ! -f "$d/marketplace-added" ] || echo "ahrena (ahrenatechnology/ahrena-framework)" ;;
@@ -310,7 +309,7 @@ run fix FAKE_PLUGINS="$FALTA_UM" FAKE_GIT_VERSION=2.34.1 FAKE_SUDO_PASSWORD=1
 expect "com o git velho, o ahrena espera o git" detail_has ahrena "depende do git 2.45"
 expect "com o git velho, o fix não tenta instalar plugin" never_ran "claude plugin install"
 
-# O git: o Claude Code precisa de um git novo para instalar os plugins.
+# formacao-fde-ops #57: o git novo que os plugins pedem.
 healthy_machine
 run check FAKE_GIT_VERSION=2.34.1
 expect "o git 2.34 do Ubuntu sai outdated" line_is outdated git

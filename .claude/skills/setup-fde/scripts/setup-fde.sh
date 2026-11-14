@@ -15,9 +15,7 @@ set -u
 UPSTREAM_REPO="barte-ai-services/formacao-fde-case"
 UPSTREAM_URL="https://github.com/$UPSTREAM_REPO.git"
 PYTHON_FLOOR="3.12"
-# formacao-fde-ops #57: o Claude Code instala os plugins do Ahrena num clone
-# parcial com a rede bloqueada, e o git 2.34 do Ubuntu 22.04 cai com segfault
-# no checkout desse clone. Abaixo deste git, os plugins não instalam.
+# formacao-fde-ops #57: o git 2.34 cai no checkout do clone parcial dos plugins; 2.45 é o piso escolhido, ainda não provado.
 GIT_FLOOR="2.45"
 AHRENA_MARKETPLACE="ahrenatechnology/ahrena-framework"
 
@@ -221,8 +219,7 @@ run_python() {
   fi
 }
 
-# formacao-fde-ops #57: os plugins do Ahrena que o settings.json do case liga,
-# instalados e habilitados no Claude Code. AHRENA_MISSING guarda os que faltam.
+# formacao-fde-ops #57: os plugins do Ahrena que o settings.json do case liga, instalados e habilitados no Claude Code; AHRENA_MISSING guarda os que faltam.
 check_ahrena() {
   AHRENA_MISSING=""
   if [ -z "$CASE_DIR" ]; then STATUS=manual; DETAIL="depende do case-clone"; return; fi
@@ -242,8 +239,7 @@ check_ahrena() {
   STATUS=missing
 }
 
-# formacao-fde-ops #57: instala no escopo local, que grava no
-# .claude/settings.local.json, fora do git, e deixa o settings.json do fork quieto.
+# formacao-fde-ops #57: instala no escopo local, que grava no .claude/settings.local.json, fora do git, e deixa o settings.json do fork quieto.
 install_ahrena() {
   local plugin failed=0
   claude plugin marketplace list 2>/dev/null | grep -q "$AHRENA_MARKETPLACE" \
