@@ -35,11 +35,11 @@ Os itens, na ordem:
 | `node` | o Node.js e o npm estão instalados, e o Node.js é o 22 ou mais novo, que o Wrangler pede (senão sai `outdated`, e o `fix` atualiza) |
 | `uv` | o uv está instalado e é novo o bastante para o `uv sync --check` (senão sai `outdated`, e o `fix` atualiza) |
 | `python` | o uv tem um Python 3.12 ou mais novo |
-| `docker` | o cliente do Docker está instalado: no macOS pelo Homebrew, no Ubuntu o Docker Engine pelo `get.docker.com`. Nunca o Docker Desktop |
+| `docker` | o cliente do Docker está instalado: no macOS pelo Homebrew, no Ubuntu o Docker Engine pelo repositório apt da Docker. Nunca o Docker Desktop |
 | `colima` | o motor do Docker no macOS, só lá. Um Mac em que o `docker` já responde com outro motor fica `ok` |
 | `docker-daemon` | o motor responde ao `docker info`. No macOS o `fix` roda `colima start`; no Ubuntu é `manual`, porque ligar o serviço e entrar no grupo `docker` pedem `sudo` e um terminal novo |
-| `supabase` | o Supabase CLI: no macOS pelo `supabase/tap/supabase`, no Ubuntu o binário do último release em `~/.local/bin`. Nunca pelo `npm -g`, que o Supabase não aceita |
-| `wrangler` | o Wrangler da Cloudflare, pelo npm em `~/.local` (sem `sudo`). Espera o `node` |
+| `supabase` | o Supabase CLI: no macOS pelo `supabase/tap/supabase`, no Ubuntu o binário da versão fixa no script (`SUPABASE_VERSION`), conferido pelo hash, em `~/.local/bin`. Nunca pelo `npm -g`, que o Supabase não aceita |
+| `wrangler` | o Wrangler da Cloudflare, na versão fixa no script (`WRANGLER_VERSION`), pelo npm em `~/.local` (sem `sudo`). Espera o `node` |
 | `git-identity` | o git sabe o nome e o e-mail da pessoa |
 | `gh-login` | o GitHub CLI está logado na conta da pessoa |
 | `supabase-login` | o Supabase CLI está logado (`supabase projects list` responde) |

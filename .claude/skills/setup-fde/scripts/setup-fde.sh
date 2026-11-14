@@ -21,15 +21,20 @@ PYTHON_FLOOR="3.12"
 GIT_FLOOR="2.45"
 AHRENA_MARKETPLACE="ahrenatechnology/ahrena-framework"
 
-# O Wrangler pede um Node.js ainda com suporte. O `fix` instala a LTS de NODE_MAJOR.
+# formacao-fde-ops #58: O Wrangler pede um Node.js ainda com suporte. O `fix` instala a LTS de NODE_MAJOR.
 NODE_FLOOR=22
 NODE_MAJOR=24
+# formacao-fde-ops #58: versões fixas e conferidas. Subir uma é trocar o número e, no Supabase, os dois hashes do checksums.txt do release.
+WRANGLER_VERSION="4.162.0"
+SUPABASE_VERSION="3.1.0"
+SUPABASE_SHA256_AMD64="dbe9fd66771337fc198727da86b9d3551302f87a7091cd8781be2a4cd0c8ac4d"
+SUPABASE_SHA256_ARM64="e49b2ab2f4fb428f4e033174d6d9747dd93c95d1504142ba5090699b1ecd2563"
 
-# O colima só existe no macOS: o all_items tira ele dos outros sistemas.
+# formacao-fde-ops #58: o colima só existe no macOS, e o all_items tira ele dos outros sistemas.
 ITEMS="git gh node uv python docker colima docker-daemon supabase wrangler claude git-identity gh-login supabase-login wrangler-login case-clone uv-sync check-setup ahrena"
 
-# O uv, o Python dele, o claude, o supabase do Linux e o wrangler se instalam aqui, e um terminal aberto antes da
-# instalação ainda não tem essa pasta no PATH.
+# formacao-fde-ops #58: o uv, o Python dele, o claude, o supabase do Linux e o wrangler se instalam aqui,
+# formacao-fde-ops #58: e um terminal aberto antes da instalação ainda não tem essa pasta no PATH.
 PATH="$HOME/.local/bin:$PATH"
 export PATH
 
@@ -72,7 +77,7 @@ find_case_dir() {
 
 CASE_DIR="$(find_case_dir)"
 
-# O que o `fix` instala, por sistema. O resto é manual.
+# formacao-fde-ops #58: o que o `fix` instala, por sistema. O resto é manual.
 fixable_items() {
   local anywhere="uv python claude case-clone uv-sync ahrena"
   case "$SYSTEM" in
@@ -202,7 +207,7 @@ update_uv() {
   uv self update || { [ "$SYSTEM" = macos ] && brew upgrade uv; }
 }
 
-# O Node.js com o npm, numa versão que o Wrangler aceita.
+# formacao-fde-ops #58: O Node.js com o npm, numa versão que o Wrangler aceita.
 check_node() {
   local version major
   have node && have npm || { STATUS=missing; return; }
@@ -216,20 +221,20 @@ check_node() {
   DETAIL="$version, o Wrangler pede o $NODE_FLOOR ou mais novo"
 }
 
-# O motor do Docker responde. No Mac é o Colima; no Linux, o serviço do Docker Engine.
+# formacao-fde-ops #58: O motor do Docker responde. No Mac é o Colima; no Linux, o serviço do Docker Engine.
 check_docker_daemon() {
   have docker || { STATUS=manual; DETAIL="depende do docker"; return; }
   docker info >/dev/null 2>&1 || STATUS=missing
 }
 
-# O wrangler vem do npm, então espera o Node.js.
+# formacao-fde-ops #58: O wrangler vem do npm, então espera o Node.js.
 check_wrangler() {
   have wrangler && return
   STATUS=missing
   have npm || DETAIL="depende do node"
 }
 
-# Os logins leem a conta pela internet. A pessoa faz o login; o fix nunca tenta.
+# formacao-fde-ops #58: os logins leem a conta pela internet. A pessoa faz o login; o fix nunca tenta.
 check_supabase_login() {
   have supabase || { STATUS=manual; DETAIL="depende do supabase"; return; }
   supabase projects list >/dev/null 2>&1 || needs_person supabase-login
@@ -310,7 +315,7 @@ inspect() {
   case "$1" in
     brew | gh | docker | supabase | claude) have "$1" || STATUS=missing ;;
     node) check_node ;;
-    # Uma máquina em que o docker já responde roda outro motor, e fica com ele.
+    # formacao-fde-ops #58: uma máquina em que o docker já responde roda outro motor, e fica com ele.
     colima) have colima || docker info >/dev/null 2>&1 || STATUS=missing ;;
     docker-daemon) check_docker_daemon ;;
     wrangler) check_wrangler ;;
@@ -384,8 +389,7 @@ add_github_cli_repository() {
       | as_root tee /etc/apt/sources.list.d/github-cli.list >/dev/null
 }
 
-# O repositório da NodeSource para o apt, com a LTS de NODE_MAJOR. O Ubuntu traz um
-# Node.js velho demais para o Wrangler. A chave vem em texto, e o apt lê o .asc.
+# formacao-fde-ops #58: O repositório da NodeSource para o apt, com a LTS de NODE_MAJOR. O Ubuntu traz um Node.js velho demais para o Wrangler. A chave vem em texto, e o apt lê o .asc.
 add_nodesource_repository() {
   local keyring=/etc/apt/keyrings/nodesource.asc
   ensure_curl || return 1
@@ -396,18 +400,43 @@ add_nodesource_repository() {
       | as_root tee /etc/apt/sources.list.d/nodesource.list >/dev/null
 }
 
-# O Supabase CLI não se instala pelo npm global. No Linux, o binário do último
-# release vai para ~/.local/bin, sem sudo.
-install_supabase_binary() {
-  local arch
+# formacao-fde-ops #58: o repositório do Docker Engine para o apt, no lugar do get.docker.com, que roda um script remoto como root.
+add_docker_repository() {
+  local keyring=/etc/apt/keyrings/docker.asc os=debian codename
+  is_ubuntu && os=ubuntu
+  codename="$(sed -n 's/^UBUNTU_CODENAME=//p' "${OS_RELEASE:-/etc/os-release}" | tr -d '"')"
+  [ -n "$codename" ] || codename="$(sed -n 's/^VERSION_CODENAME=//p' "${OS_RELEASE:-/etc/os-release}" | tr -d '"')"
+  [ -n "$codename" ] || { echo "não achei o codinome do sistema em /etc/os-release" >&2; return 1; }
   ensure_curl || return 1
-  arch="$(dpkg --print-architecture)"
-  mkdir -p "$HOME/.local/bin" \
-    && curl -fsSL "https://github.com/supabase/cli/releases/latest/download/supabase_linux_$arch.tar.gz" \
-      | tar -xz -C "$HOME/.local/bin" supabase
+  as_root mkdir -p -m 755 /etc/apt/keyrings \
+    && curl -fsSL "https://download.docker.com/linux/$os/gpg" | as_root tee "$keyring" >/dev/null \
+    && as_root chmod go+r "$keyring" \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=$keyring] https://download.docker.com/linux/$os $codename stable" \
+      | as_root tee /etc/apt/sources.list.d/docker.list >/dev/null
 }
 
-# O motor é o Colima, não o Docker Desktop: o docker do Homebrew é só o cliente.
+# formacao-fde-ops #58: o Supabase CLI não se instala pelo npm global. No Linux, o binário da versão fixa vai para ~/.local/bin, sem sudo, depois de o hash bater.
+install_supabase_binary() {
+  local arch file expected dir code
+  ensure_curl || return 1
+  arch="$(dpkg --print-architecture)"
+  case "$arch" in
+    amd64) expected="$SUPABASE_SHA256_AMD64" ;;
+    arm64) expected="$SUPABASE_SHA256_ARM64" ;;
+    *) echo "o Supabase CLI não tem binário para $arch" >&2; return 1 ;;
+  esac
+  file="supabase_${SUPABASE_VERSION}_linux_$arch.tar.gz"
+  dir="$(mktemp -d)" || return 1
+  curl -fsSL -o "$dir/$file" "https://github.com/supabase/cli/releases/download/v$SUPABASE_VERSION/$file" \
+    && echo "$expected  $dir/$file" | sha256sum -c - >/dev/null \
+    && mkdir -p "$HOME/.local/bin" \
+    && tar -xzf "$dir/$file" -C "$HOME/.local/bin" supabase
+  code=$?
+  rm -rf "$dir"
+  return "$code"
+}
+
+# formacao-fde-ops #58: O motor é o Colima, não o Docker Desktop: o docker do Homebrew é só o cliente.
 install_on_macos() {
   case "$1" in
     git | gh | docker | colima) brew install "$1" && hash -r ;;
@@ -423,14 +452,16 @@ add_git_core_repository() {
   as_root add-apt-repository -y ppa:git-core/ppa
 }
 
-# O Docker Engine vem do script oficial, que também liga o serviço. Entrar no
-# grupo docker só vale depois que a pessoa abre o terminal de novo.
+# formacao-fde-ops #58: o Docker Engine vem do repositório da Docker, e o pacote liga o serviço. Entrar no grupo docker só vale num terminal novo.
 install_on_debian() {
   case "$1" in
     git) if have git && is_ubuntu; then add_git_core_repository && apt_install git; else apt_install git; fi ;;
     gh) add_github_cli_repository && apt_install gh ;;
     node) add_nodesource_repository && apt_install nodejs ;;
-    docker) ensure_curl && curl -fsSL https://get.docker.com | as_root sh && as_root usermod -aG docker "$USER" ;;
+    docker)
+      add_docker_repository \
+        && apt_install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
+        && as_root usermod -aG docker "$USER" ;;
     supabase) install_supabase_binary ;;
   esac
 }
@@ -440,8 +471,8 @@ install() {
     uv) if have uv; then update_uv; else ensure_curl && curl -LsSf https://astral.sh/uv/install.sh | sh; fi ;;
     python) uv python install "$PYTHON_FLOOR" ;;
     claude) ensure_curl && curl -fsSL https://claude.ai/install.sh | bash ;;
-    # Num prefixo da pessoa, o npm instala sem sudo, e o wrangler cai no ~/.local/bin.
-    wrangler) npm install -g --prefix "$HOME/.local" wrangler ;;
+    # formacao-fde-ops #58: num prefixo da pessoa, o npm instala sem sudo, e o wrangler cai no ~/.local/bin.
+    wrangler) npm install -g --prefix "$HOME/.local" "wrangler@$WRANGLER_VERSION" ;;
     case-clone) git -C "$CASE_DIR" remote add upstream "$UPSTREAM_URL" ;;
     uv-sync) (cd "$CASE_DIR" && uv sync) ;;
     ahrena) install_ahrena ;;

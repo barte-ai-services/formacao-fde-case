@@ -187,11 +187,13 @@ O **Node.js** roda programas em JavaScript; o **npm** vem junto com ele e instal
 brew install node
 ```
 
-**Windows (Ubuntu no WSL):** o Node.js que vem no Ubuntu é velho demais, então ele vem do repositório da NodeSource:
+**Windows (Ubuntu no WSL):** o Node.js que vem no Ubuntu é velho demais, então ele vem do repositório da NodeSource. Rode um comando por vez:
 
 ```bash
-curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
-sudo apt install -y nodejs
+sudo mkdir -p -m 755 /etc/apt/keyrings
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo tee /etc/apt/keyrings/nodesource.asc > /dev/null
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.asc] https://deb.nodesource.com/node_24.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list > /dev/null
+sudo apt update && sudo apt install -y nodejs
 ```
 
 Confira com `node --version` (deve começar com `v22` ou mais) e `npm --version`.
@@ -209,14 +211,17 @@ colima start
 
 O `colima start` liga o motor. Depois de reiniciar o Mac, rode `colima start` de novo antes de usar o Docker.
 
-**Windows (Ubuntu no WSL):**
+**Windows (Ubuntu no WSL):** o Docker Engine vem do repositório oficial da Docker. Rode um comando por vez:
 
 ```bash
-curl -fsSL https://get.docker.com | sudo sh
+sudo mkdir -p -m 755 /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/keyrings/docker.asc > /dev/null
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update && sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo usermod -aG docker "$USER"
 ```
 
-O segundo comando deixa você usar o Docker sem `sudo`. Ele só vale num terminal novo: no Ubuntu do WSL, abra o PowerShell, rode `wsl --shutdown` e abra o Ubuntu de novo. No Ubuntu fora do WSL, saia da sua sessão e entre de novo.
+O último comando deixa você usar o Docker sem `sudo`. Ele só vale num terminal novo: no Ubuntu do WSL, abra o PowerShell, rode `wsl --shutdown` e abra o Ubuntu de novo. No Ubuntu fora do WSL, saia da sua sessão e entre de novo.
 
 Se o Docker disser que não consegue falar com o motor (`Cannot connect to the Docker daemon`), ligue o serviço:
 
@@ -239,12 +244,7 @@ O **Supabase** guarda os dados e o login dos usuários do que você publica. O *
    brew install supabase/tap/supabase
    ```
 
-   **Windows (Ubuntu no WSL):** o CLI não se instala pelo npm. Baixe o programa pronto para a sua pasta pessoal:
-
-   ```bash
-   mkdir -p ~/.local/bin
-   curl -fsSL https://github.com/supabase/cli/releases/latest/download/supabase_linux_$(dpkg --print-architecture).tar.gz | tar -xz -C ~/.local/bin supabase
-   ```
+   **Windows (Ubuntu no WSL):** o CLI não se instala pelo npm. O mais simples é pedir ao Claude Code: "instala o Supabase CLI pelo setup-fde". Ele baixa a versão que o curso usa, confere que o arquivo é o original e põe o programa na sua pasta pessoal, sem pedir senha. À mão, siga a [página de instalação do Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started) para Linux.
 
    Feche e abra o terminal de novo e confira com `supabase --version`.
 
@@ -264,7 +264,7 @@ A **Cloudflare** entrega o que você publica na internet. O **Wrangler** é o pr
 2. Instale o Wrangler, na sua pasta pessoal (assim ele não pede a senha do computador):
 
    ```bash
-   npm install -g --prefix ~/.local wrangler
+   npm install -g --prefix ~/.local wrangler@4.162.0
    ```
 
    Feche e abra o terminal de novo e confira com `wrangler --version`. Se o terminal disser que `wrangler` não existe, rode `echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc` (no Mac, `~/.zshrc` no lugar de `~/.bashrc`) e abra o terminal de novo.

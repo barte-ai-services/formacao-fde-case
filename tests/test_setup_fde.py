@@ -94,7 +94,7 @@ def test_skill_nunca_faz_login_nem_pede_segredo():
 def test_setup_explica_os_logins_novos():
     """#58/AC-5: o SETUP.md explica cada ferramenta nova e cada login."""
     texto = (RAIZ / "SETUP.md").read_text(encoding="utf-8")
-    for trecho in ("## Node.js e npm", "## Docker", "colima start", "get.docker.com", "supabase login", "wrangler login"):
+    for trecho in ("## Node.js e npm", "## Docker", "colima start", "download.docker.com", "supabase login", "wrangler login"):
         assert trecho in texto, trecho
 
 

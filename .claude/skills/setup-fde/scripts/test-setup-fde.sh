@@ -13,7 +13,7 @@ set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
 SCRIPT="$HERE/setup-fde.sh"
 ORIGINAL="https://github.com/barte-ai-services/formacao-fde-case.git"
-INSTALLS='apt-get|brew (install|upgrade)|curl|dpkg -i|npm install|colima start|tar|usermod|supabase login|wrangler login|uv python install|uv self update|uv sync$|git .*remote (add|set-url)|gh auth (login|setup-git|refresh)|gh repo fork|add-apt-repository|claude plugin (install|marketplace add)'
+INSTALLS='apt-get|brew (install|upgrade)|curl|dpkg -i|npm install|colima start|tar|usermod|sha256sum|supabase login|wrangler login|uv python install|uv self update|uv sync$|git .*remote (add|set-url)|gh auth (login|setup-git|refresh)|gh repo fork|add-apt-repository|claude plugin (install|marketplace add)'
 FAILURES=0
 SANDBOX=""
 REAL_PYTHON="$(type -P python3)"
@@ -50,7 +50,7 @@ JSON
   : > "$SANDBOX/case/scripts/check_setup.py"
   : > "$SANDBOX/case/.synced"
   : > "$SANDBOX/calls"
-  echo 'ID=ubuntu' > "$SANDBOX/os-release"
+  printf 'ID=ubuntu\nVERSION_CODENAME=noble\n' > "$SANDBOX/os-release"
   for tool in sh sed grep head mktemp rm mkdir cat chmod cp dirname ln tr tee awk; do
     ln -s "$(type -P "$tool")" "$SANDBOX/bin/$tool"
   done
@@ -61,27 +61,27 @@ JSON
     stub "$tool" ''
   done
   stub dpkg 'echo amd64'
-  # Os dublês das ferramentas novas ficam numa pasta à parte, e cada instalador
-  # de mentira cria o dublê dele ali.
+  # formacao-fde-ops #58: os dublês das ferramentas novas ficam numa pasta à parte, e cada instalador de mentira cria o dublê dele ali.
   stub node 'echo "${FAKE_NODE_VERSION:-v24.1.0}"'
-  stub npm 'case "$*" in "install -g --prefix "*" wrangler") mkdir -p "$4/bin"; printf "#!/bin/sh\\n" > "$4/bin/wrangler"; chmod +x "$4/bin/wrangler" ;; esac'
+  stub npm 'case "$*" in "install -g --prefix "*" wrangler@"*) mkdir -p "$4/bin"; printf "#!/bin/sh\\n" > "$4/bin/wrangler"; chmod +x "$4/bin/wrangler" ;; esac'
   stub wrangler 'case "$*" in whoami) [ -n "${FAKE_WRANGLER_LOGGED_OUT:-}" ] && echo "You are not authenticated. Please run wrangler login." ;; esac; exit 0'
   stub supabase 'case "$*" in "projects list") [ -z "${FAKE_SUPABASE_LOGGED_OUT:-}" ] ;; esac'
-  # O docker responde quando o motor está ligado; o colima start liga.
+  # formacao-fde-ops #58: O docker responde quando o motor está ligado; o colima start liga.
   stub docker 'case "$*" in info) [ -z "${FAKE_DOCKER_DOWN:-}" ] || [ -f "$(dirname "$CALLS")/colima-started" ] ;; esac'
-  # O tar do release do Supabase deixa o binário na pasta que recebeu.
-  stub tar 'printf "#!/bin/sh\\n" > "$3/supabase"; chmod +x "$3/supabase"'
-  # Uma cópia de cada dublê fica de reserva: o instalador de mentira põe a cópia
-  # de volta no PATH, e a ferramenta instalada se comporta como a de verdade.
+  # formacao-fde-ops #58: O tar do release do Supabase deixa o binário na pasta que recebeu.
+  stub tar 'printf "#!/bin/sh\\n" > "$4/supabase"; chmod +x "$4/supabase"'
+  # formacao-fde-ops #58: FAKE_BAD_CHECKSUM faz o hash do Supabase não bater.
+  stub sha256sum 'cat > /dev/null; [ -z "${FAKE_BAD_CHECKSUM:-}" ]'
+  # formacao-fde-ops #58: uma cópia de cada dublê fica de reserva: o instalador de mentira põe a cópia de volta no PATH, e a ferramenta instalada se comporta como a de verdade.
   mkdir -p "$SANDBOX/spare"
   cp "$SANDBOX/bin/node" "$SANDBOX/bin/npm" "$SANDBOX/bin/docker" "$SANDBOX/spare/"
   stub uname 'case "$1" in -s) echo "${FAKE_SYSTEM:-Linux}" ;; *) echo x86_64 ;; esac'
-  # Nunca root, e o sudo só repassa para os dublês: nada toca o /etc de verdade.
+  # formacao-fde-ops #58: nunca root, e o sudo só repassa para os dublês: nada toca o /etc de verdade.
   stub id 'echo 1000'
   stub sudo 'if [ "$1" = -n ]; then [ -z "${FAKE_SUDO_PASSWORD:-}" ] || exit 1; shift; fi
-  case "$1" in apt-get | dpkg | add-apt-repository | usermod | true) "$@" ;; tee) cat > /dev/null ;; sh) cat > /dev/null; cp "$(dirname "$CALLS")/spare/docker" "$(dirname "$0")/" ;; esac'
+  case "$1" in apt-get | dpkg | add-apt-repository | usermod | true) "$@" ;; tee) cat > /dev/null ;; esac'
   # formacao-fde-ops #57: claude plugin list --json; FAKE_PLUGINS troca a lista.
-  # Instalar um plugin deixa a lista completa; FAKE_INSTALL_FAILS faz a instalação falhar.
+  # formacao-fde-ops #57: instalar um plugin deixa a lista completa; FAKE_INSTALL_FAILS faz a instalação falhar.
   stub claude 'd="$(dirname "$CALLS")"
   case "$*" in
   "plugin marketplace list") [ -n "${FAKE_NO_MARKETPLACE:-}" ] && [ ! -f "$d/marketplace-added" ] || echo "ahrena (ahrenatechnology/ahrena-framework)" ;;
@@ -95,7 +95,10 @@ JSON
   esac'
   cp "$SANDBOX/bin/claude" "$SANDBOX/claude-instalado"
   # formacao-fde-ops #57: Instalar o claude o põe no PATH, como o instalador de verdade.
-  stub curl 'case "$*" in *claude.ai/install.sh*) cp "$(dirname "$CALLS")/claude-instalado" "$(dirname "$0")/claude" ;; esac'
+  stub curl 'case "$*" in
+    *claude.ai/install.sh*) cp "$(dirname "$CALLS")/claude-instalado" "$(dirname "$0")/claude" ;;
+    "-fsSL -o "*) : > "$3" ;;
+  esac'
   stub git 'case "$*" in
     --version) echo "git version ${FAKE_GIT_VERSION:-2.47.1}" ;;
     "config user.name") [ -n "${FAKE_NO_IDENTITY:-}" ] || echo Ada ;;
@@ -123,6 +126,7 @@ JSON
   # formacao-fde-ops #57: Instalar o gh pelo apt o põe no PATH.
   stub apt-get 'case "$*" in
     "install -y gh") printf "#!/bin/sh\n" > "$(dirname "$0")/gh"; chmod +x "$(dirname "$0")/gh" ;;
+    "install -y docker-ce "*) cp "$(dirname "$CALLS")/spare/docker" "$(dirname "$0")/" ;;
     "install -y nodejs") cp "$(dirname "$CALLS")/spare/node" "$(dirname "$CALLS")/spare/npm" "$(dirname "$0")/" ;;
   esac'
 }
@@ -241,8 +245,8 @@ run fix FAKE_SYSTEM=FreeBSD
 expect "num sistema sem instalador, o que falta é manual" line_is manual gh
 expect "num sistema sem instalador, nada é instalado" no_install_ran
 
-# covers barte-ai-services/formacao-fde-ops#58/AC-1, AC-2
-# O Node.js com o npm, e numa versão que o Wrangler aceita.
+# covers formacao-fde-ops #58/AC-1, AC-2
+# formacao-fde-ops #58: o Node.js com o npm, e numa versão que o Wrangler aceita.
 healthy_machine
 run check FAKE_NODE_VERSION=v18.19.1
 expect "um Node.js 18 sai outdated" line_is outdated node
@@ -255,7 +259,7 @@ expect "sem npm, o wrangler espera o node" detail_has wrangler "depende do node"
 run fix
 expect "no Ubuntu o Node.js vem da NodeSource" ran "deb.nodesource.com/gpgkey/nodesource-repo.gpg.key"
 expect "no Ubuntu o Node.js entra pelo apt" ran "apt-get install -y nodejs"
-expect "o wrangler entra pelo npm, sem sudo" ran "npm install -g --prefix $SANDBOX/home/.local wrangler"
+expect "o wrangler entra pelo npm, sem sudo" ran "npm install -g --prefix $SANDBOX/home/.local wrangler@4."
 expect "depois do fix o node fica ok" line_is ok node
 expect "depois do fix o wrangler fica ok" line_is ok wrangler
 
@@ -263,14 +267,15 @@ healthy_mac
 run fix FAKE_SYSTEM=Darwin FAKE_NODE_VERSION=v20.0.0
 expect "no Mac o Node.js velho é atualizado pelo Homebrew" ran "brew upgrade node"
 
-# O Supabase CLI: Homebrew no Mac, o binário do release no Linux.
+# formacao-fde-ops #58: O Supabase CLI: Homebrew no Mac, o binário do release no Linux.
 healthy_machine
 rm "$SANDBOX/bin/supabase"
 run check
 expect "sem o Supabase CLI, o supabase sai missing" line_is missing supabase
 expect "sem o Supabase CLI, o login espera ele" detail_has supabase-login "depende do supabase"
 run fix
-expect "no Ubuntu o Supabase CLI vem do release do GitHub" ran "curl -fsSL https://github.com/supabase/cli/releases/latest/download/supabase_linux_amd64.tar.gz"
+expect "no Ubuntu o Supabase CLI vem de um release fixo do GitHub" ran "https://github.com/supabase/cli/releases/download/v3."
+expect "no Ubuntu o Supabase CLI confere o hash" ran "sha256sum -c -"
 expect "no Ubuntu o Supabase CLI não passa pelo npm" never_ran "npm install -g --prefix $SANDBOX/home/.local supabase"
 expect "no Ubuntu o Supabase CLI não pede sudo" never_ran "sudo"
 expect "depois do fix o supabase fica ok" line_is ok supabase
@@ -281,7 +286,13 @@ run fix FAKE_SYSTEM=Darwin
 expect "no Mac o Supabase CLI vem do tap do Supabase" only_install_is "brew install supabase/tap/supabase"
 expect "no Mac o supabase fica ok" line_is ok supabase
 
-# O Docker: Colima no Mac, Docker Engine no Linux, nunca o Docker Desktop.
+healthy_machine
+rm "$SANDBOX/bin/supabase"
+run fix FAKE_BAD_CHECKSUM=1
+expect "um hash do Supabase que não bate não instala nada" never_ran "tar "
+expect "com o hash errado o supabase continua missing" line_is missing supabase
+
+# formacao-fde-ops #58: O Docker: Colima no Mac, Docker Engine no Linux, nunca o Docker Desktop.
 healthy_mac
 rm "$SANDBOX/bin/docker" "$SANDBOX/bin/colima"
 run fix FAKE_SYSTEM=Darwin FAKE_DOCKER_DOWN=1
@@ -302,7 +313,9 @@ run check
 expect "sem o docker, o docker sai missing" line_is missing docker
 expect "sem o docker, o motor espera ele" detail_has docker-daemon "depende do docker"
 run fix
-expect "no Ubuntu o Docker Engine vem do get.docker.com" ran "curl -fsSL https://get.docker.com"
+expect "no Ubuntu a chave do Docker vem do download.docker.com" ran "curl -fsSL https://download.docker.com/linux/ubuntu/gpg"
+expect "no Ubuntu o Docker Engine entra pelo apt" ran "apt-get install -y docker-ce docker-ce-cli containerd.io"
+expect "nada roda o get.docker.com" never_ran "get.docker.com"
 expect "no Ubuntu a pessoa entra no grupo docker" ran "usermod -aG docker ada"
 expect "no Ubuntu o docker fica ok" line_is ok docker
 
@@ -310,7 +323,8 @@ healthy_machine
 rm "$SANDBOX/bin/docker"
 run fix FAKE_SUDO_PASSWORD=1
 expect "quando o sudo pede senha, o docker continua missing" line_is missing docker
-expect "quando o sudo pede senha, o get.docker.com não roda" never_ran "usermod"
+expect "quando o sudo pede senha, o Docker Engine não entra" never_ran "apt-get install"
+expect "quando o sudo pede senha, ninguém entra no grupo docker" never_ran "usermod"
 
 healthy_machine
 run fix FAKE_DOCKER_DOWN=1
@@ -318,7 +332,7 @@ expect "no Ubuntu o motor parado é manual" line_is manual docker-daemon
 expect "a linha do motor traz o systemctl e o grupo" detail_has docker-daemon "sudo usermod -aG docker"
 expect "no Ubuntu o fix não liga o motor" no_install_ran
 
-# covers barte-ai-services/formacao-fde-ops#58/AC-3
+# covers formacao-fde-ops #58/AC-3
 healthy_machine
 run fix FAKE_SUPABASE_LOGGED_OUT=1 FAKE_WRANGLER_LOGGED_OUT=1
 expect "o login do Supabase é manual" line_is manual supabase-login
