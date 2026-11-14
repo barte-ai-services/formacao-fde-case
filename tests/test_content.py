@@ -6,7 +6,7 @@ import pytest
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SKIPPED_DIRS = {".git", ".venv", "__pycache__", ".pytest_cache", ".ruff_cache", "outputs"}
-TEXT_SUFFIXES = {".md", ".py", ".txt", ".csv", ".json", ".toml", ".yml", ".yaml", ".sh", ".cfg", ".ini", ""}
+TEXT_SUFFIXES = {".md", ".py", ".txt", ".csv", ".json", ".toml", ".yml", ".yaml", ".sh", ".cfg", ".ini", ".html", ""}
 
 TEMPLATES = [
     "checkpoint-1-diagnosis.md",
