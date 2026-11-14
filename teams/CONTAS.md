@@ -85,9 +85,29 @@ No fork líder, peça ao Claude Code:
 
 > Copie o exemplo `mcp-server` do repositório `cloudflare/python-workers-examples` para a pasta `servidor-mcp/` deste fork, troque o nome do Worker no `wrangler.jsonc` para o nome do grupo e troque as tools do exemplo pelas tools do caso.
 
-O exemplo guarda os dados no D1, o banco da própria Cloudflare. Para o caso, o grupo pode começar no D1 e depois ler o Supabase, como na [arquitetura de referência](https://claude.ai/artifact/8MzayYjsfMepQohd1b3DVJ).
+O exemplo guarda os dados no D1, o banco da própria Cloudflare. Para o caso, o grupo pode começar no D1 e depois ler o Supabase, como na [arquitetura de referência](../artifacts/arquitetura-ja-chegou/index.html).
 
-Na sua máquina, dentro de `servidor-mcp/`, teste antes de publicar:
+O exemplo pede o Python 3.14. A `setup-fde` instala o 3.12, mas o `uv run` baixa o 3.14 sozinho na primeira vez.
+
+### Criar o banco D1
+
+O exemplo já vem ligado a um banco D1, mas com um ID de mentira no `wrangler.jsonc`. Antes de rodar, dentro de `servidor-mcp/`:
+
+```bash
+wrangler d1 create <nome-do-banco>
+```
+
+Ele imprime um `database_id`. Cole esse ID e o nome do banco no `wrangler.jsonc`, no lugar do ID de zeros e do `mcp-incidents`. Depois crie as tabelas na sua máquina:
+
+```bash
+uv run pywrangler d1 migrations apply <nome-do-banco> --local
+```
+
+Se o grupo não for usar o D1, peça ao Claude Code para tirar o banco do `wrangler.jsonc` e do código, e pule esta parte.
+
+### Testar na sua máquina
+
+Dentro de `servidor-mcp/`:
 
 ```bash
 uv run pywrangler dev
@@ -96,6 +116,14 @@ uv run pywrangler dev
 O servidor sobe em `http://localhost:8787/mcp`.
 
 ### Publicar
+
+Na primeira vez, crie as tabelas também no banco da Cloudflare:
+
+```bash
+uv run pywrangler d1 migrations apply <nome-do-banco> --remote
+```
+
+Depois, e a cada mudança:
 
 ```bash
 uv run pywrangler deploy
@@ -111,7 +139,7 @@ Qualquer integrante convidado na conta da Cloudflare publica de novo do mesmo je
 
 ### Proteger com um token
 
-O exemplo não confere quem chama. Peça ao Claude Code para o servidor recusar a chamada sem o cabeçalho `Authorization: Bearer <token>` e grave o token como segredo do Worker:
+O exemplo não confere quem chama. Peça ao Claude Code para o servidor recusar a chamada sem o cabeçalho `Authorization: Bearer <token>` e grave o token como segredo do Worker, dentro de `servidor-mcp/`:
 
 ```bash
 wrangler secret put MCP_TOKEN
@@ -121,6 +149,14 @@ Ele pede o valor no terminal. Gere um token longo e guarde no gerenciador de sen
 
 ### Cada um liga o Claude Code
 
+Primeiro, ponha o token numa variável do terminal, sem que ele apareça na tela (cole e aperte Enter):
+
+```bash
+read -rs MCP_TOKEN
+```
+
+Depois:
+
 ```bash
 claude mcp add --transport http ja-chegou \
   https://<nome-do-worker>.<subdominio-do-grupo>.workers.dev/mcp \
@@ -129,7 +165,7 @@ claude mcp add --transport http ja-chegou \
 
 Abra o Claude Code e rode `/mcp`: o servidor `ja-chegou` precisa aparecer conectado.
 
-No plano gratuito, cada chamada tem 10 ms de CPU e o dia tem 100 mil chamadas ([limites](https://developers.cloudflare.com/workers/platform/pricing/)). Para tools que leem e gravam os dados do caso, sobra.
+No plano gratuito, cada chamada tem 10 ms de CPU e o dia tem 100 mil chamadas ([limites](https://developers.cloudflare.com/workers/platform/pricing/)). Se uma chamada passar dos 10 ms, a Cloudflare corta e devolve o **erro 1102**. O tempo de CPU de cada chamada aparece no painel do Worker, em **Metrics**: se o 1102 aparecer, mostre esse número ao Claude Code para enxugar a tool.
 
 ## O que nunca entra no fork
 
