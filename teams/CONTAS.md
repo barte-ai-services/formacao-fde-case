@@ -1,8 +1,8 @@
-# Contas do grupo no Supabase e na Cloudflare
+# Contas do grupo no Supabase, na Cloudflare e no FastMCP Gateway
 
-O grupo constrói com o Supabase (banco e autenticação) e publica com a Cloudflare (Workers). Quem cria as duas contas é o **líder do grupo**, o dono do fork líder. Depois ele convida os integrantes, e todo mundo trabalha nas mesmas contas.
+O grupo constrói com o Supabase (banco e autenticação) e publica com a Cloudflare (Workers). O servidor MCP do grupo pode ficar na Cloudflare ou no FastMCP Gateway, que hospeda servidores MCP escritos em Python. Quem cria as contas é o **líder do grupo**, o dono do fork líder. Depois ele convida os integrantes, quando o serviço deixa, e todo mundo trabalha nas mesmas contas.
 
-As duas contas são gratuitas. Ninguém precisa de cartão de crédito.
+As três contas são gratuitas. O Supabase e a Cloudflare não pedem cartão de crédito.
 
 ## Já tem conta? Crie uma segunda só para a formação
 
@@ -73,16 +73,67 @@ wrangler login
 
 Quem tem acesso a mais de uma conta na Cloudflare (a pessoal e a do grupo) escolhe a do grupo no primeiro `wrangler deploy`, quando ele perguntar, ou fixa o `account_id` da conta do grupo no arquivo de configuração do Wrangler (`wrangler.jsonc` ou `wrangler.toml`).
 
+## FastMCP Gateway: o líder cria
+
+O [FastMCP Gateway](https://gofastmcp.com/deployment/prefect-horizon), da Prefect, publica um servidor MCP em Python direto do GitHub e entrega um endereço `https://<nome>.fastmcp.app/mcp` para o Claude Code. Ele se chamava Horizon, e o painel e a documentação ainda usam esse nome no endereço (`horizon.prefect.io`). O antigo FastMCP Cloud virou o Gateway.
+
+O plano gratuito é o **Personal**: um desenvolvedor, até 200 servidores e um dia de logs. Os convites para o grupo só existem no plano pago, então no plano gratuito quem publica é o líder, e o grupo usa o endereço que ele publicar. Os limites estão em [prefect.io/pricing](https://www.prefect.io/pricing?product=horizon).
+
+1. Entre em [horizon.prefect.io/signup](https://horizon.prefect.io/signup) com o GitHub do líder, o mesmo do fork líder. Aqui a regra do e-mail com `+` não vale: o FastMCP Gateway só entra pelo GitHub.
+2. Na primeira entrada, crie a **organização** com o nome do grupo (por exemplo, `formacao-fde-grupo-1`).
+3. Conecte o GitHub: autorize o app e dê acesso só ao fork líder (**Only select repositories**).
+
+### FastMCP Gateway: preparar o servidor no fork
+
+O Gateway roda servidores do pacote `fastmcp`. No fork líder, o servidor do grupo precisa de:
+
+- **o `fastmcp` nas dependências:** `uv add fastmcp`, que grava no `pyproject.toml` e no `uv.lock`;
+- **o import do pacote:** `from fastmcp import FastMCP`;
+- **um objeto do servidor num arquivo Python**, por exemplo `mcp = FastMCP("ja-chegou")` em `servidor/main.py`. O `if __name__ == "__main__"` é ignorado.
+
+Antes de publicar, confira na sua máquina:
+
+```bash
+uv run fastmcp inspect servidor/main.py:mcp
+```
+
+Ele lista as tools. Se der erro aqui, também vai dar erro no Gateway.
+
+### FastMCP Gateway: publicar
+
+1. No painel, escolha o fork líder e preencha:
+   - **Server name:** o nome do grupo. Ele vira o endereço `https://<nome>.fastmcp.app/mcp`;
+   - **Entrypoint:** o arquivo e o objeto, no formato `servidor/main.py:mcp`;
+   - **Authentication:** desligada. Veja abaixo por quê;
+   - **Environment variables:** as chaves de que o servidor precisa, como a do Supabase. Elas ficam guardadas no Gateway e não aparecem de novo depois de salvas.
+2. Clique em **Deploy Server** e acompanhe o log. Em geral leva menos de um minuto, e o servidor aparece como **Live**.
+3. Cada push na branch principal do fork líder publica de novo. Cada pull request ganha uma prévia.
+
+**Por que a autenticação desligada.** Com ela ligada, só quem é da organização chama o servidor, e no plano gratuito a organização tem só o líder. Desligada, quem tem o endereço usa o servidor. Por isso:
+
+- **o endereço é a senha:** passe-o ao grupo pelo gerenciador de senhas ou numa mensagem direta, nunca no fork;
+- **o servidor só mexe nos dados fictícios do caso:** nada de dado real, e nenhuma tool devolve uma chave;
+- **no fim da imersão,** o líder religa a autenticação ou apaga o servidor.
+
+### FastMCP Gateway: cada um liga o Claude Code
+
+```bash
+claude mcp add --transport http ja-chegou https://<nome>.fastmcp.app/mcp
+```
+
+Abra o Claude Code e rode `/mcp`: o servidor `ja-chegou` precisa aparecer conectado. O botão **Connect** de cada servidor, no painel, mostra o comando pronto.
+
 ## O que nunca entra no fork
 
 O fork é público. Nada disto entra em commit, no código ou em arquivo versionado:
 
 - a senha do banco do Supabase;
 - as chaves do projeto Supabase (a chave secreta e a `service_role`);
-- os tokens de API da Cloudflare.
+- os tokens de API da Cloudflare;
+- o endereço do servidor no FastMCP Gateway, enquanto a autenticação estiver desligada, e as chaves `fmcp_` do Gateway.
 
-Elas ficam no seu gerenciador de senhas, nos secrets do Worker (`wrangler secret put`), nos secrets do repositório ou nos arquivos locais `.env` e `.dev.vars`, que não entram no git.
+Elas ficam no seu gerenciador de senhas, nos secrets do Worker (`wrangler secret put`), nas variáveis de ambiente do FastMCP Gateway, nos secrets do repositório ou nos arquivos locais `.env` e `.dev.vars`, que não entram no git.
 
 ## Registre na pasta do grupo
 
-No `README.md` da pasta do grupo, em `teams/`, o líder preenche o campo **Contas** com o nome da organização no Supabase e o nome da conta na Cloudflare. Só os nomes, nunca as chaves.
+No `README.md` da pasta do grupo, em `teams/`, o líder preenche o campo **Contas** com o nome da organização no Supabase, o nome da conta na Cloudflare e o nome da organização no FastMCP Gateway. Só os nomes, nunca as chaves nem o endereço do servidor.
