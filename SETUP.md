@@ -1,6 +1,44 @@
 # Setup: preparar a sua máquina para a Formação FDE
 
-Este guia é para quem não programa no dia a dia. Siga na ordem, copiando e colando os comandos. Reserve uns 30 a 45 minutos e faça **até quinta-feira, 12/11**, para chegar na sexta com tudo funcionando.
+Este guia é para quem não programa no dia a dia. Há dois caminhos: o **caminho principal**, em que o Claude Code configura a máquina com você, e o [passo a passo à mão](#passo-a-passo-à-mão), para quem prefere fazer cada instalação sozinho ou ficou travado no caminho principal. Os dois chegam ao mesmo lugar.
+
+> **Qual é o seu sistema?**
+> - **macOS:** siga as partes marcadas *macOS*.
+> - **Windows:** o caminho que damos suporte é o **WSL 2 com Ubuntu** (um Linux que roda dentro do Windows). Comece pela seção [Windows (WSL 2)](#windows-wsl-2) e depois siga as partes marcadas *Windows (Ubuntu no WSL)*. Todos os comandos são digitados **dentro do terminal do Ubuntu**, não no PowerShell.
+> - **Linux:** siga as partes marcadas *Windows (Ubuntu no WSL)*; os comandos são os mesmos no Ubuntu e no Debian.
+
+## Caminho principal: o Claude Code configura a máquina com você
+
+O repositório traz uma skill do Claude Code, a `setup-fde` (em `.claude/skills/setup-fde/`). Ela confere a máquina, instala o que falta (Git, GitHub CLI, uv, Python 3.12), deixa o seu fork com `origin` e `upstream` certos, prepara o projeto e roda o verificador. O que só você pode fazer, como entrar na sua conta do GitHub, ela explica e espera você fazer: ela nunca pede senha, token ou chave na conversa.
+
+1. **Instale o Claude Code.** Abra o terminal (veja [Como abrir o terminal](#como-abrir-o-terminal); no Windows, primeiro a seção [Windows (WSL 2)](#windows-wsl-2)) e rode:
+
+   ```bash
+   curl -fsSL https://claude.ai/install.sh | bash
+   ```
+
+   O comando precisa do `curl`, que já vem no macOS e no Ubuntu. Se o Ubuntu disser que ele não existe, rode antes `sudo apt update && sudo apt install -y curl`. Feche e abra o terminal de novo.
+
+2. **Entre com a sua conta.** Rode `claude` e siga as instruções na tela. Os organizadores vão passar as orientações sobre a conta e o acesso a usar na imersão.
+
+3. **Peça o setup.** Com o Claude Code aberto na pasta do case, peça:
+
+   ```
+   configura o meu setup de FDE
+   ```
+
+   Ele mostra o que está pronto e o que falta, instala o que dá e diz, passo a passo, o que você precisa fazer. Se algo pedir a senha do computador, ele passa o comando para você rodar no seu terminal.
+
+**Ainda não tem o case na sua máquina?** A skill mora dentro do repositório, então ela só aparece numa sessão do Claude Code aberta na pasta `formacao-fde-case`. Quem ainda não tem essa pasta tem dois jeitos de começar:
+
+- abra o Claude Code numa pasta qualquer e peça: "instala o git e o GitHub CLI e clona o meu fork do barte-ai-services/formacao-fde-case". Ele vai pedir para você entrar na sua conta do GitHub (`gh auth login`, que você mesmo roda) e depois roda `gh repo fork barte-ai-services/formacao-fde-case --clone`; ou
+- siga o [passo a passo à mão](#passo-a-passo-à-mão) até o clone (seções Git, Conta no GitHub e GitHub CLI, e o passo a passo do fork no [README.md](README.md#passo-a-passo-fazer-o-fork-e-clonar)).
+
+Depois, feche o Claude Code, entre na pasta (`cd formacao-fde-case`), abra uma sessão nova com `claude` e peça de novo "configura o meu setup de FDE".
+
+## Passo a passo à mão
+
+Se preferir fazer sozinho, siga na ordem, copiando e colando os comandos. Reserve uns 30 a 45 minutos.
 
 Você vai instalar:
 
@@ -11,11 +49,6 @@ Você vai instalar:
 5. **uv e Python 3.12**: o uv instala o Python e as bibliotecas do projeto.
 
 No fim, você roda um verificador que diz o que está pronto e o que falta.
-
-> **Qual é o seu sistema?**
-> - **macOS:** siga as partes marcadas *macOS*.
-> - **Windows:** o caminho que damos suporte é o **WSL 2 com Ubuntu** (um Linux que roda dentro do Windows). Comece pela seção [Windows (WSL 2)](#windows-wsl-2) e depois siga as partes marcadas *Windows (Ubuntu no WSL)*. Todos os comandos são digitados **dentro do terminal do Ubuntu**, não no PowerShell.
-> - **Linux:** siga as partes marcadas *Windows (Ubuntu no WSL)*; os comandos são os mesmos no Ubuntu e no Debian.
 
 ## Como abrir o terminal
 
