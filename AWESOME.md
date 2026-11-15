@@ -185,6 +185,13 @@ Ferramentas que fecham os buracos da arquitetura de referência quando o projeto
 - **[n8n](https://docs.n8n.io):** automações entre ferramentas, montadas visualmente. **Use quando:** o fluxo for curto e não justificar o Temporal.
 - **[Bruno](https://docs.usebruno.com):** chama e versiona as chamadas de API no próprio repositório. As chaves ficam no `.env`, lidas como `{{process.env.NOME}}`, nunca escritas no arquivo da coleção. **Use quando:** testar as APIs do Supabase, do Resend ou da Barte sem escrever código.
 
+### Backend em Python e mais recursos do Supabase
+
+- **[FastAPI](https://fastapi.tiangolo.com):** um framework web em Python para escrever APIs, com a validação do Pydantic. Roda num [Python Worker da Cloudflare](https://developers.cloudflare.com/workers/languages/python/packages/fastapi/). **Use quando:** o backend do grupo for em Python.
+- **[Servidor MCP em Python](https://github.com/cloudflare/python-workers-examples):** um servidor MCP num Python Worker, a partir do exemplo `mcp-server` da Cloudflare, com o [SDK oficial de MCP em Python](https://github.com/modelcontextprotocol/python-sdk). **Use quando:** as tools do agente forem escritas em Python.
+- **[Supabase Auth](https://supabase.com/docs/guides/auth):** o login do próprio Supabase, por e-mail, link mágico ou SSO. Um [Custom Access Token Hook](https://supabase.com/docs/guides/auth/auth-hooks/custom-access-token-hook) põe o papel da pessoa dentro do JWT. **Use quando:** o produto precisar de contas e papéis dentro do app, e não só de um portão na frente.
+- **[Políticas de RLS](https://supabase.com/docs/guides/database/postgres/row-level-security):** regras no próprio Postgres sobre quem lê e quem altera cada linha, lidas do JWT de quem chama. **Use quando:** mais de um cliente chamar o banco direto, como o navegador ou o MCP, e o banco precisar recusar o que não cabe a cada um.
+
 ## Regra para todas
 
 O fork é público. Chave de API, token e senha nunca entram em commit: ficam no `.env`, nos secrets do Worker ou nos secrets do repositório. O passo a passo está em [teams/CONTAS.md](teams/CONTAS.md).
