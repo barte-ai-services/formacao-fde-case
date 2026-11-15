@@ -73,7 +73,7 @@
   - A pessoa decide; o agente organiza e propõe.
   - A recusa vem do sistema, não de uma instrução ao modelo: mesmo que alguém peça ao Claude, a tool não grava.
   - Todo número na tela vem da base, nunca do texto do modelo.
-- Plano B se a demo falhar: as capturas reais de cada passo, que estão nos slides do pitch (a fila no MCP App, a NF-006 aprovada e a recusa da NF-017), e a gravação da demo, se o Daniel conseguir fazê-la antes. O roteiro completo está em `teams/group-2/roteiro-demo.md`.
+- Plano B se a demo falhar: o vídeo da demo, em `teams/group-2/video-demo/demo-fila-analista.mp4` (36 s, com a fila, a NF-035 aprovada e as travas de alçada), e as capturas reais nos slides do pitch. O roteiro completo está em `teams/group-2/roteiro-demo.md`.
 
 ### 5. Eval
 
