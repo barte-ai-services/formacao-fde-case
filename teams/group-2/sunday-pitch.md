@@ -65,15 +65,17 @@
 
 ### 4. Demo
 
-- O caso que a demo mostra, com três notas da fila gerada por `uv run python baseline/regras.py`:
-  1. **NF-006** (E1, R$ 3.557,60): o analista aprova receber parcial, e a nota sai da fila.
-  2. **NF-017** (E5, R$ 18.316,80): a proposta diz analista, a régua sobe para coordenação e o servidor **recusa** sem gravar nada. É o momento forte da demo.
-  3. **NF-012** (E6, R$ 15.430,84): bloqueio por suspeita de duplicidade. Nem aparece na fila do analista.
+- Plano A: o vídeo da demo, `teams/group-2/video-demo/demo-fila-analista.mp4` (36 s), tocado no slide da demo. Os números vêm das tools do servidor; a conversa é uma reconstrução animada.
+  1. **Ver a fila:** "mostra a minha fila", 34 notas esperando o analista.
+  2. **Abrir a NF-035** (E3, Congelados Polar Sul): nota, pedido e doca lado a lado; faltam 49 pizzas na doca.
+  3. **Decidir:** aprovar com motivo e confirmação; a decisão é gravada e a fila cai de 34 para 33.
+  4. **As travas de alçada:** o que está acima do nível do analista, ou é diretoria ou bloqueio, ele não decide.
 - O que o público deve notar:
   - A pessoa decide; o agente organiza e propõe.
   - A recusa vem do sistema, não de uma instrução ao modelo: mesmo que alguém peça ao Claude, a tool não grava.
   - Todo número na tela vem da base, nunca do texto do modelo.
-- Plano B se a demo falhar: o vídeo da demo, em `teams/group-2/video-demo/demo-fila-analista.mp4` (36 s, com a fila, a NF-035 aprovada e as travas de alçada), e as capturas reais nos slides do pitch. O roteiro completo está em `teams/group-2/roteiro-demo.md`.
+- Plano B: as capturas reais da tela nos slides (a fila no MCP App, a NF-006 aprovada e a recusa da NF-017, acima da alçada). O roteiro da demo ao vivo continua em `teams/group-2/roteiro-demo.md`.
+- Código final e teste técnico: ficam com o time da Barte, a partir do servidor no fork líder.
 
 ### 5. Eval
 
@@ -97,6 +99,7 @@
   - Rodar a fila em modo sombra sobre as notas do CD, com o controller e o CFO assinando o baseline.
   - Ligar a delegação ao motor real do Grupo 1, primeiro só como simulação.
   - Levar o servidor `ja-chegou-analista` para produção: hoje ele roda na máquina do analista e lê arquivos locais; em produção, fica atrás do Cloudflare Access, com a identidade de cada analista, e passa a chamar a API da solução em vez de ler arquivos.
+  - Entregar ao time da Barte o código final e o teste técnico do servidor `ja-chegou-analista`, que estão no fork líder.
   - Pedir os acessos que bloqueiam a primeira entrega: credencial de serviço na captura de NF, usuário de leitura no ERP e homologação atualizada (Dossiê, Anexo 6).
 - Fica para depois:
   - o processo de **notas de devolução**, para recuperar o que hoje é zero;
