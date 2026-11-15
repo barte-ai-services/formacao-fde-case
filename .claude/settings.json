@@ -19,6 +19,7 @@
     "ahrena-engineering-python@ahrena": true,
     "ahrena-engineering-development@ahrena": true,
     "ahrena-engineering-code-review@ahrena": true,
-    "ahrena-engineering-data@ahrena": true
+    "ahrena-engineering-data@ahrena": true,
+    "ahrena-engineering-database@ahrena": true
   }
 }
