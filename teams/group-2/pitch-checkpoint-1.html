@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pitch Já Chegou · Checkpoint 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Inter:wght@400;600&display=swap">
+<style>
+/* Mesmo visual do mapa mental: degradês por papel.
+   Azul = dado do dossiê, rosa = foco, verde = plano, âmbar = suposição ou decisão, grafite = as respostas. */
+section {
+  --bg: #F2F5FA; --surface: #FBFCFE; --ink: #0E1726; --muted: #4A5568; --line: #DCE3EE; --track: #E7ECF4;
+  --night: #0E1726; --on-dark: #F2F5FA; --on-dark-muted: #BFCADB;
+  --diag-a: #1D4ED8; --diag-b: #0E7490; --diag-sa: #DCE9FF; --diag-sb: #D3F5FA;
+  --foco-a: #BE185D; --foco-b: #C2410C; --foco-sa: #FCE4F0; --foco-sb: #FFEBDB;
+  --plano-a: #047857; --plano-b: #0F766E; --plano-sa: #D4F7E6; --plano-sb: #D2F6F1;
+  --decid-a: #F59E0B; --decid-b: #FCD34D; --decid-ink: #3B2405; --decid-sa: #FEF0C7; --decid-sb: #FEF8D2;
+  --resp-a: #1E293B; --resp-b: #475569;
+  counter-increment: page;
+  box-sizing: border-box;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 128px 128px 160px;
+}
+
+/* capa e slides escuros */
+section.cover {
+  padding: 128px;
+  justify-content: space-between;
+  background: linear-gradient(120deg, var(--foco-a), var(--foco-b));
+  color: #FFF7FA;
+}
+section.dark {
+  background: var(--night);
+  color: var(--on-dark);
+  justify-content: center;
+  gap: 40px;
+}
+
+/* texto */
+.kicker { font-size: 24px; font-weight: 600; letter-spacing: 1px; }
+.kicker-light { color: #FFE4EE; }
+.kicker-pink { color: #F9A8D4; }
+.kicker-amber { color: #FCD34D; }
+.cover-main { display: flex; flex-direction: column; gap: 32px; }
+.cover-title { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 96px; font-weight: 700; line-height: 1.05; width: 1500px; color: #FFF7FA; }
+.cover-sub { font-size: 32px; line-height: 1.4; width: 1300px; color: #FFE9F1; }
+.chips { display: flex; flex-wrap: wrap; gap: 16px; }
+.chip { font-size: 24px; font-weight: 600; padding: 12px 26px; border-radius: 999px; background: rgba(255, 255, 255, 0.16); border: 2px solid rgba(255, 255, 255, 0.45); color: #FFF7FA; }
+
+.eyebrow { align-self: flex-start; font-size: 24px; font-weight: 600; color: #F8FAFC; padding: 8px 22px; border-radius: 999px; background: linear-gradient(120deg, var(--resp-a), var(--resp-b)); }
+.title { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 64px; font-weight: 700; line-height: 1.1; color: var(--ink); }
+.h3 { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 32px; font-weight: 600; line-height: 1.15; color: var(--ink); }
+.lab { font-size: 24px; font-weight: 600; line-height: 1.3; color: var(--muted); }
+.b32 { font-size: 32px; line-height: 1.35; color: var(--ink); }
+.b24 { font-size: 24px; line-height: 1.4; color: var(--ink); }
+.strong { font-weight: 600; }
+.quote { font-size: 24px; line-height: 1.4; font-style: italic; color: var(--muted); }
+.cap { font-size: 24px; line-height: 1.4; color: var(--muted); }
+.big { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 700; line-height: 1.1; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* blocos */
+.grid2 { display: grid; grid-template-columns: 2fr 3fr; gap: 32px; }
+.grid2e { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+.grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 24px; }
+.stack { display: flex; flex-direction: column; gap: 16px; }
+.stat { display: flex; flex-direction: column; gap: 4px; }
+
+.card { box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; padding: 32px; border-radius: 24px; background: var(--surface); border: 2px solid var(--line); }
+.tight { padding: 24px; gap: 8px; }
+.foco { background: linear-gradient(135deg, var(--foco-sa), var(--foco-sb)); border-color: var(--foco-sa); }
+.diag { background: linear-gradient(135deg, var(--diag-sa), var(--diag-sb)); border-color: var(--diag-sa); }
+.plano { background: linear-gradient(135deg, var(--plano-sa), var(--plano-sb)); border-color: var(--plano-sa); }
+.decid { background: linear-gradient(135deg, var(--decid-sa), var(--decid-sb)); border-color: var(--decid-sa); }
+
+.callout { font-size: 24px; line-height: 1.4; padding: 20px 28px; border-radius: 20px; color: var(--ink); background: linear-gradient(135deg, var(--diag-sa), var(--diag-sb)); }
+.note { font-size: 24px; line-height: 1.4; padding: 20px 28px; border-radius: 20px; color: var(--decid-ink); background: linear-gradient(135deg, var(--decid-sa), var(--decid-sb)); }
+
+.pill-foco, .pill-plano, .pill-resp { align-self: flex-start; font-size: 24px; font-weight: 600; color: #F8FAFC; padding: 6px 18px; border-radius: 999px; }
+.pill-foco { background: linear-gradient(120deg, var(--foco-a), var(--foco-b)); }
+.pill-plano { background: linear-gradient(120deg, var(--plano-a), var(--plano-b)); }
+.pill-resp { background: linear-gradient(120deg, var(--resp-a), var(--resp-b)); }
+
+ul.list { font-size: 24px; line-height: 1.45; color: var(--ink); padding-left: 32px; }
+
+/* tabela */
+.tbl { font-size: 24px; color: var(--ink); width: 100%; }
+.tr-head { background: var(--track); }
+.tr-pick { background: #FCE4F0; }
+
+/* barras */
+.bars { display: flex; flex-direction: column; gap: 20px; }
+.barrow { display: flex; flex-direction: column; gap: 6px; }
+.blab { font-size: 24px; color: var(--muted); }
+.bline { display: flex; align-items: center; gap: 20px; }
+.btrack { width: 520px; height: 28px; border-radius: 14px; background: var(--track); overflow: hidden; }
+.bfill { height: 28px; border-radius: 14px; background: linear-gradient(90deg, var(--diag-a), var(--diag-b)); }
+.bfill-meta { height: 28px; border-radius: 14px; background: linear-gradient(90deg, var(--plano-a), var(--plano-b)); }
+.bval { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 32px; font-weight: 700; width: 110px; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* passos */
+.num { width: 64px; height: 64px; border-radius: 32px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--foco-a), var(--foco-b)); }
+.num-amber { width: 64px; height: 64px; border-radius: 32px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--decid-a), var(--decid-b)); }
+.num-t { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 32px; font-weight: 700; color: #F8FAFC; }
+.num-t-dark { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 32px; font-weight: 700; color: var(--decid-ink); }
+
+/* slides escuros */
+.statement { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 96px; font-weight: 700; line-height: 1.08; width: 1600px; color: var(--on-dark); }
+.on-dark { font-size: 32px; line-height: 1.4; width: 1400px; color: var(--on-dark); }
+.on-dark-muted { font-size: 32px; line-height: 1.4; width: 1400px; color: var(--on-dark-muted); }
+.mega { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 96px; font-weight: 700; line-height: 1.05; color: #FCD34D; font-variant-numeric: tabular-nums; }
+.mega-wrap { display: flex; flex-direction: column; gap: 16px; }
+
+/* rodapé */
+.foot { position: absolute; left: 128px; bottom: 64px; width: 1664px; display: flex; justify-content: space-between; }
+.foot-t { font-size: 24px; color: var(--muted); }
+.foot-t-dark { font-size: 24px; color: var(--on-dark-muted); }
+.pg::after { content: counter(page); }
+
+/* entrada */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.anim { --i: 0; animation: rise 600ms ease-out both; animation-delay: calc(var(--i) * 120ms); }
+
+
+:root { --page: #E7ECF4; --ink: #0E1726; --muted: #4A5568; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font-family: 'Inter', Arial, sans-serif; }
+.deck { max-width: 1280px; margin: 0 auto; padding: 32px 16px 64px; display: flex; flex-direction: column; gap: 28px; }
+.deck > header h1 { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 28px; margin: 0 0 4px; }
+.deck > header p { margin: 0; color: var(--muted); }
+.slide { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 12px; box-shadow: 0 10px 30px rgba(14, 23, 38, .12); }
+.frame { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+.frame > section { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
+.frame h1, .frame h2, .frame h3, .frame p, .frame ul { margin: 0; }
+.frame .tbl { border-collapse: collapse; }
+.frame .tbl th, .frame .tbl td { padding: .35em .6em; text-align: left; border-bottom: 1px solid #DCE3EE; }
+.notes { margin-top: -16px; color: var(--muted); font-size: 15px; }
+.notes summary { cursor: pointer; }
+.notes p { max-width: 75ch; }
+@media (prefers-reduced-motion: reduce) { .anim { animation: none !important; } }
+</style>
+</head>
+<body>
+<main class="deck">
+<header><h1>Pitch Já Chegou · Checkpoint 1</h1><p>Cópia em arquivo do pitch do Grupo 2. Cada slide tem as notas do apresentador logo abaixo.</p></header>
+<div class="slide" id="slide-1">
+<div class="frame">
+<section id="cover" class="cover" data-transition="fade">
+<p class="kicker kicker-light">Formação FDE · Grupo 2 · Checkpoint 1 · Já Chegou</p>
+<div class="cover-main">
+<h1 class="cover-title anim" style="--i:1">Pagar em dia, e só o que chegou</h1>
+<p class="cover-sub anim" style="--i:2">As respostas do grupo às cinco perguntas do checkpoint, com o quick win que ataca a dor do CFO.</p>
+</div>
+<div class="chips anim" style="--i:3">
+<p class="chip">Quick win em 4 semanas</p>
+<p class="chip">90% menos atrasos</p>
+<p class="chip">R$ 109,8 mil por mês a menos em juros</p>
+</div>
+
+</section>
+</div>
+</div>
+<details class="notes"><summary>Notas do slide 1</summary><p>Abrir pela tese: o CFO quer parar de pagar juros, e o grupo entrega isso em 4 semanas, conferindo cada nota assim que ela é emitida. Os números do resultado são projeção do grupo, a validar no piloto.</p></details>
+<div class="slide" id="slide-2">
+<div class="frame">
+<section id="resultado" data-transition="fade">
+<p class="pill-plano">O resultado que o quick win entrega</p>
+<h2 class="title">90% menos pagamentos atrasados em 4 semanas</h2>
+<div class="grid4">
+<div class="card plano anim" style="--i:1">
+<p class="lab">Valor pago depois do vencimento</p>
+<p class="big">41% → 4%</p>
+<p class="b24 strong">90% menos atrasos</p>
+</div>
+<div class="card plano anim" style="--i:2">
+<p class="lab">Juros e multa por mês</p>
+<p class="big">R$ 122 mil → R$ 12 mil</p>
+<p class="b24 strong">Economia de R$ 109,8 mil por mês</p>
+</div>
+<div class="card plano anim" style="--i:3">
+<p class="lab">Economia em 12 meses</p>
+<p class="big">R$ 1,3 milhão</p>
+<p class="b24 strong">em juros e multa que deixam de ser pagos</p>
+</div>
+<div class="card plano anim" style="--i:4">
+<p class="lab">Notas sem toque manual</p>
+<p class="big">0,7% → 90%</p>
+<p class="b24 strong">Até 10%, sem pedido, seguem em análise manual</p>
+</div>
+</div>
+<p class="cap">Projeção do grupo, a validar no piloto. Parte do baseline do dossiê (média de jan a set) e assume que os juros caem na mesma proporção dos atrasos.</p>
+<div class="foot"><p class="foot-t">Grupo 2 · Já Chegou · Checkpoint 1</p><p class="foot-t pg"></p></div>
+
+</section>
+</div>
+</div>
+<details class="notes"><summary>Notas do slide 2</summary><p>Este é o placar do quick win. A economia de R$ 109,8 mil por mês é 90% dos R$ 122 mil de juros e multa de hoje. Tudo aqui é projeção do grupo: o piloto no CD confirma ou corrige.</p></details>
+<div class="slide" id="slide-3">
+<div class="frame">
+<section id="q1" data-transition="fade">
+<p class="eyebrow">Pergunta 1 · O pedido do CFO</p>
+<h2 class="title">Atender uma parte, reenquadrar o resto</h2>
+<div class="grid3">
+<div class="card anim" style="--i:1">
+<p class="lab">O que o CFO pediu</p>
+<p class="b32">Automatizar o boleto e parar de pagar juros.</p>
+<p class="quote">“Contratei para automatizar o boleto.”</p>
+</div>
+<div class="card foco anim" style="--i:2">
+<p class="lab">O que entregamos em 4 semanas</p>
+<p class="b32">O match das notas emitidas com os pedidos, o ajuste automático do ERP quando há divergência e a fila pronta para o CFO aprovar em dia.</p>
+</div>
+<div class="card diag anim" style="--i:3">
+<p class="lab">O dado que sustenta</p>
+<div class="stat"><p class="big">41%</p><p class="b24">do valor é pago após vencer</p></div>
+<div class="stat"><p class="big">14 dias</p><p class="b24">da nota ao lançamento no CD</p></div>
+<div class="stat"><p class="big">0,7%</p><p class="b24">das notas batem com o pedido</p></div>
+</div>
+</div>
+<p class="note anim" style="--i:4"><b>Regra do ajuste:</b> o pedido segue o que a doca recebeu, não o que a nota diz. Seguir a nota pagaria em dia mercadoria que não chegou.</p>
+<div class="foot"><p class="foot-t">Grupo 2 · Já Chegou · Checkpoint 1 · Fonte: dossiê pós-reunião</p><p class="foot-t pg"></p></div>
+
+</section>
+</div>
+</div>
+<details class="notes"><summary>Notas do slide 3</summary><p>Atendemos a parte dos juros e reenquadramos a automação do boleto. O dado: 41% do valor sai depois do vencimento, a conferência manual leva 14 dias no CD e só 0,7% das notas batem sozinhas. A regra do ajuste evita pagar em dia mercadoria que não chegou (exceções 1 e 3 do dossiê).</p></details>
+<div class="slide" id="slide-4">
+<div class="frame">
+<section id="q2" data-transition="fade">
+<p class="eyebrow">Pergunta 2 · O número a mover</p>
+<h2 class="title">Juros e atraso, medidos em taxa</h2>
+<div class="grid2">
+<div class="stack">
+<div class="card plano anim" style="--i:1">
+<p class="lab">Juros e multa por mês</p>
+<p class="big">R$ 122 mil → R$ 12 mil</p>
+<p class="b24 strong">Economia de R$ 109,8 mil por mês</p>
+</div>
+<div class="card plano anim" style="--i:2">
+<p class="lab">Valor pago depois do vencimento</p>
+<p class="big">41% → 4%</p>
+<p class="b24 strong">90% menos atrasos</p>
+</div>
+<p class="cap">Meta: projeção do grupo, a validar no piloto.</p>
+</div>
+<div class="stack">
+<table class="tbl anim" style="--i:3">
+<tr class="tr-head"><th style="width:46%">Indicador</th><th style="width:28%">Hoje</th><th style="width:26%">Fonte</th></tr>
+<tr class="tr-pick"><td>Juros e multa pagos</td><td>R$ 122 mil por mês</td><td>Dossiê</td></tr>
+<tr class="tr-pick"><td>Valor pago após vencer</td><td>41%</td><td>Dossiê</td></tr>
+<tr><td>Notas pagas em atraso</td><td>A medir</td><td>CSV de títulos</td></tr>
+<tr><td>Boletos que passam a ser pagos em dia</td><td>A medir</td><td>CSV de títulos</td></tr>
+<tr><td>Ruptura por atraso</td><td>1,2 ponto</td><td>Dossiê</td></tr>
+</table>
+<p class="callout anim" style="--i:4">Os juros variam de R$ 23 mil a R$ 420 mil por mês. Por isso medimos em taxa e em média móvel de 4 semanas: um mês fora da curva, como abril ou setembro, não distorce o resultado.</p>
+</div>
+</div>
+<div class="foot"><p class="foot-t">Grupo 2 · Já Chegou · Checkpoint 1 · Fonte: dossiê pós-reunião</p><p class="foot-t pg"></p></div>
+
+</section>
+</div>
+</div>
+<details class="notes"><summary>Notas do slide 4</summary><p>O número principal é o de juros e multa, com o percentual pago depois do vencimento. Notas e boletos atrasados saem do CSV diário de títulos, que já está liberado. A alinhar no grupo: no diagnóstico entregue, o número do projeto é P1 (pagar errado), com juros como indicador do quick win.</p></details>
+<div class="slide" id="slide-5">
+<div class="frame">
+<section id="q3" data-transition="fade">
+<p class="eyebrow">Pergunta 3 · Setembro e a linha de base</p>
+<h2 class="title">Sem a força-tarefa, o atraso volta</h2>
+<div class="grid2e">
+<div class="card anim" style="--i:1">
+<p class="lab">Valor pago depois do vencimento</p>
+<div class="bars">
+<div class="barrow"><p class="blab">Janeiro</p><div class="bline"><div class="btrack"><div class="bfill" style="width:520px"></div></div><p class="bval">76%</p></div></div>
+<div class="barrow"><p class="blab">Média de jan a set</p><div class="bline"><div class="btrack"><div class="bfill" style="width:280px"></div></div><p class="bval">41%</p></div></div>
+<div class="barrow"><p class="blab">Setembro, com força-tarefa</p><div class="bline"><div class="btrack"><div class="bfill" style="width:110px"></div></div><p class="bval">16%</p></div></div>
+<div class="barrow"><p class="blab">Meta do quick win</p><div class="bline"><div class="btrack"><div class="bfill-meta" style="width:28px"></div></div><p class="bval">~4%</p></div></div>
+</div>
+<p class="cap">Janeiro, média e setembro: dossiê. Meta: projeção do grupo.</p>
+</div>
+<div class="stack">
+<div class="card tight diag anim" style="--i:2">
+<h3 class="h3">Quando a força-tarefa sai</h3>
+<p class="b24">O atraso volta a subir, porque o processo não mudou. Setembro foi pontual.</p>
+</div>
+<div class="card tight decid anim" style="--i:3">
+<h3 class="h3">Quanto custou</h3>
+<p class="b24">O dossiê não traz o valor. Estimamos de R$ 10 mil a R$ 15 mil em gente na semana.</p>
+</div>
+<div class="card tight diag anim" style="--i:4">
+<h3 class="h3">Linha de base</h3>
+<p class="b24">Média de jan a set: 41% em atraso e R$ 122 mil por mês de juros, com setembro marcado como atípico.</p>
+</div>
+</div>
+</div>
+<div class="foot"><p class="foot-t">Grupo 2 · Já Chegou · Checkpoint 1 · Fonte: dossiê pós-reunião</p><p class="foot-t pg"></p></div>
+
+</section>
+</div>
+</div>
+<details class="notes"><summary>Notas do slide 5</summary><p>Setembro caiu para 16% porque o controller e uma equipe passaram uma semana pondo os vencidos em dia, e o processo não mudou. O custo da semana é estimativa do grupo: o time de conciliação e pagamento custa R$ 45 mil por mês, sem contar o que o controller deixou de fazer no fechamento. Confirmar com o controller. Outubro e novembro, no CSV diário, mostram se o atraso já voltou a subir.</p></details>
+<div class="slide" id="slide-6">
+<div class="frame">
+<section id="argumento" class="dark" data-transition="fade">
+<p class="kicker kicker-pink">O argumento para o CFO</p>
+<h1 class="statement anim" style="--i:1">O quick win é a força-tarefa de setembro rodando todo dia, sem gente extra.</h1>
+<p class="on-dark-muted anim" style="--i:2">Setembro provou que o gargalo é operacional. Quando alguém confere e prioriza, o atraso cai.</p>
+<div class="foot"><p class="foot-t-dark">Grupo 2 · Já Chegou · Checkpoint 1</p><p class="foot-t-dark pg"></p></div>
+
+</section>
+</div>
+</div>
+<details class="notes"><summary>Notas do slide 6</summary><p>Esta é a frase para levar ao CFO. Ele mesmo viu o atraso cair em setembro: o quick win torna aquilo permanente, sem tirar o controller do fechamento.</p></details>
+<div class="slide" id="slide-7">
+<div class="frame">
+<section id="q4" data-transition="fade">
+<p class="eyebrow">Pergunta 4 · Ordem das frentes</p>
+<h2 class="title">O primeiro ganho chega na semana 4</h2>
+<div class="grid4">
+<div class="card foco anim" style="--i:1">
+<p class="pill-foco">Semanas 1 a 4</p>
+<h3 class="h3">Quick win</h3>
+<p class="b24">Match nota × pedido com ajuste automático, fila por vencimento e alertas.</p>
+<p class="b24 strong">Ataca R$ 122 mil por mês de juros, com esforço médio</p>
+</div>
+<div class="card plano anim" style="--i:2">
+<p class="pill-plano">Semanas 5 a 8</p>
+<h3 class="h3">Exceções</h3>
+<p class="b24">Análise manual das notas sem pedido, bloqueio de boleto duplicado e conversão caixa × unidade.</p>
+<p class="b24 strong">Caixa × unidade gera até 300% de diferença no preço</p>
+</div>
+<div class="card plano anim" style="--i:3">
+<p class="pill-plano">Próxima fase</p>
+<h3 class="h3">Notas de devolução</h3>
+<p class="b24">Parar de pagar mercadoria que não foi pedida ou não chegou.</p>
+<p class="b24 strong">A maior economia: R$ 543 mil por mês em jogo</p>
+</div>
+<div class="card anim" style="--i:4">
+<p class="pill-resp">Depois</p>
+<h3 class="h3">Pagamento em lote</h3>
+<p class="b24">Pagar e baixar em lote, sem boleto um a um.</p>
+<p class="b24 strong">Depende de API do banco, que o plano atual não tem</p>
+</div>
+</div>
+<p class="callout anim" style="--i:5">O dossiê estima cerca de 4% de notas sem pedido; a reunião falou em 10%. Com 4%, o quick win cobre cerca de 96% das notas sem toque manual.</p>
+<div class="foot"><p class="foot-t">Grupo 2 · Já Chegou · Checkpoint 1 · Fonte: dossiê pós-reunião</p><p class="foot-t pg"></p></div>
+
+</section>
+</div>
+</div>
+<details class="notes"><summary>Notas do slide 7</summary><p>Ordem por retorno, prazo até o primeiro valor e esforço. O quick win vem primeiro porque ataca a dor do CFO e mostra valor dentro do primeiro mês que ele prometeu ao conselho. As notas de devolução são a maior economia, mas dependem do jurídico e de escrita no ERP. A alinhar no grupo: no diagnóstico entregue e no mapa, a segunda frente ainda é cobrar o fornecedor.</p></details>
+<div class="slide" id="slide-8">
+<div class="frame">
+<section id="q5-pessoas" data-transition="fade">
+<p class="eyebrow">Pergunta 5 · Quem decide</p>
+<h2 class="title">Quem decide, quem sente e quem libera</h2>
+<div class="grid3">
+<div class="card foco anim" style="--i:1">
+<p class="lab">Decide e paga</p>
+<h3 class="h3">CFO</h3>
+<p class="b24">Sponsor e dono do número. Continua aprovando cada pagamento, agora com a fila pronta e conferida.</p>
+</div>
+<div class="card diag anim" style="--i:2">
+<p class="lab">Sente a mudança</p>
+<ul class="list">
+<li>Controller e os 5 analistas: tratam só as exceções</li>
+<li>Compras: recebe o alerta antes da doca e vê o pedido ajustado</li>
+<li>Fornecedores: recebem em dia e não bloqueiam entregas</li>
+</ul>
+</div>
+<div class="card plano anim" style="--i:3">
+<p class="lab">Libera o acesso</p>
+<ul class="list">
+<li>Controller: ERP, captura de NF e títulos</li>
+<li>Compras: agenda de doca e WMS</li>
+<li>Jurídico: regra de devolução, na próxima fase</li>
+</ul>
+</div>
+</div>
+<p class="note anim" style="--i:4"><b>Conflito a resolver:</b> compras ganha quando a mercadoria entra, e o financeiro paga a divergência depois. O ajuste automático do pedido precisa de uma regra combinada com compras: a tolerância e quem valida.</p>
+<div class="foot"><p class="foot-t">Grupo 2 · Já Chegou · Checkpoint 1 · Fonte: dossiê pós-reunião</p><p class="foot-t pg"></p></div>
+
+</section>
+</div>
+</div>
+<details class="notes"><summary>Notas do slide 8</summary><p>O CFO decide e paga. Controller, analistas, compras e fornecedores sentem a mudança. Controller, compras e jurídico liberam o que o projeto precisa. O conflito principal é de incentivo: compras ganha quando a mercadoria entra, e o financeiro absorve a divergência. Quem arbitra é o CFO.</p></details>
+<div class="slide" id="slide-9">
+<div class="frame">
+<section id="q5-conversa" data-transition="fade">
+<p class="eyebrow">Pergunta 5 · A conversa com o CFO</p>
+<h2 class="title">Começar pela dor dele, com o número dele</h2>
+<div class="grid4">
+<div class="card foco anim" style="--i:1">
+<div class="num"><p class="num-t">1</p></div>
+<h3 class="h3">A dor dele</h3>
+<p class="b24">R$ 122 mil por mês de juros e 41% do valor pago em atraso.</p>
+</div>
+<div class="card foco anim" style="--i:2">
+<div class="num"><p class="num-t">2</p></div>
+<h3 class="h3">Setembro</h3>
+<p class="b24">O atraso só caiu com uma semana de força-tarefa, e o processo não mudou.</p>
+</div>
+<div class="card foco anim" style="--i:3">
+<div class="num"><p class="num-t">3</p></div>
+<h3 class="h3">O quick win</h3>
+<p class="b24">A força-tarefa automática. Ele continua aprovando cada pagamento, mas recebe a lista pronta e conferida.</p>
+</div>
+<div class="card decid anim" style="--i:4">
+<div class="num-amber"><p class="num-t-dark">4</p></div>
+<h3 class="h3">A próxima oportunidade</h3>
+<p class="b24">R$ 543 mil por mês pagos sem mercadoria, que nunca voltam.</p>
+</div>
+</div>
+<p class="cap">A aprovação de cada pagamento é o controle que o CFO quer desde o boleto pago duas vezes. O quick win mantém esse controle e tira o trabalho manual de antes dele.</p>
+<div class="foot"><p class="foot-t">Grupo 2 · Já Chegou · Checkpoint 1</p><p class="foot-t pg"></p></div>
+
+</section>
+</div>
+</div>
+<details class="notes"><summary>Notas do slide 9</summary><p>A ordem importa: primeiro a dor que ele trouxe, depois a prova de setembro, depois o quick win como a força-tarefa automática, e só no fim a oportunidade maior. Assim a conversa começa onde ele está e termina onde o projeto pode crescer.</p></details>
+<div class="slide" id="slide-10">
+<div class="frame">
+<section id="proximo" class="dark" data-transition="fade">
+<p class="kicker kicker-amber">Depois do quick win · notas de devolução</p>
+<div class="mega-wrap">
+<p class="mega anim" style="--i:1">R$ 543 mil por mês</p>
+<p class="on-dark-muted anim" style="--i:2">pagos sem mercadoria correspondente, com recuperado zero. São cerca de R$ 6,5 milhões por ano.</p>
+</div>
+<p class="on-dark anim" style="--i:3">O registro de ajustes do quick win mostra, nota a nota, o que devolver ou cobrar. É a base da próxima fase.</p>
+<div class="foot"><p class="foot-t-dark">Grupo 2 · Já Chegou · Checkpoint 1 · Fonte: dossiê pós-reunião</p><p class="foot-t-dark pg"></p></div>
+
+</section>
+</div>
+</div>
+<details class="notes"><summary>Notas do slide 10</summary><p>Não aprofundamos agora, mas vale deixar a oportunidade clara: P1, pagar errado, é a maior perda do contas a pagar. O quick win já deixa registrado cada ajuste, que é o ponto de partida para um processo de notas de devolução.</p></details>
+</main>
+
+<script>
+(function () {
+  function fit() {
+    document.querySelectorAll('.slide').forEach(function (s) {
+      var f = s.querySelector('.frame');
+      f.style.transform = 'scale(' + (s.clientWidth / 1920) + ')';
+    });
+  }
+  window.addEventListener('resize', fit);
+  fit();
+})();
+</script>
+</body>
+</html>

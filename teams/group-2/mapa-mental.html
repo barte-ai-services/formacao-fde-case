@@ -1,0 +1,1430 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa Mental Já Chegou</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+/* Layout: mapa clicável à esquerda (fixo no desktop) e seções em sanfona à direita, uma aberta por vez.
+   Cada grupo tem seu degradê: diagnóstico (azul → ciano), foco (magenta → laranja), plano (verde → petróleo), a decidir (âmbar). */
+:root{
+  --bg:#F2F5FA; --surface:#FFFFFF; --fg:#0E1726; --muted:#4A5568; --line:#DCE3EE; --track:#E7ECF4;
+  --on-strong:#FFFFFF;
+  --diag-a:#1D4ED8; --diag-b:#0E7490; --diag-sa:#DCE9FF; --diag-sb:#D3F5FA;
+  --foco-a:#BE185D; --foco-b:#C2410C; --foco-sa:#FCE4F0; --foco-sb:#FFEBDB;
+  --plano-a:#047857; --plano-b:#0F766E; --plano-sa:#D4F7E6; --plano-sb:#D2F6F1;
+  --decid-a:#F59E0B; --decid-b:#FCD34D; --decid-ink:#3B2405; --decid-sa:#FEF0C7; --decid-sb:#FEF8D2;
+  --resp-a:#1E293B; --resp-b:#475569; --resp-sa:#E2E8F0; --resp-sb:#EEF2F7;
+  --soft-ink:#0E1726;
+  --ok-bg:#D1FAE5; --ok-fg:#065F46; --bad-bg:#FFE4E6; --bad-fg:#9F1239; --wait-bg:#FEF3C7; --wait-fg:#8A3C04;
+  --src-bg:#EAF0F7; --src-fg:#334155; --sup-bg:#FEF0C7; --sup-fg:#8A3C04;
+  --font-display:'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-body:'Inter', -apple-system, 'Segoe UI', system-ui, sans-serif;
+  --mq-board:#CFDBEA; --mq-base:#AFBDD1; --mq-road:#F8FBFE; --mq-build:#FFFFFF; --mq-roof:#8FA5C4; --mq-dim:#B5C0CF;
+  --mq-nota:#2563EB; --mq-ok:#059669; --mq-warn:#F59E0B; --mq-bad:#E11D48; --mq-idle:#64748B; --mq-coin:#F5B700;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0A1220; --surface:#111B2E; --fg:#E6ECF5; --muted:#A3B0C4; --line:#24324B; --track:#1C2940;
+    --diag-sa:#16294F; --diag-sb:#0F3340; --foco-sa:#3A1730; --foco-sb:#3A2014;
+    --plano-sa:#0E3328; --plano-sb:#0E302E; --decid-sa:#3A2C0A; --decid-sb:#383010; --resp-a:#3B4A63; --resp-b:#64748B; --resp-sa:#1E293B; --resp-sb:#243247;
+    --soft-ink:#E6ECF5;
+    --ok-bg:#0F3B2E; --ok-fg:#6EE7B7; --bad-bg:#3F1422; --bad-fg:#FDA4AF; --wait-bg:#3B2A08; --wait-fg:#FCD34D;
+    --src-bg:#1A2740; --src-fg:#C3CEDF; --sup-bg:#3B2A08; --sup-fg:#FCD34D; --mq-board:#1B2942; --mq-base:#0C1525; --mq-road:#32456B; --mq-build:#AEBDD6; --mq-roof:#5F78A3; --mq-dim:#3B4B69; --mq-nota:#60A5FA; --mq-ok:#34D399; --mq-warn:#FBBF24; --mq-bad:#FB7185; --mq-idle:#94A3B8; --mq-coin:#FCD34D;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0A1220; --surface:#111B2E; --fg:#E6ECF5; --muted:#A3B0C4; --line:#24324B; --track:#1C2940;
+  --diag-sa:#16294F; --diag-sb:#0F3340; --foco-sa:#3A1730; --foco-sb:#3A2014;
+  --plano-sa:#0E3328; --plano-sb:#0E302E; --decid-sa:#3A2C0A; --decid-sb:#383010; --resp-a:#3B4A63; --resp-b:#64748B; --resp-sa:#1E293B; --resp-sb:#243247;
+  --soft-ink:#E6ECF5;
+  --ok-bg:#0F3B2E; --ok-fg:#6EE7B7; --bad-bg:#3F1422; --bad-fg:#FDA4AF; --wait-bg:#3B2A08; --wait-fg:#FCD34D;
+  --src-bg:#1A2740; --src-fg:#C3CEDF; --sup-bg:#3B2A08; --sup-fg:#FCD34D; --mq-board:#1B2942; --mq-base:#0C1525; --mq-road:#32456B; --mq-build:#AEBDD6; --mq-roof:#5F78A3; --mq-dim:#3B4B69; --mq-nota:#60A5FA; --mq-ok:#34D399; --mq-warn:#FBBF24; --mq-bad:#FB7185; --mq-idle:#94A3B8; --mq-coin:#FCD34D;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+
+/* grupos: cada um aponta para o seu degradê */
+.g-diag{--a:var(--diag-a);--b:var(--diag-b);--sa:var(--diag-sa);--sb:var(--diag-sb);--ink:var(--on-strong)}
+.g-foco{--a:var(--foco-a);--b:var(--foco-b);--sa:var(--foco-sa);--sb:var(--foco-sb);--ink:var(--on-strong)}
+.g-plano{--a:var(--plano-a);--b:var(--plano-b);--sa:var(--plano-sa);--sb:var(--plano-sb);--ink:var(--on-strong)}
+.g-decid{--a:var(--decid-a);--b:var(--decid-b);--sa:var(--decid-sa);--sb:var(--decid-sb);--ink:var(--decid-ink)}
+.g-resp{--a:var(--resp-a);--b:var(--resp-b);--sa:var(--resp-sa);--sb:var(--resp-sb);--ink:var(--on-strong)}
+
+/* cabeçalho */
+header.top{display:grid;gap:14px;margin-bottom:28px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--font-display);font-weight:700;font-size:clamp(30px,4.2vw,44px);line-height:1.08;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.lead{font-size:clamp(16px,1.6vw,19px);color:var(--muted);margin:0;max-width:62ch}
+.lead strong{color:var(--fg);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--muted);align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:26px;height:12px;border-radius:999px;background:linear-gradient(90deg,var(--a),var(--b));display:inline-block}
+
+/* layout */
+.layout{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:920px){.layout{grid-template-columns:minmax(0,1fr)}}
+
+/* mapa */
+.map{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;display:grid;gap:0;scroll-margin-top:16px}
+@media (min-width:921px){.map{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 16px);max-height:calc(100vh - 32px);overflow:auto}}
+.band-label{font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.band-label::before{content:"";width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--a),var(--b))}
+.nodes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.nodes.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.node{appearance:none;border:0;cursor:pointer;text-align:left;border-radius:12px;padding:11px 13px;color:var(--ink);
+  background:linear-gradient(135deg,var(--a),var(--b));font-family:var(--font-display);display:grid;gap:2px;min-width:0;
+  transition:transform .18s ease, box-shadow .18s ease, filter .18s ease}
+.node b{font-weight:600;font-size:14.5px;line-height:1.25}
+.node small{font-family:var(--font-body);font-size:12.5px;opacity:.92;font-variant-numeric:tabular-nums}
+.node:hover{transform:translateY(-1px);filter:brightness(1.06)}
+.node:focus-visible{outline:none;box-shadow:0 0 0 3px var(--surface),0 0 0 5px var(--fg)}
+.node.is-active{box-shadow:0 0 0 3px var(--surface),0 0 0 5px var(--a)}
+.stem{width:2px;height:22px;margin:6px auto;border-radius:2px;background:linear-gradient(var(--from),var(--to))}
+.hub{appearance:none;border:0;cursor:pointer;width:100%;text-align:left;border-radius:16px;padding:16px 18px;color:var(--ink);
+  background:linear-gradient(120deg,var(--a),var(--b));display:grid;gap:8px;transition:transform .18s ease, box-shadow .18s ease}
+.hub:hover{transform:translateY(-1px)}
+.hub:focus-visible{outline:none;box-shadow:0 0 0 3px var(--surface),0 0 0 5px var(--fg)}
+.hub.is-active{box-shadow:0 0 0 3px var(--surface),0 0 0 5px var(--a)}
+.hub .k{font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.9}
+.hub .t{font-family:var(--font-display);font-weight:700;font-size:22px;line-height:1.15;text-wrap:balance}
+.hub .chips{display:flex;flex-wrap:wrap;gap:6px}
+.hub .chips span{font-size:12.5px;font-weight:600;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);font-variant-numeric:tabular-nums}
+.map-hint{font-size:12.5px;color:var(--muted);margin:14px 0 0}
+
+/* seções */
+.secs{display:grid;gap:22px;min-width:0}
+.group{display:grid;gap:10px;min-width:0}
+.group > h2{font-family:var(--font-display);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0;display:flex;align-items:center;gap:10px}
+.group > h2::after{content:"";flex:1;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--a),transparent)}
+details.sec{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;scroll-margin-top:16px;min-width:0}
+details.sec > summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:14px minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 16px;color:var(--fg)}
+details.sec > summary::-webkit-details-marker{display:none}
+details.sec > summary:focus-visible{outline:2px solid var(--a);outline-offset:-2px}
+.sw{width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,var(--a),var(--b))}
+.st-title{font-family:var(--font-display);font-weight:600;font-size:17px;line-height:1.25;display:block}
+.st-sub{font-size:13px;color:var(--muted);display:block}
+.chev{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);transition:transform .2s ease}
+.chev::before{content:"";width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-2px) rotate(45deg)}
+details.sec[open] > summary{background:linear-gradient(90deg,var(--sa),var(--sb));color:var(--soft-ink)}
+details.sec[open] > summary .st-sub{color:var(--soft-ink);opacity:.8}
+details.sec[open] .chev{transform:rotate(180deg);border-color:transparent;background:linear-gradient(135deg,var(--a),var(--b));color:var(--ink)}
+.body{padding:16px 18px 20px;display:grid;gap:14px;min-width:0}
+.body p{margin:0;max-width:68ch}
+.back{font-size:13px;color:var(--muted);justify-self:start}
+@media (min-width:921px){.back{display:none}}
+
+/* conteúdo */
+ul.facts{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+ul.facts li{display:grid;grid-template-columns:8px minmax(0,1fr);gap:12px;align-items:start;max-width:72ch}
+ul.facts li::before{content:"";width:8px;height:8px;border-radius:50%;margin-top:7px;background:linear-gradient(135deg,var(--a),var(--b))}
+.src{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 8px;border-radius:999px;background:var(--src-bg);color:var(--src-fg);margin-left:6px;white-space:nowrap;vertical-align:1px}
+.src.sup{background:var(--sup-bg);color:var(--sup-fg)}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:560px){.pair{grid-template-columns:minmax(0,1fr)}}
+.pair > div{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:6px;min-width:0}
+.pair h3{font-family:var(--font-display);font-size:14px;font-weight:600;margin:0;letter-spacing:.02em;text-transform:uppercase;color:var(--muted)}
+.pair .real{background:linear-gradient(135deg,var(--sa),var(--sb));border-color:transparent;color:var(--soft-ink)}
+.pair .real h3{color:var(--soft-ink)}
+blockquote{margin:0;padding:10px 14px;border-radius:10px;background:var(--track);font-style:italic}
+.callout{border-radius:12px;padding:12px 14px;background:linear-gradient(135deg,var(--sa),var(--sb));color:var(--soft-ink)}
+.callout strong{font-weight:600}
+
+ol.flow{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:passo}
+ol.flow li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;position:relative;padding-bottom:14px;counter-increment:passo}
+ol.flow li::before{content:counter(passo);width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--ink);background:linear-gradient(135deg,var(--a),var(--b));position:relative;z-index:1}
+ol.flow li::after{content:"";position:absolute;left:14px;top:30px;bottom:0;width:2px;background:var(--line)}
+ol.flow li:last-child{padding-bottom:0}
+ol.flow li:last-child::after{display:none}
+ol.flow b{font-family:var(--font-display);font-weight:600}
+
+.bars{display:grid;gap:10px}
+.bar{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr) 92px;gap:12px;align-items:center}
+@media (max-width:520px){.bar{grid-template-columns:minmax(0,1fr) 84px}.bar .track{grid-column:1/-1;grid-row:2}}
+.bar .lab{font-size:13.5px;font-weight:500}
+.bar .track{height:14px;border-radius:999px;background:var(--track);overflow:hidden}
+.bar .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--a),var(--b))}
+.bar .val{font-family:var(--font-display);font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.cap{font-size:12.5px;color:var(--muted)}
+
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;line-height:1.45;font-variant-numeric:tabular-nums}
+th{text-align:left;font-weight:600;padding:9px 12px;border-bottom:1px solid var(--line);background:var(--track);white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.num{text-align:center;font-weight:600}
+tr.pick td{background:linear-gradient(90deg,var(--sa),var(--sb));color:var(--soft-ink)}
+.tbl-wide{min-width:640px}
+.st{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.st.ok{background:var(--ok-bg);color:var(--ok-fg)}
+.st.bad{background:var(--bad-bg);color:var(--bad-fg)}
+.st.wait{background:var(--wait-bg);color:var(--wait-fg)}
+
+.phases{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.phases li{display:grid;grid-template-columns:132px minmax(0,1fr);gap:14px;align-items:start;padding:12px 14px;border:1px solid var(--line);border-radius:12px}
+@media (max-width:520px){.phases li{grid-template-columns:minmax(0,1fr);gap:6px}}
+.phases .when{font-family:var(--font-display);font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px}
+.phases .when::before{content:"";width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--a),var(--b));flex:none}
+.phases li.qw{background:linear-gradient(135deg,var(--foco-sa),var(--foco-sb));border-color:transparent;color:var(--soft-ink)}
+.phases li.qw .when::before{background:linear-gradient(135deg,var(--foco-a),var(--foco-b))}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.cards > div{border-radius:12px;padding:12px 14px;background:linear-gradient(135deg,var(--sa),var(--sb));color:var(--soft-ink);display:grid;gap:4px;align-content:start}
+.cards b{font-family:var(--font-display);font-weight:600}
+
+.node.wide{grid-column:1/-1}
+.map-jump{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 13px;margin-bottom:14px;border-radius:12px;border:1px dashed var(--line);color:var(--fg);text-decoration:none;font-family:var(--font-display);font-weight:600;font-size:13.5px}
+.map-jump::after{content:"↑";font-size:15px;color:var(--muted)}
+.map-jump:hover{border-color:var(--fg)}
+.map-jump:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+
+/* resultado do plano */
+.result{border-radius:18px;padding:20px 22px;margin-bottom:28px;display:grid;gap:14px;min-width:0;color:var(--ink);background:linear-gradient(120deg,var(--a),var(--b))}
+.result .k{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.92}
+.result h2{font-family:var(--font-display);font-weight:700;font-size:clamp(22px,2.8vw,32px);line-height:1.12;letter-spacing:-.01em;margin:4px 0 0;text-wrap:balance}
+.result-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:900px){.result-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:460px){.result-grid{grid-template-columns:minmax(0,1fr)}}
+.result-grid > div{border-radius:12px;padding:12px 14px;display:grid;gap:3px;align-content:start;min-width:0;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3)}
+.result-grid small{font-size:12px;opacity:.95}
+.result-grid b{font-family:var(--font-display);font-weight:700;font-size:clamp(19px,2vw,24px);line-height:1.15;font-variant-numeric:tabular-nums}
+.result-grid span{font-size:13px;line-height:1.35}
+.result-note{margin:0;font-size:12.5px;max-width:95ch}
+
+/* maquete */
+.mq{display:grid;gap:14px;margin-bottom:36px;scroll-margin-top:16px;min-width:0}
+.mq-head{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:flex-end;justify-content:space-between}
+.mq-head h2{font-family:var(--font-display);font-weight:700;font-size:clamp(22px,2.6vw,30px);line-height:1.15;letter-spacing:-.01em;margin:4px 0 0;text-wrap:balance}
+.mq-ctrl{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.seg{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:var(--track);border:1px solid var(--line)}
+.seg-b{appearance:none;border:0;cursor:pointer;font-family:var(--font-display);font-weight:600;font-size:14.5px;padding:8px 20px;border-radius:999px;background:transparent;color:var(--muted)}
+.seg-b:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.seg-b.is-on{color:var(--on-strong)}
+.seg-b.is-on[data-set="antes"]{background:linear-gradient(120deg,var(--foco-a),var(--foco-b))}
+.seg-b.is-on[data-set="depois"]{background:linear-gradient(120deg,var(--plano-a),var(--plano-b))}
+.ghost{appearance:none;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--fg);font-family:var(--font-body);font-weight:500;font-size:13.5px;padding:8px 14px;border-radius:999px}
+.ghost:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.mq-stage{position:relative;aspect-ratio:16/9;max-width:100%;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:radial-gradient(120% 90% at 50% 12%,var(--surface),var(--track));touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
+.mq-stage.is-drag{cursor:grabbing}
+@media (max-width:640px){.mq-stage{aspect-ratio:5/4}}
+.mq-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.mq-labels{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.mq-label{position:absolute;left:0;top:0;display:grid;justify-items:center;gap:3px;text-align:center;max-width:130px}
+.mq-label b{font-family:var(--font-display);font-weight:600;font-size:12.5px;line-height:1.2;padding:3px 9px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--fg);white-space:nowrap}
+.mq-label span{font-size:11.5px;font-weight:500;line-height:1.25;padding:2px 8px;border-radius:8px;background:var(--src-bg);color:var(--src-fg)}
+.mq-label.is-bad span{background:var(--bad-bg);color:var(--bad-fg)}
+.mq-label.is-ok span{background:var(--ok-bg);color:var(--ok-fg)}
+.mq-label.is-warn span{background:var(--wait-bg);color:var(--wait-fg)}
+@media (max-width:900px){.mq-label span{display:none}}
+@media (max-width:640px){.mq-label b{font-size:10.5px;padding:2px 6px}}
+.mq-fallback{position:absolute;inset:0;margin:0;padding:24px;display:grid;place-items:center;text-align:center;color:var(--muted)}
+.mq-foot{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;justify-content:space-between;font-size:12.5px;color:var(--muted)}
+.mq-key{display:flex;flex-wrap:wrap;gap:6px 14px}
+.mq-key span{display:inline-flex;align-items:center;gap:6px}
+.mq-key i{width:14px;height:10px;border-radius:3px;display:inline-block}
+.mq-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:760px){.mq-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.mq-stats > div{border-radius:12px;padding:12px 14px;display:grid;gap:2px;align-content:start;min-width:0;background:linear-gradient(135deg,var(--sa),var(--sb));color:var(--soft-ink)}
+.mq-stats b{font-family:var(--font-display);font-weight:700;font-size:22px;line-height:1.15;font-variant-numeric:tabular-nums}
+.mq-stats span{font-size:13px;line-height:1.35}
+.mq-stats small{font-size:11.5px;opacity:.8}
+.mq-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;counter-reset:etapa}
+@media (max-width:920px){.mq-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.mq-steps{grid-template-columns:minmax(0,1fr)}}
+.mq-steps li{counter-increment:etapa;display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-size:14px}
+.mq-steps li::before{content:counter(etapa);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-display);font-weight:600;font-size:13.5px;color:var(--ink);background:linear-gradient(135deg,var(--a),var(--b))}
+.mq-next{margin:0;border-radius:12px;padding:12px 16px;background:linear-gradient(135deg,var(--decid-sa),var(--decid-sb));color:var(--soft-ink)}
+.mq-next strong{font-weight:600}
+
+/* respostas do checkpoint 1 */
+.nodes.list{grid-template-columns:minmax(0,1fr);gap:8px}
+.q{margin:0;padding:10px 14px;border-radius:10px;border:1px dashed var(--line);font-size:13.5px;color:var(--muted)}
+.q b{color:var(--fg);font-weight:600}
+.note{margin:0;border-radius:12px;padding:10px 14px;background:var(--wait-bg);color:var(--wait-fg);font-size:13.5px}
+.note b{font-weight:600}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">Formação FDE · Grupo 2 · checkpoint 1</span>
+    <h1>Mapa mental do projeto Já Chegou</h1>
+    <p class="lead"><strong>Pagar em dia, e só o que chegou.</strong> Comece pelo resultado e pela maquete do quick win, com o antes e o depois. Mais abaixo, toque num nó do mapa para abrir a seção: uma fica aberta por vez. As respostas do checkpoint 1 estão no fim do mapa.</p>
+    <div class="legend" aria-label="Legenda das cores">
+      <span class="g-diag"><i></i>Diagnóstico: o que o dado mostra</span>
+      <span class="g-foco"><i></i>Foco recomendado</span>
+      <span class="g-plano"><i></i>Plano: o que fazemos</span>
+      <span class="g-decid"><i></i>A decidir</span>
+      <span class="g-resp"><i></i>Respostas do checkpoint 1</span>
+    </div>
+  </header>
+
+  <section class="result g-plano" aria-labelledby="res-title">
+    <div>
+      <span class="k">Resultado que o plano entrega</span>
+      <h2 id="res-title">90% menos pagamentos atrasados em 4 semanas</h2>
+    </div>
+    <div class="result-grid">
+      <div><small>Valor pago depois do vencimento</small><b>41% → 4%</b><span>Redução de 90% dos atrasos</span></div>
+      <div><small>Juros e multa por mês</small><b>R$ 122 mil → R$ 12 mil</b><span>Economia de R$ 109,8 mil por mês</span></div>
+      <div><small>Economia em 12 meses</small><b>R$ 1,3 milhão</b><span>em juros e multa que deixam de ser pagos</span></div>
+      <div><small>Notas sem toque manual</small><b>0,7% → 90%</b><span>Até 10%, sem pedido, seguem em análise manual</span></div>
+    </div>
+    <p class="result-note">Projeção do grupo, a validar no piloto. Parte do baseline do dossiê (média de jan a set) e assume que os juros caem na mesma proporção dos atrasos.</p>
+  </section>
+
+  <section class="mq" id="maquete" aria-labelledby="mq-title">
+    <div class="mq-head">
+      <div>
+        <span class="eyebrow">Quick win · maquete animada</span>
+        <h2 id="mq-title">Da nota ao pagamento, antes e depois</h2>
+      </div>
+      <div class="mq-ctrl">
+        <div class="seg" role="group" aria-label="Cenário da maquete">
+          <button class="seg-b is-on" type="button" id="mq-antes" data-set="antes" aria-pressed="true">Antes</button>
+          <button class="seg-b" type="button" id="mq-depois" data-set="depois" aria-pressed="false">Depois</button>
+        </div>
+        <button class="ghost" type="button" id="mq-pause">Pausar</button>
+      </div>
+    </div>
+    <div class="mq-stage" id="mq-stage">
+      <canvas id="mq-canvas" role="img" aria-label="Maquete animada do caminho da nota fiscal, do fornecedor ao pagamento no banco"></canvas>
+      <div class="mq-labels" id="mq-labels" aria-hidden="true"></div>
+      <p class="mq-fallback" id="mq-fallback" hidden>A maquete 3D não abriu neste navegador. As etapas de cada cenário estão descritas logo abaixo.</p>
+    </div>
+    <div class="mq-foot">
+      <div class="mq-key" data-mode="antes">
+        <span><i style="background:var(--mq-nota)"></i>Nota não conferida</span>
+        <span><i style="background:var(--mq-warn)"></i>Perto de vencer</span>
+        <span><i style="background:var(--mq-bad)"></i>Vencida: paga com juros</span>
+      </div>
+      <div class="mq-key" data-mode="depois" hidden>
+        <span><i style="background:var(--mq-nota)"></i>Nota emitida</span>
+        <span><i style="background:var(--mq-ok)"></i>Conferida com o pedido</span>
+        <span><i style="background:var(--mq-warn)"></i>Divergência: pedido ajustado</span>
+        <span><i style="background:var(--mq-idle)"></i>Sem pedido: análise manual</span>
+      </div>
+      <span>Animação ilustrativa, fora de escala. Arraste para girar.</span>
+    </div>
+    <div class="mq-stats g-foco" data-mode="antes">
+      <div><b>14 dias</b><span>da nota ao lançamento no CD</span></div>
+      <div><b>0,7%</b><span>das notas do CD batem sozinhas com o pedido</span></div>
+      <div><b>41%</b><span>do valor é pago depois do vencimento</span></div>
+      <div><b>R$ 122 mil</b><span>por mês em juros e multa</span></div>
+    </div>
+    <div class="mq-stats g-plano" data-mode="depois" hidden>
+      <div><b>Na emissão</b><span>a nota é conferida antes de o caminhão chegar</span></div>
+      <div><b>Cerca de 90%</b><span>das notas seguem sem toque manual</span><small>Meta do grupo</small></div>
+      <div><b>41% → 4%</b><span>do valor pago depois do vencimento</span><small>Projeção do grupo</small></div>
+      <div><b>Até 10%</b><span>das notas, sem pedido, ficam em análise manual</span></div>
+    </div>
+    <ol class="mq-steps g-foco" data-mode="antes">
+      <li><span>O fornecedor emite a nota e despacha a carga.</span></li>
+      <li><span>A nota chega pela SEFAZ, mas ninguém a olha antes da doca.</span></li>
+      <li><span>A doca aceita a carga inteira para não romper o estoque.</span></li>
+      <li><span>O contas a pagar cruza pedido, nota e recebido à mão: 14 dias até lançar.</span></li>
+      <li><span>A divergência vira correção manual no ERP, nota a nota.</span></li>
+      <li><span>O CFO aprova cerca de 400 itens por dia; 41% do valor sai vencido e gera juros.</span></li>
+    </ol>
+    <ol class="mq-steps g-plano" data-mode="depois" hidden>
+      <li><span>O fornecedor emite a nota e despacha a carga.</span></li>
+      <li><span>A escuta captura a nota na SEFAZ assim que ela é emitida.</span></li>
+      <li><span>A nota é cruzada com os pedidos vigentes no ERP.</span></li>
+      <li><span>Se há divergência, o pedido é ajustado automaticamente e o ajuste fica registrado.</span></li>
+      <li><span>Notas sem pedido (até 10%) vão para análise manual.</span></li>
+      <li><span>O CFO aprova a fila do dia por vencimento, com alertas, e o banco paga em dia.</span></li>
+    </ol>
+    <p class="mq-next" data-mode="depois" hidden><strong>Próxima oportunidade: notas de devolução.</strong> O quick win paga em dia, mas paga a nota como veio. Hoje são R$ 543 mil por mês pagos sem mercadoria correspondente, com recuperado zero. O registro de ajustes mostra, nota a nota, o que devolver ou cobrar.</p>
+    <p class="cap">Antes: números do dossiê, média de jan a set. Depois: metas e projeções do grupo, a validar no piloto.</p>
+  </section>
+
+  <div class="layout">
+    <nav class="map" id="mapa" aria-label="Mapa do projeto">
+      <a class="map-jump" href="#maquete">Maquete antes × depois</a>
+      <div class="g-diag">
+        <p class="band-label">Diagnóstico</p>
+        <div class="nodes">
+          <button class="node" type="button" data-open="pedido" aria-controls="pedido"><b>O pedido e o problema</b><small>Dor do CFO: juros</small></button>
+          <button class="node" type="button" data-open="processo" aria-controls="processo"><b>Onde trava</b><small>14 dias até lançar no CD</small></button>
+          <button class="node" type="button" data-open="perdas" aria-controls="perdas"><b>As quatro perdas</b><small>P1 · R$ 543 mil/mês</small></button>
+          <button class="node" type="button" data-open="termos" aria-controls="termos"><b>Termos em conflito</b><small>6 termos</small></button>
+        </div>
+      </div>
+      <div class="stem" style="--from:var(--diag-b);--to:var(--foco-a)"></div>
+      <div class="g-foco">
+        <button class="hub" type="button" data-open="foco" aria-controls="foco">
+          <span class="k">Foco do projeto</span>
+          <span class="t">Pagar em dia, e só o que chegou</span>
+          <span class="chips"><span>Quick win · 90% menos atrasos</span><span>4 semanas</span><span>P1 · R$ 543 mil/mês</span></span>
+        </button>
+      </div>
+      <div class="stem" style="--from:var(--foco-b);--to:var(--plano-a)"></div>
+      <div class="g-plano">
+        <p class="band-label">Plano</p>
+        <div class="nodes">
+          <button class="node wide" type="button" data-open="plano-pratico" aria-controls="plano-pratico"><b>Plano prático do quick win</b><small>4 semanas: escutar, cruzar, ajustar e pagar em dia</small></button>
+          <button class="node" type="button" data-open="frentes" aria-controls="frentes"><b>Frentes na régua</b><small>A primeiro · 14 pontos</small></button>
+          <button class="node" type="button" data-open="roteiro" aria-controls="roteiro"><b>Roteiro</b><small>Juros caindo em 4 semanas</small></button>
+          <button class="node" type="button" data-open="pessoas" aria-controls="pessoas"><b>Quem decide</b><small>CFO arbitra o conflito</small></button>
+          <button class="node" type="button" data-open="acessos" aria-controls="acessos"><b>Acessos</b><small>1 de 8 liberado</small></button>
+        </div>
+      </div>
+      <div class="stem" style="--from:var(--plano-b);--to:var(--decid-a)"></div>
+      <div class="g-decid">
+        <p class="band-label">A decidir</p>
+        <div class="nodes three">
+          <button class="node" type="button" data-open="decisoes" aria-controls="decisoes"><b>Decisões</b><small>5 escolhas</small></button>
+          <button class="node" type="button" data-open="perguntas" aria-controls="perguntas"><b>Perguntas</b><small>Q1 a Q7</small></button>
+          <button class="node" type="button" data-open="hipoteses" aria-controls="hipoteses"><b>Hipóteses</b><small>H1 a H5</small></button>
+        </div>
+      </div>
+      <div class="stem" style="--from:var(--decid-b);--to:var(--resp-a)"></div>
+      <div class="g-resp">
+        <p class="band-label">Respostas do checkpoint 1</p>
+        <div class="nodes list">
+          <button class="node" type="button" data-open="r1" aria-controls="r1"><b>1 · O pedido do CFO</b><small>Atender uma parte e reenquadrar o resto</small></button>
+          <button class="node" type="button" data-open="r2" aria-controls="r2"><b>2 · O número a mover</b><small>Juros e atraso, medidos em taxa</small></button>
+          <button class="node" type="button" data-open="r3" aria-controls="r3"><b>3 · Setembro e a linha de base</b><small>O atraso volta quando a força-tarefa sai</small></button>
+          <button class="node" type="button" data-open="r4" aria-controls="r4"><b>4 · Ordem das frentes</b><small>Primeiro ganho na semana 4</small></button>
+          <button class="node" type="button" data-open="r5" aria-controls="r5"><b>5 · Quem decide e a conversa com o CFO</b><small>Começar pela dor dele, com o número dele</small></button>
+        </div>
+      </div>
+      <p class="map-hint">Números do dossiê, média de jan a set. Metas marcadas como suposição ainda dependem do grupo.</p>
+    </nav>
+
+    <div class="secs">
+      <!-- DIAGNÓSTICO -->
+      <section class="group g-diag" aria-labelledby="h-diag">
+        <h2 id="h-diag">Diagnóstico</h2>
+
+        <details class="sec" id="pedido" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">O pedido e o problema real</span><span class="st-sub">A dor do CFO é o atraso; a origem está na doca</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <div class="pair">
+              <div>
+                <h3>Pedido do CFO</h3>
+                <p>Automatizar lançar, pagar e baixar os boletos, e parar de pagar juros.</p>
+                <blockquote>“Contratei para automatizar o boleto.”</blockquote>
+              </div>
+              <div class="real">
+                <h3>Problema real</h3>
+                <p>A Já Chegou paga notas que ninguém conferiu. Só 0,7% das notas do CD batem sozinhas com a ordem, e o recuperado é zero em todos os meses.<span class="src">Dossiê</span></p>
+              </div>
+            </div>
+            <ul class="facts">
+              <li><span><b>Dor do CFO:</b> 41% do valor sai depois do vencimento, com R$ 122 mil por mês de juros e multa. É o que o quick win ataca primeiro.<span class="src">Dossiê</span></span></li>
+              <li><span>Para o jurídico, aceitar a nota é aceitar o pedido. A doca só aceita ou recusa a carga inteira, e a correção manual depois do aceite segura o pagamento.<span class="src">Dossiê</span></span></li>
+              <li><span>O pedido do CFO, como veio, cobre P2 e P4: R$ 167 mil de R$ 710 mil por mês.<span class="src">Conta do grupo</span></span></li>
+            </ul>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+
+        <details class="sec" id="processo" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">Onde o processo trava</span><span class="st-sub">Do pedido ao pagamento, sete passos e onde cada um espera</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <ol class="flow">
+              <li><span><b>Pedido.</b> O forecast gera o plano; 20% das ordens ainda sobem por CSV feito à mão.</span></li>
+              <li><span><b>Nota.</b> O fornecedor emite a nota antes de entregar. Ela quase sempre chega antes da mercadoria, mas ninguém a olha antes da doca.</span></li>
+              <li><span><b>Doca.</b> Aceita ou recusa a carga inteira. O WMS não converte caixa em unidade.</span></li>
+              <li><span><b>Conferência.</b> Ordem, nota e recebido cruzados à mão: 14 dias até o lançamento no CD. Uma nota de 80 itens leva mais de 1h30.</span></li>
+              <li><span><b>Divergência.</b> Vira ordem complementar, criada por três áreas, em 2 dias a 3 meses.</span></li>
+              <li><span><b>Lista do dia.</b> Cerca de 400 propostas. O saldo é visto às 8h e o CFO decide das 16h às 18h, aprovando cada item, sem teto.</span></li>
+              <li><span><b>Pagamento.</b> Boletos pagos e baixados um a um: o plano do banco não tem API.</span></li>
+            </ol>
+            <p class="cap">Fonte: dossiê pós-reunião, fluxo do contas a pagar e Anexos 3 e 5.</p>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+
+        <details class="sec" id="perdas" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">As quatro perdas</span><span class="st-sub">Pagar errado é 76% da perda em reais</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <div class="bars" role="img" aria-label="Perdas por mês em reais: P1 R$ 543 mil, P2 R$ 122 mil, P4 R$ 45 mil">
+              <div class="bar"><span class="lab">P1 · pagar errado</span><span class="track"><span class="fill" style="width:100%;display:block"></span></span><span class="val">R$ 543 mil</span></div>
+              <div class="bar"><span class="lab">P2 · pagar atrasado</span><span class="track"><span class="fill" style="width:22.5%;display:block"></span></span><span class="val">R$ 122 mil</span></div>
+              <div class="bar"><span class="lab">P4 · custo de operar</span><span class="track"><span class="fill" style="width:8.3%;display:block"></span></span><span class="val">R$ 45 mil</span></div>
+            </div>
+            <p class="cap">Média mensal de jan a set, na mesma escala. P3, ruptura por atraso, é medida em pontos: 1,2 ponto de disponibilidade perdida (faixa de 0 a 4,6).</p>
+            <ul class="facts">
+              <li><span>P1 é 1,56% do valor das notas. Varia de R$ 136 mil a R$ 1,8 milhão por mês, e abril teve quase 40% do período.<span class="src">Dossiê</span></span></li>
+              <li><span>P2: 41% do valor sai depois do vencimento. Foi 76% em janeiro e 16% em setembro, com uma semana de força-tarefa do controller.<span class="src">Dossiê</span></span></li>
+              <li><span>P1 e P2 somam R$ 665 mil por mês, quase 15 vezes o custo do time que paga.<span class="src">Dossiê</span></span></li>
+            </ul>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+
+        <details class="sec" id="termos" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">Termos em conflito</span><span class="st-sub">Seis palavras que mudam de sentido entre os cargos</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <div class="tw"><table class="tbl-wide">
+              <thead><tr><th>Termo</th><th>Um cargo diz</th><th>Outro cargo diz</th><th>Onde pesa</th></tr></thead>
+              <tbody>
+                <tr><td><b>Aprovado</b></td><td>CFO: aprovou o pagamento</td><td>Abaixo de R$ 5 mil, ele assina sem olhar</td><td>Aprovado não é conferido</td></tr>
+                <tr><td><b>Aceitar</b></td><td>Doca: a carga entrou</td><td>Jurídico: aceitar a nota é aceitar o pedido</td><td>Vira obrigação de pagar a nota cheia</td></tr>
+                <tr><td><b>Recebido</b></td><td>Doca e WMS: caixas descarregadas</td><td>Controller: unidades conferidas contra nota e ordem</td><td>O WMS não converte caixa em unidade</td></tr>
+                <tr><td><b>Atrasado</b></td><td>CFO: o atraso vem caindo, 16% em setembro</td><td>Dossiê: 41% na média de jan a set</td><td>O baseline muda com o mês escolhido</td></tr>
+                <tr><td><b>Divergência</b></td><td>Compras: o que não bate na doca</td><td>Controller: o que vira ordem complementar</td><td>Ninguém soma num lugar só</td></tr>
+                <tr><td><b>Pedido</b></td><td>Forecast: plano de compra</td><td>ERP: ordem, 20% subida por CSV</td><td>Nota sem ordem (cerca de 4%) não tem dono</td></tr>
+              </tbody>
+            </table></div>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+      </section>
+
+      <!-- FOCO -->
+      <section class="group g-foco" aria-labelledby="h-foco">
+        <h2 id="h-foco">Foco</h2>
+        <details class="sec" id="foco" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">Foco e número a mover</span><span class="st-sub">Pagar em dia, e só o que chegou</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <p>O quick win ataca primeiro a dor do CFO: pagar em dia e parar de pagar juros. O mesmo check registra a diferença de cada nota, que é a base para atacar P1, a maior perda.</p>
+            <div class="tw"><table>
+              <tbody>
+                <tr><td><b>Número a mover</b></td><td>P1: pago sem mercadoria correspondente, menos o recuperado<span class="src">Dossiê</span></td></tr>
+                <tr><td><b>Baseline</b></td><td>R$ 543 mil por mês, 1,56% do valor das notas<span class="src">Dossiê</span></td></tr>
+                <tr><td><b>Período</b></td><td>Média de jan a set; faixa de R$ 136 mil a R$ 1,8 milhão<span class="src">Dossiê</span></td></tr>
+                <tr><td><b>Quem assina</b></td><td>Controller e CFO, antes de mudar qualquer coisa<span class="src sup">A combinar</span></td></tr>
+                <tr><td><b>Indicador do quick win</b></td><td>Valor pago depois do vencimento: de 41% para cerca de 4%, uma redução de 90% dos atrasos. Juros e multa: de R$ 122 mil para cerca de R$ 12 mil por mês<span class="src sup">Projeção</span></td></tr>
+                <tr><td><b>Meta de P1</b></td><td>Perda líquida pela metade em 8 semanas, sem a ruptura passar de 1,2 ponto e sem mudar a regra de aceitar a carga<span class="src sup">Suposição</span></td></tr>
+                <tr><td><b>Prazo</b></td><td>Juros caindo e primeiras divergências registradas e cobradas até a semana 4; meta cheia em 8 semanas<span class="src sup">Suposição</span></td></tr>
+                <tr><td><b>Como medir</b></td><td>Em taxa e média móvel, com abril e setembro separados<span class="src">Conta do grupo</span></td></tr>
+              </tbody>
+            </table></div>
+            <div class="callout"><strong>Reenquadramento:</strong> parar de descobrir o erro do fornecedor na doca. Conferir a nota assim que ela é emitida, para que a nota aceita chegue com o pedido já ajustado e seja paga em dia, e a diferença fique registrada para cobrar do fornecedor. A regra de aceitar a carga continua.</div>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+      </section>
+
+      <!-- PLANO -->
+      <section class="group g-plano" aria-labelledby="h-plano">
+        <h2 id="h-plano">Plano</h2>
+
+        <details class="sec" id="plano-pratico" name="secao" open>
+          <summary><span class="sw"></span><span><span class="st-title">Plano prático do quick win</span><span class="st-sub">Quatro semanas: escutar, cruzar, ajustar e pagar em dia</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <p>O quick win escuta as notas na SEFAZ, cruza cada uma com os pedidos vigentes e ajusta o pedido quando há divergência. O CFO recebe a fila pronta, por vencimento, e só aprova.</p>
+            <div class="callout"><strong>Resultado esperado:</strong> 90% menos pagamentos atrasados. O valor pago depois do vencimento cai de 41% para cerca de 4%, e os juros de R$ 122 mil para cerca de R$ 12 mil por mês.<span class="src sup">Projeção</span></div>
+            <p class="cap">Premissa: acessos resolvidos. Credencial de serviço na captura de NF, leitura e escrita de pedidos no ERP com homologação atualizada, e títulos a pagar.</p>
+            <ol class="phases">
+              <li><span class="when">Semana 1</span><span><b>Conectar e medir.</b> Ligar a escuta à captura de NF e ler os pedidos vigentes e os títulos a pagar. Rodar em sombra nas notas do CD e fechar o baseline com o controller e o CFO.</span></li>
+              <li><span class="when">Semana 2</span><span><b>Cruzar nota × pedido.</b> Comparar item, quantidade, unidade (caixa × unidade) e preço. Testar em notas já lançadas e conferir com o que o time decidiu em cada uma.</span></li>
+              <li><span class="when">Semana 3</span><span><b>Ajustar e enfileirar.</b> Ligar o ajuste automático do pedido, primeiro em homologação, com registro de cada ajuste. Montar a fila do CFO por vencimento e os alertas.</span></li>
+              <li><span class="when">Semana 4</span><span><b>Piloto no CD.</b> Começar pelos fornecedores de maior volume e abrir para todo o CD. Enviar ao CFO o relatório semanal de atrasos e juros.</span></li>
+            </ol>
+            <div class="tw"><table>
+              <thead><tr><th>Quem</th><th>O que faz</th></tr></thead>
+              <tbody>
+                <tr><td><b>Regra fixa</b></td><td>Captura a nota, cruza item, quantidade, unidade e preço, ordena a fila por vencimento e dispara os alertas</td></tr>
+                <tr><td><b>IA</b></td><td>Casa os itens quando o código ou a descrição não batem e classifica o tipo de divergência</td></tr>
+                <tr><td><b>Pessoa</b></td><td>O CFO aprova os pagamentos. O analista resolve a nota sem pedido. O controller decide os ajustes fora da tolerância</td></tr>
+              </tbody>
+            </table></div>
+            <div class="tw"><table class="tbl-wide">
+              <thead><tr><th>Indicador</th><th>Hoje</th><th>Com o quick win</th></tr></thead>
+              <tbody>
+                <tr class="pick"><td><b>Valor pago depois do vencimento</b></td><td>41%</td><td>Cerca de 4%: 90% menos atrasos (projeção)</td></tr>
+                <tr><td><b>Juros e multa</b></td><td>R$ 122 mil por mês</td><td>Cerca de R$ 12 mil por mês (projeção)</td></tr>
+                <tr><td><b>Dias da nota ao lançamento no CD</b></td><td>14</td><td>No mesmo dia, para as notas que batem (suposição)</td></tr>
+                <tr><td><b>Notas sem toque manual</b></td><td>0,7%</td><td>Cerca de 90% (meta do grupo)</td></tr>
+                <tr><td><b>Notas em análise manual</b></td><td>Todas</td><td>Até 10%: as sem pedido (o dossiê estima cerca de 4%)</td></tr>
+              </tbody>
+            </table></div>
+            <p><b>Travas sugeridas</b><span class="src sup">Sugestão</span></p>
+            <ul class="facts">
+              <li><span>O ajuste automático vale até uma tolerância combinada com o controller. Acima dela, uma pessoa decide.</span></li>
+              <li><span>Todo ajuste fica registrado, com nota, item e valor.</span></li>
+              <li><span>Nada é pago sem a aprovação do CFO, e essa trava fica no sistema.</span></li>
+            </ul>
+            <p><b>O que o quick win não resolve:</b> a nota é paga como veio, e a falta física só aparece na contagem da doca.</p>
+            <div class="callout"><strong>Próxima oportunidade: notas de devolução.</strong> Hoje são R$ 543 mil por mês pagos sem mercadoria correspondente, com recuperado zero: cerca de R$ 6,5 milhões por ano. O registro de ajustes do quick win mostra, nota a nota, o que devolver ou cobrar.</div>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+
+        <details class="sec" id="frentes" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">Frentes na régua</span><span class="st-sub">A primeiro: pagar em dia o que bate e avisar o que diverge</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <div class="tw"><table class="tbl-wide">
+              <thead><tr><th>Frente</th><th>Move</th><th>Retorno</th><th>Prazo</th><th>Esforço</th><th>Total</th><th>Depende de</th><th>Confiança</th></tr></thead>
+              <tbody>
+                <tr class="pick"><td><b>A · Check antecipado e fila por vencimento</b></td><td>P2, P1</td><td class="num">5</td><td class="num">5</td><td class="num">4</td><td class="num">14</td><td>Títulos a pagar, credencial da SEFAZ, leitura e escrita de pedidos no ERP</td><td>Alta</td></tr>
+                <tr><td><b>B · Cobrar o fornecedor</b></td><td>P1</td><td class="num">4</td><td class="num">3</td><td class="num">3</td><td class="num">10</td><td>Registro da diferença feito por A; regra do jurídico</td><td>Baixa: o recuperado hoje é zero</td></tr>
+                <tr><td><b>C · Cadastro caixa × unidade</b></td><td>P1</td><td class="num">3</td><td class="num">2</td><td class="num">3</td><td class="num">8</td><td>Cadastro por planilha; WMS não converte</td><td>Média</td></tr>
+                <tr><td><b>D · Automação do boleto</b></td><td>P2, P4</td><td class="num">2</td><td class="num">3</td><td class="num">2</td><td class="num">7</td><td>API do banco, que não existe, e escrita no ERP</td><td>Baixa</td></tr>
+              </tbody>
+            </table></div>
+            <p class="cap">Notas de 1 a 5. Em prazo e esforço, 5 é o mais rápido e o mais leve.</p>
+            <p>A ataca primeiro a dor do CFO: com o pedido já ajustado antes do aceite, a nota não fica parada e é paga em dia. O registro dos ajustes alimenta B. Compras também pediu isso:</p>
+            <blockquote>“Se eu soubesse antes, planejava a equipe e recusava na hora.”</blockquote>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+
+        <details class="sec" id="roteiro" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">Roteiro</span><span class="st-sub">Quick win: 90% menos atrasos em 4 semanas</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <ol class="phases">
+              <li class="qw"><span class="when">Semanas 1 a 4</span><span>Escuta das notas na SEFAZ, cruzamento com os pedidos vigentes e ajuste automático do pedido quando há divergência, com registro de cada ajuste. O CFO recebe a fila pronta por vencimento, com alertas. Notas sem pedido (até 10%) ficam em análise manual.</span></li>
+              <li><span class="when">Semanas 5 a 8</span><span>Cobrança formal da diferença registrada (B) e check no fluxo de aprovação, com bloqueio de pagamento duplicado. Cadastro caixa × unidade (C), se a H1 se confirmar.</span></li>
+              <li><span class="when">Depois</span><span>Automação do boleto (D), quando o banco tiver API, e processo de notas de devolução, para parar de pagar mercadoria que não foi pedida ou não chegou.</span></li>
+            </ol>
+            <p class="cap">O detalhe semana a semana está em "Plano prático do quick win". O pagamento continua dependendo da aprovação do CFO.</p>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+
+        <details class="sec" id="pessoas" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">Quem decide e quem libera</span><span class="st-sub">Compras ganha quando a mercadoria entra; o financeiro paga a divergência</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <div class="tw"><table class="tbl-wide">
+              <thead><tr><th>Papel</th><th>No projeto</th><th>Posição</th><th>O que precisamos</th></tr></thead>
+              <tbody>
+                <tr><td><b>CFO, sponsor</b></td><td>Decide e paga; libera o banco</td><td>Apoia o pedido como veio</td><td>Decisão sobre o reenquadramento</td></tr>
+                <tr><td><b>Controller</b></td><td>Sente e libera ERP, SEFAZ e títulos</td><td>Apoia; exige homologação e termo por pessoa</td><td>Acessos e baseline assinado</td></tr>
+                <tr><td><b>Gerente de compras e comercial</b></td><td>Sente e libera a doca e o WMS</td><td>Neutro: quer saber antes, sem brigar com fornecedor</td><td>Agenda de doca e piloto</td></tr>
+                <tr><td><b>Jurídico</b></td><td>Libera a regra de recusa e devolução</td><td>Trava hoje</td><td>Regra para recusa parcial</td></tr>
+                <tr><td><b>Analistas do contas a pagar</b></td><td>Sentem; um detém a credencial da SEFAZ</td><td>Neutros</td><td>Troca por credencial de serviço</td></tr>
+              </tbody>
+            </table></div>
+            <div class="callout"><strong>Quem arbitra:</strong> o CFO, como sponsor e dono do caixa. Falta confirmar se alguém acima dele resolve um impasse entre compras e financeiro.</div>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+
+        <details class="sec" id="acessos" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">Acessos do quick win</span><span class="st-sub">Só o CSV de títulos está liberado</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <div class="tw"><table class="tbl-wide">
+              <thead><tr><th>Acesso</th><th>Para quê</th><th>Situação</th><th>Quem libera</th></tr></thead>
+              <tbody>
+                <tr><td><b>Títulos e pagamentos (CSV diário)</b></td><td>Fila por vencimento</td><td><span class="st ok">Liberado</span></td><td>Controller</td></tr>
+                <tr><td><b>Captura de NF na SEFAZ</b></td><td>Ler a nota antes da entrega</td><td><span class="st bad">Bloqueia: login de terceirizado</span></td><td>Controller e fiscal</td></tr>
+                <tr><td><b>Leitura no ERP</b></td><td>Ordens, notas e fornecedores</td><td><span class="st bad">Bloqueia: sem previsão</span></td><td>Controller, com termo por pessoa</td></tr>
+                <tr><td><b>Agenda de doca</b></td><td>Saber o que chega e quando</td><td><span class="st wait">Não pedido</span></td><td>Compras</td></tr>
+                <tr><td><b>WMS do CD</b></td><td>Conferir o físico recebido</td><td><span class="st wait">Não pedido</span></td><td>Compras e controller</td></tr>
+                <tr><td><b>Escrita no ERP</b></td><td>Ajuste automático do pedido</td><td><span class="st bad">Bloqueia: homologação de março</span></td><td>Controller</td></tr>
+                <tr><td><b>Banco</b></td><td>Pagamento e extrato</td><td><span class="st wait">Sem API</span></td><td>CFO</td></tr>
+                <tr><td><b>Onde a solução roda</b></td><td>Hospedagem e dados</td><td><span class="st wait">Em aberto</span></td><td>Controller e CFO</td></tr>
+              </tbody>
+            </table></div>
+            <p class="cap">A fila por vencimento já pode começar com o CSV. O check antecipado depende da credencial de serviço na SEFAZ e da leitura no ERP, e o ajuste automático do pedido depende de escrita no ERP. A maquete e o plano prático consideram esses acessos resolvidos. Para hospedar na Barte, o controller pede dados fiscais no Brasil e contrato de operador de dados.</p>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+      </section>
+
+      <!-- A DECIDIR -->
+      <section class="group g-decid" aria-labelledby="h-decid">
+        <h2 id="h-decid">A decidir</h2>
+
+        <details class="sec" id="decisoes" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">Decisões do grupo</span><span class="st-sub">Cinco escolhas antes das 12h</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <div class="cards">
+              <div><b>Meta de atraso</b><span>Reduzir 90% dos atrasos: de 41% para cerca de 4% do valor. Validar no piloto.</span></div>
+              <div><b>Meta de P1</b><span>Perda líquida pela metade em 8 semanas?</span></div>
+              <div><b>Número principal</b><span>Manter P1 como número do projeto, com juros como indicador do quick win?</span></div>
+              <div><b>Baseline</b><span>Combinar que controller e CFO assinam antes de começar.</span></div>
+              <div><b>Entrega</b><span>Escolher o fork líder, preencher os integrantes e enviar o diagnóstico.</span></div>
+            </div>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+
+        <details class="sec" id="perguntas" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">Perguntas ao cliente</span><span class="st-sub">O que só o cliente consegue responder</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <div class="tw"><table class="tbl-wide">
+              <thead><tr><th>#</th><th>Pergunta</th><th>Para quem</th><th>Por que importa</th></tr></thead>
+              <tbody>
+                <tr><td><b>Q1</b></td><td>Quanto dos R$ 543 mil é do CD?</td><td>Controller</td><td>O CD tem 1,9 mil notas e cerca de 64% do valor</td></tr>
+                <tr><td><b>Q2</b></td><td>Quanto custou a força-tarefa de setembro, e o atraso de outubro voltou a subir?</td><td>Controller e CFO</td><td>Define o baseline de juros do quick win</td></tr>
+                <tr><td><b>Q3</b></td><td>Quando saem a credencial de serviço da SEFAZ e a leitura no ERP?</td><td>Controller e fiscal</td><td>Sem isso, o check não começa</td></tr>
+                <tr><td><b>Q4</b></td><td>Quanto tempo leva a correção no ERP de uma nota aceita com divergência, e quem faz?</td><td>Controller</td><td>Se for o que atrasa o pagamento, é onde o quick win reduz juros</td></tr>
+                <tr><td><b>Q5</b></td><td>O fornecedor aceita reemitir a nota antes da entrega, ou dar abatimento na seguinte?</td><td>Compras</td><td>Define se a divergência se resolve na origem ou só é cobrada depois</td></tr>
+                <tr><td><b>Q6</b></td><td>O jurídico aceita recusa parcial antes da doca?</td><td>Controller, com o jurídico</td><td>Define se o aceite parcial pode sair do "depois"</td></tr>
+                <tr><td><b>Q7</b></td><td>Por que abril concentrou quase 40% de P1?</td><td>Controller</td><td>Um evento único muda o baseline</td></tr>
+              </tbody>
+            </table></div>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+
+        <details class="sec" id="hipoteses" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">Hipóteses a testar</span><span class="st-sub">Cinco apostas e o que muda se falharem</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <div class="tw"><table class="tbl-wide">
+              <thead><tr><th>#</th><th>Hipótese</th><th>Como confirmar</th><th>Se estiver errada</th></tr></thead>
+              <tbody>
+                <tr><td><b>H1</b></td><td>Parte relevante da divergência no CD é caixa × unidade, já que o WMS não converte</td><td>Classificar uma amostra nas exceções 1 a 8 do dossiê</td><td>C perde força e o foco fica no check e na cobrança</td></tr>
+                <tr><td><b>H2</b></td><td>A maior parte dos juros vem de notas paradas na conferência e na correção manual</td><td>Cruzar títulos atrasados com os dias até o lançamento</td><td>O quick win se apoia na fila por vencimento e D sobe</td></tr>
+                <tr><td><b>H3</b></td><td>Avisar compras antes do caminhão não aumenta a ruptura</td><td>Piloto com poucos fornecedores do CD</td><td>O check só alerta, e a diferença segue para a cobrança (B)</td></tr>
+                <tr><td><b>H4</b></td><td>A correção feita no aceite cabe no prazo médio de 45 dias</td><td>Comparar a data de recebimento com o vencimento</td><td>O quick win prioriza as notas de vencimento curto</td></tr>
+                <tr><td><b>H5</b></td><td>Os 16% de setembro não se sustentam sem força-tarefa</td><td>Acompanhar outubro e novembro no CSV de títulos</td><td>O baseline de juros do quick win precisa ser revisto</td></tr>
+              </tbody>
+            </table></div>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+      </section>
+
+      <!-- RESPOSTAS DO CHECKPOINT 1 -->
+      <section class="group g-resp" aria-labelledby="h-resp">
+        <h2 id="h-resp">Respostas do checkpoint 1</h2>
+
+        <details class="sec" id="r1" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">1 · O pedido do CFO</span><span class="st-sub">Atender uma parte e reenquadrar o resto</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <p class="q"><b>Pergunta do Pack 2:</b> atender o pedido do CFO como veio, reenquadrá-lo ou atender uma parte e reenquadrar o resto? Com qual dado vocês sustentam a escolha?</p>
+            <div class="callout"><strong>Resposta:</strong> atendemos uma parte e reenquadramos o resto. Priorizamos a redução de juros e a velocidade de entrega: em 4 semanas, o match das notas emitidas com os pedidos de compra, com ajuste automático do ERP quando há divergência, e a fila pronta para o CFO aprovar em dia.</div>
+            <ul class="facts">
+              <li><span>41% do valor é pago depois do vencimento, com R$ 122 mil por mês em juros e multa.<span class="src">Dossiê</span></span></li>
+              <li><span>A conferência manual leva 14 dias da nota ao lançamento no CD, e só 0,7% das notas batem sozinhas com o pedido.<span class="src">Dossiê</span></span></li>
+              <li><span>A nota quase sempre chega antes da mercadoria, mas ninguém a olha antes da doca.<span class="src">Dossiê</span></span></li>
+            </ul>
+            <p class="note"><b>Ponto de atenção:</b> o pedido deve ser ajustado ao que foi recebido na doca, não ao que a nota diz. Se seguir a nota, o sistema paga em dia mercadoria que não chegou (exceções 1 e 3 do dossiê).</p>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+
+        <details class="sec" id="r2" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">2 · O número a mover</span><span class="st-sub">Juros e atraso, medidos em taxa</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <p class="q"><b>Pergunta do Pack 2:</b> qual número o projeto vai mover, qual é o valor atual e como medir com uma variação mensal tão grande?</p>
+            <div class="callout"><strong>Resposta:</strong> o número principal é o de juros e multa pagos, com o percentual do valor pago depois do vencimento. Hoje são R$ 122 mil por mês e 41% do valor. A meta do quick win é cortar 90%: o valor pago depois do vencimento cai para cerca de 4%, e os juros caem 90% sobre os R$ 122 mil, uma economia de R$ 109,8 mil por mês (restam cerca de R$ 12 mil).<span class="src sup">Projeção</span></div>
+            <div class="tw"><table class="tbl-wide">
+              <thead><tr><th>Indicador</th><th>Hoje</th><th>Fonte</th></tr></thead>
+              <tbody>
+                <tr class="pick"><td><b>Juros e multa pagos</b></td><td>R$ 122 mil por mês (faixa de R$ 23 mil a R$ 420 mil)</td><td>Dossiê, Anexo 2</td></tr>
+                <tr class="pick"><td><b>Valor pago depois do vencimento</b></td><td>41% (média de jan a set)</td><td>Dossiê, Anexo 3</td></tr>
+                <tr><td><b>Notas pagas em atraso</b></td><td>A extrair do CSV diário de títulos</td><td>Linha de base a medir</td></tr>
+                <tr><td><b>Boletos que passam de atrasados a em dia</b></td><td>A extrair do CSV diário; 66% do valor é pago por boleto</td><td>Dossiê, Anexo 3</td></tr>
+                <tr><td><b>Ruptura por atraso</b></td><td>1,2 ponto (faixa de 0 a 4,6)</td><td>Dossiê, Anexo 2</td></tr>
+              </tbody>
+            </table></div>
+            <p><b>Como medir com a variação mensal:</b> em taxa, e não em valor absoluto, e em média móvel de 4 semanas. Assim um mês fora da curva, como abril ou setembro, não distorce o resultado.</p>
+            <p class="cap">A alinhar: no diagnóstico entregue, o número do projeto é P1 (pagar errado), com juros como indicador do quick win.</p>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+
+        <details class="sec" id="r3" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">3 · Setembro e a linha de base</span><span class="st-sub">O atraso volta quando a força-tarefa sai</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <p class="q"><b>Pergunta do Pack 2:</b> o atraso de setembro caiu porque o controller e uma equipe dedicada passaram uma semana pondo os vencidos em dia. O que acontece com o atraso quando essa força-tarefa sai? Quanto essa semana custou? Qual número usar como linha de base?</p>
+            <div class="bars" role="img" aria-label="Valor pago depois do vencimento: janeiro 76%, média de janeiro a setembro 41%, setembro 16%, meta do quick win cerca de 4%">
+              <div class="bar"><span class="lab">Janeiro</span><span class="track"><span class="fill" style="width:100%;display:block"></span></span><span class="val">76%</span></div>
+              <div class="bar"><span class="lab">Média de jan a set</span><span class="track"><span class="fill" style="width:53.9%;display:block"></span></span><span class="val">41%</span></div>
+              <div class="bar"><span class="lab">Setembro, com força-tarefa</span><span class="track"><span class="fill" style="width:21.1%;display:block"></span></span><span class="val">16%</span></div>
+              <div class="bar"><span class="lab">Meta do quick win</span><span class="track"><span class="fill" style="width:5.3%;display:block"></span></span><span class="val">~4%</span></div>
+            </div>
+            <p class="cap">Valor pago depois do vencimento, na mesma escala. Janeiro, média e setembro vêm do dossiê; a meta é projeção do grupo.</p>
+            <ul class="facts">
+              <li><span><b>Quando a força-tarefa sai:</b> o atraso volta a subir, porque o processo não mudou. Setembro foi um esforço pontual; a tendência real é a média de jan a set.<span class="src">Dossiê</span></span></li>
+              <li><span><b>Quanto custou:</b> o dossiê não traz o valor. Estimamos de R$ 10 mil a R$ 15 mil em gente na semana, já que o time de conciliação e pagamento custa R$ 45 mil por mês, sem contar o que o controller deixou de fazer no fechamento.<span class="src sup">Suposição</span></span></li>
+              <li><span><b>Linha de base:</b> a média de jan a set, com 41% do valor pago em atraso e R$ 122 mil por mês de juros, e setembro marcado como mês atípico. Outubro e novembro, no CSV diário, confirmam se o atraso voltou a subir.<span class="src">Dossiê</span></span></li>
+            </ul>
+            <div class="callout"><strong>O argumento:</strong> setembro prova que o gargalo é operacional. Quando alguém confere e prioriza, o atraso cai. O quick win é essa força-tarefa rodando todo dia, sem gente extra.</div>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+
+        <details class="sec" id="r4" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">4 · Ordem das frentes</span><span class="st-sub">Primeiro ganho na semana 4</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <p class="q"><b>Pergunta do Pack 2:</b> em que ordem atacar as frentes, por retorno, prazo até o primeiro valor e esforço? Em quanto tempo o cliente sente o primeiro ganho?</p>
+            <div class="callout"><strong>Resposta:</strong> o cliente sente o primeiro ganho na semana 4, dentro do primeiro mês que o CFO prometeu ao conselho.</div>
+            <ol class="phases">
+              <li class="qw"><span class="when">Semanas 1 a 4</span><span><b>Quick win.</b> Match nota × pedido com ajuste automático no ERP, fila de pagamento por vencimento e alertas. Retorno sobre R$ 122 mil por mês de juros, com esforço médio.</span></li>
+              <li><span class="when">Semanas 5 a 8</span><span><b>Exceções.</b> Fila de análise manual para as notas sem pedido, bloqueio de boleto duplicado e conversão caixa × unidade, que gera divergência de até 300% no preço.</span></li>
+              <li><span class="when">Próxima fase</span><span><b>Notas de devolução.</b> A maior oportunidade de economia: R$ 543 mil por mês pagos sem mercadoria correspondente, com recuperado zero, cerca de R$ 6,5 milhões por ano.</span></li>
+              <li><span class="when">Depois</span><span><b>Pagamento em lote.</b> Depende de API do banco, que o plano atual não tem.</span></li>
+            </ol>
+            <ul class="facts">
+              <li><span>O dossiê estima cerca de 4% de notas sem pedido; a reunião falou em 10%. Com 4%, o quick win cobre cerca de 96% das notas sem toque manual.<span class="src">Dossiê</span></span></li>
+            </ul>
+            <p class="note"><b>A alinhar:</b> esta ordem é a sugestão em discussão. Em "Frentes na régua" e no "Roteiro", a segunda frente ainda é cobrar o fornecedor.</p>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+
+        <details class="sec" id="r5" name="secao">
+          <summary><span class="sw"></span><span><span class="st-title">5 · Quem decide e a conversa com o CFO</span><span class="st-sub">Começar pela dor dele, com o número dele</span></span><span class="chev" aria-hidden="true"></span></summary>
+          <div class="body">
+            <p class="q"><b>Pergunta do Pack 2:</b> quem decide, quem paga e quem é afetado? Como vocês levam a conversa ao CFO?</p>
+            <div class="tw"><table class="tbl-wide">
+              <thead><tr><th>Papel no projeto</th><th>Quem</th><th>O que muda</th></tr></thead>
+              <tbody>
+                <tr class="pick"><td><b>Decide e paga</b></td><td>CFO, sponsor e dono do número</td><td>Continua aprovando cada pagamento, com a fila pronta e conferida</td></tr>
+                <tr><td><b>Sente</b></td><td>Controller e os 5 analistas</td><td>Param de cruzar à mão e tratam só as exceções</td></tr>
+                <tr><td><b>Sente</b></td><td>Compras e comercial</td><td>Recebem o alerta de divergência antes da doca e veem o pedido ajustado</td></tr>
+                <tr><td><b>Sente</b></td><td>Fornecedores</td><td>Recebem em dia e deixam de bloquear entregas</td></tr>
+                <tr><td><b>Libera</b></td><td>Controller</td><td>ERP, captura de NF e títulos</td></tr>
+                <tr><td><b>Libera</b></td><td>Compras</td><td>Agenda de doca e WMS</td></tr>
+                <tr><td><b>Libera</b></td><td>Jurídico</td><td>Regra de devolução, na próxima fase</td></tr>
+              </tbody>
+            </table></div>
+            <div class="callout"><strong>Conflito:</strong> compras ganha quando a mercadoria entra, e o financeiro paga a divergência depois. O ajuste automático do pedido precisa de uma regra combinada com compras: a tolerância e quem valida a alteração.</div>
+            <p><b>Como levar a conversa ao CFO</b></p>
+            <ol class="flow">
+              <li><span><b>A dor dele.</b> Começar pelo número dele: R$ 122 mil por mês de juros e 41% do valor pago em atraso.</span></li>
+              <li><span><b>Setembro.</b> Mostrar que o atraso só caiu com uma semana de força-tarefa, e que o processo não mudou.</span></li>
+              <li><span><b>O quick win.</b> Apresentar como a força-tarefa automática. Ele continua aprovando cada pagamento, o controle que quer desde o boleto pago duas vezes, mas recebe a lista pronta e conferida.</span></li>
+              <li><span><b>A próxima oportunidade.</b> Por último, os R$ 543 mil por mês pagos sem mercadoria, que nunca voltam.</span></li>
+            </ol>
+            <a class="back" href="#mapa">Voltar ao mapa</a>
+          </div>
+        </details>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var nodes = Array.prototype.slice.call(document.querySelectorAll('[data-open]'));
+  function reduceMotion(){ return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  function setActive(id){
+    nodes.forEach(function(n){
+      var on = n.getAttribute('data-open') === id;
+      n.classList.toggle('is-active', on);
+      n.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+  function openSec(id, scroll){
+    var d = document.getElementById(id);
+    if (!d || d.tagName !== 'DETAILS') return false;
+    d.open = true;
+    if (scroll) {
+      d.scrollIntoView({behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start'});
+      var s = d.querySelector('summary');
+      if (s) { try { s.focus({preventScroll: true}); } catch (e) { s.focus(); } }
+    }
+    return true;
+  }
+  secs.forEach(function(d){
+    d.addEventListener('toggle', function(){
+      if (d.open) {
+        secs.forEach(function(o){ if (o !== d && o.open) o.open = false; });
+        setActive(d.id);
+      } else if (!secs.some(function(o){ return o.open; })) {
+        setActive(null);
+      }
+    });
+  });
+  nodes.forEach(function(n){
+    n.addEventListener('click', function(){ openSec(n.getAttribute('data-open'), true); });
+  });
+  function fromHash(){
+    var id = (location.hash || '').slice(1);
+    if (id && id !== 'mapa') openSec(id, true);
+  }
+  window.addEventListener('hashchange', fromHash);
+  var start = (location.hash || '').slice(1);
+  if (!(start && start !== 'mapa' && openSec(start, false))) {
+    var first = secs.filter(function(d){ return d.open; })[0];
+    if (first) setActive(first.id);
+  }
+})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  var stage = document.getElementById('mq-stage');
+  if (!stage) return;
+  var canvas = document.getElementById('mq-canvas');
+  var labelsEl = document.getElementById('mq-labels');
+  var fallback = document.getElementById('mq-fallback');
+  var btnA = document.getElementById('mq-antes');
+  var btnD = document.getElementById('mq-depois');
+  var btnP = document.getElementById('mq-pause');
+  var modeEls = Array.prototype.slice.call(document.querySelectorAll('[data-mode]'));
+  var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var view = null;
+
+  function showMode(m){
+    modeEls.forEach(function(el){ el.hidden = el.getAttribute('data-mode') !== m; });
+    [btnA, btnD].forEach(function(b){
+      var on = b.getAttribute('data-set') === m;
+      b.classList.toggle('is-on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    if (view) view.setMode(m);
+  }
+  btnA.addEventListener('click', function(){ showMode('antes'); });
+  btnD.addEventListener('click', function(){ showMode('depois'); });
+
+  function clamp(v){ return v < 0 ? 0 : (v > 1 ? 1 : v); }
+
+  function build(){
+    var T = window.THREE;
+    if (!T) throw new Error('three');
+    var renderer = new T.WebGLRenderer({canvas: canvas, antialias: true, alpha: true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = T.PCFSoftShadowMap;
+    var scene = new T.Scene();
+    var camera = new T.PerspectiveCamera(28, 16 / 9, 1, 400);
+
+    /* cores vindas dos tokens da página */
+    var KEYS = ['board','base','road','build','roof','dim','nota','ok','warn','bad','idle','coin'];
+    var C = {};
+    KEYS.forEach(function(k){ C[k] = new T.Color(0x888888); });
+    var mats = [];
+    function paint(m){
+      var key = m.userData.key;
+      m.color.copy(C[key]);
+      if (m.userData.em) m.emissive.copy(C[key]).multiplyScalar(key === 'dim' || key === 'idle' ? 0 : 0.5);
+    }
+    function mat(key, emissive){
+      var m = new T.MeshStandardMaterial({roughness: 0.85, metalness: 0});
+      m.userData = {key: key, em: !!emissive};
+      mats.push(m);
+      return m;
+    }
+    function setKey(m, key){ m.userData.key = key; paint(m); }
+    function readTheme(){
+      var cs = getComputedStyle(document.documentElement);
+      KEYS.forEach(function(k){
+        var v = cs.getPropertyValue('--mq-' + k).trim();
+        if (v) { try { C[k].set(v); } catch (e) {} }
+      });
+      mats.forEach(paint);
+    }
+
+    function add(geo, m, x, y, z, parent, noCast){
+      var o = new T.Mesh(geo, m);
+      o.position.set(x, y, z);
+      o.castShadow = !noCast;
+      o.receiveShadow = true;
+      (parent || scene).add(o);
+      return o;
+    }
+    function box(w, h, d, m, x, y, z, parent, noCast){ return add(new T.BoxGeometry(w, h, d), m, x, y, z, parent, noCast); }
+    function cyl(r, h, m, x, y, z, parent){ return add(new T.CylinderGeometry(r, r, h, 24), m, x, y, z, parent); }
+
+    /* luz */
+    scene.add(new T.HemisphereLight(0xffffff, 0x9aa7b8, 0.62));
+    var sun = new T.DirectionalLight(0xffffff, 0.55);
+    sun.position.set(-18, 22, 6);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.camera.left = -22; sun.shadow.camera.right = 22;
+    sun.shadow.camera.top = 18; sun.shadow.camera.bottom = -18;
+    sun.shadow.camera.near = 1; sun.shadow.camera.far = 90;
+    sun.shadow.bias = -0.0012;
+    scene.add(sun);
+
+    /* base da maquete */
+    var mBoard = mat('board'), mBase = mat('base'), mRoad = mat('road'), mBuild = mat('build'), mRoof = mat('roof');
+    box(29.4, 0.5, 18.4, mBase, 0, -0.65, 0, null, true);
+    box(28, 0.4, 17, mBoard, 0, -0.2, 0, null, true);
+
+    /* caminhos */
+    var gBoth = new T.Group(), gAntes = new T.Group(), gDepois = new T.Group();
+    scene.add(gBoth); scene.add(gAntes); scene.add(gDepois);
+    function road(a, b, g){
+      var dx = b[0] - a[0], dz = b[1] - a[1], len = Math.sqrt(dx * dx + dz * dz);
+      var o = box(len + 0.9, 0.05, 0.9, mRoad, (a[0] + b[0]) / 2, 0.025, (a[1] + b[1]) / 2, g, true);
+      o.rotation.y = -Math.atan2(dz, dx);
+    }
+    road([-9.4, -3.4], [-3.5, -3.4], gBoth);
+    road([-11.2, -3.9], [-11.2, 2.4], gBoth);
+    road([-4.6, 6.7], [10, 6.7], gBoth);
+    road([-3.5, -3.4], [-7.1, 6.7], gAntes);
+    road([-7.1, 6.7], [-4.6, 6.7], gAntes);
+    road([-3.5, -3.4], [7.2, -3.4], gDepois);
+    road([7.2, -3.4], [7.2, 6.7], gDepois);
+    road([3.5, -3.4], [-0.8, 6.7], gDepois);
+
+    /* ambientes */
+    function classical(x, z){
+      box(3.6, 0.25, 2.8, mRoof, x, 0.125, z);
+      box(3.0, 1.5, 1.8, mBuild, x, 1.0, z - 0.3);
+      [-1.3, -0.45, 0.45, 1.3].forEach(function(dx){ cyl(0.15, 1.5, mBuild, x + dx, 1.0, z + 0.95); });
+      box(3.6, 0.28, 2.8, mRoof, x, 1.89, z);
+      box(2.6, 0.42, 1.9, mBuild, x, 2.24, z);
+    }
+    /* fornecedor */
+    box(3.0, 1.5, 2.4, mBuild, -10, 0.75, -5.9);
+    box(3.2, 0.22, 2.6, mRoof, -10, 1.61, -5.9);
+    box(1.3, 0.9, 1.3, mBuild, -8.0, 0.45, -5.4);
+    cyl(0.28, 1.5, mRoof, -10.8, 2.47, -6.3);
+    /* SEFAZ */
+    classical(-3.5, -5.9);
+    /* escuta de notas */
+    var mEscBase = mat('dim'), mEscMast = mat('dim'), mEscHead = mat('dim', true);
+    box(1.9, 0.5, 1.9, mEscBase, 3.5, 0.25, -5.6);
+    cyl(0.13, 2.3, mEscMast, 3.5, 1.65, -5.6);
+    add(new T.SphereGeometry(0.45, 24, 16), mEscHead, 3.5, 3.0, -5.6);
+    var rings = [];
+    for (var ri = 0; ri < 2; ri++) {
+      var ringMat = new T.MeshBasicMaterial({transparent: true, opacity: 0, depthWrite: false});
+      var ring = new T.Mesh(new T.TorusGeometry(0.8, 0.05, 8, 40), ringMat);
+      ring.rotation.x = Math.PI / 2;
+      ring.position.set(3.5, 3.0, -5.6);
+      ring.visible = false;
+      scene.add(ring);
+      rings.push(ring);
+    }
+    /* ERP */
+    box(2.0, 2.1, 1.6, mRoof, 9.6, 1.05, -5.7);
+    var mLed = mat('idle', true);
+    [0.36, 1.08, 1.80].forEach(function(y){
+      box(2.2, 0.62, 1.8, mBuild, 9.6, y, -5.7);
+      for (var j = 0; j < 3; j++) box(0.16, 0.12, 0.06, mLed, 8.9 + j * 0.3, y, -4.78, null, true);
+    });
+    /* CD e doca */
+    box(4.2, 1.5, 3.0, mBuild, -10, 0.75, 4.4);
+    box(4.5, 0.22, 3.3, mRoof, -10, 1.61, 4.4);
+    box(0.95, 0.95, 0.08, mRoof, -11.2, 0.475, 2.88, null, true);
+    box(0.95, 0.95, 0.08, mRoof, -9.5, 0.475, 2.88, null, true);
+    /* contas a pagar / análise manual */
+    box(3.4, 0.16, 2.4, mRoof, -3.5, 0.08, 4.2);
+    var desks = [];
+    [-1.1, 0, 1.1].forEach(function(dx){
+      var g = new T.Group();
+      scene.add(g);
+      box(0.85, 0.42, 0.5, mBuild, -3.5 + dx, 0.37, 4.2, g);
+      box(0.42, 0.3, 0.05, mRoof, -3.5 + dx, 0.73, 4.05, g);
+      desks.push(g);
+    });
+    /* CFO */
+    box(2.6, 0.16, 2.2, mRoof, 4.6, 0.08, 4.2);
+    box(1.7, 0.55, 0.75, mBuild, 4.6, 0.435, 4.2);
+    box(1.0, 0.65, 0.07, mRoof, 4.6, 1.035, 4.0);
+    var mStamp = mat('dim', true);
+    cyl(0.22, 0.3, mStamp, 5.2, 0.86, 4.35);
+    /* banco */
+    classical(10, 4.3);
+    var coin = cyl(0.42, 0.12, mat('coin'), 10, 2.98, 4.3);
+    coin.rotation.x = Math.PI / 2;
+
+    /* caminhões */
+    var trucks = [];
+    for (var ti = 0; ti < 3; ti++) {
+      var tg = new T.Group();
+      box(0.9, 0.7, 1.4, mBuild, 0, 0.45, -0.35, tg);
+      box(0.9, 0.5, 0.55, mRoof, 0, 0.35, 0.7, tg);
+      tg.visible = false;
+      scene.add(tg);
+      trucks.push({g: tg, on: false, fade: 0});
+    }
+
+    /* notas fiscais */
+    var tokGeo = new T.BoxGeometry(0.62, 0.08, 0.8);
+    var toks = [], freeToks = [];
+    for (var ki = 0; ki < 64; ki++) {
+      var tm = new T.Mesh(tokGeo, new T.MeshStandardMaterial({roughness: 0.6, metalness: 0}));
+      tm.castShadow = true;
+      tm.visible = false;
+      scene.add(tm);
+      var tok = {mesh: tm, on: false};
+      toks.push(tok);
+      freeToks.push(tok);
+    }
+    /* efeito no banco */
+    var popGeo = new T.CylinderGeometry(0.3, 0.3, 0.1, 20);
+    var pops = [], popI = 0;
+    for (var pi = 0; pi < 6; pi++) {
+      var pm = new T.Mesh(popGeo, new T.MeshBasicMaterial({transparent: true, opacity: 0, depthWrite: false}));
+      pm.rotation.x = Math.PI / 2;
+      pm.visible = false;
+      scene.add(pm);
+      pops.push({mesh: pm, life: 0});
+    }
+
+    /* rótulos dos ambientes */
+    var L = [
+      {p: [-10, 3.5, -5.9], a: ['Fornecedor', 'Emite a nota antes de entregar', ''], d: ['Fornecedor', 'Emite a nota antes de entregar', '']},
+      {p: [-3.5, 2.9, -5.9], a: ['SEFAZ', 'A nota espera a carga chegar', 'warn'], d: ['SEFAZ', 'Nota emitida', '']},
+      {p: [3.5, 3.9, -5.6], a: ['Captura de NF', 'Ninguém olha antes da doca', 'bad'], d: ['Escuta de notas', 'Lê a nota na emissão', 'ok']},
+      {p: [9.6, 2.6, -5.7], a: ['ERP', 'Correção manual, nota a nota', 'bad'], d: ['ERP', 'Cruza e ajusta o pedido', 'ok']},
+      {p: [-10, 2.2, 4.4], a: ['CD · Doca', 'Aceita a carga inteira', ''], d: ['CD · Doca', 'Recebe sabendo o que vem', 'ok']},
+      {p: [-3.5, 1.5, 4.2], a: ['Contas a pagar', '14 dias até lançar', 'bad'], d: ['Análise manual', 'Até 10%: nota sem pedido', 'warn']},
+      {p: [4.6, 1.9, 4.2], a: ['CFO', 'Aprova cerca de 400 itens por dia', ''], d: ['CFO', 'Aprova a fila em dia, com alertas', 'ok']},
+      {p: [10, 3.8, 4.3], a: ['Banco', 'Juros: R$ 122 mil por mês', 'bad'], d: ['Banco', 'Pago em dia', 'ok']}
+    ];
+    L.forEach(function(l){
+      var el = document.createElement('div');
+      el.className = 'mq-label';
+      var b = document.createElement('b'), s = document.createElement('span');
+      el.appendChild(b); el.appendChild(s);
+      labelsEl.appendChild(el);
+      l.el = el; l.b = b; l.s = s;
+    });
+
+    /* simulação */
+    var mode = 'antes', S = null, erpFlash = 0, clock = 0;
+
+    function release(k){ k.on = false; k.mesh.visible = false; freeToks.push(k); }
+    function spawn(x, z, ck){
+      var k = freeToks.pop();
+      if (!k) return null;
+      k.on = true;
+      k.mesh.visible = true;
+      k.mesh.position.set(x, 0.14, z);
+      k.mesh.scale.set(1, 1, 1);
+      k.mesh.rotation.y = Math.PI / 2;
+      k.ck = ck; k.ck2 = null; k.mix = 0;
+      k.moving = false; k.pts = null; k.pi = 0; k.speed = 4; k.done = null;
+      k.wait = 0; k.after = null;
+      k.tx = null; k.ty = 0; k.tz = 0;
+      k.age = 0; k.late = false; k.side = false; k.kind = ''; k.dying = 0;
+      k.n = S.n++;
+      return k;
+    }
+    function go(k, pts, speed, done){ k.pts = pts; k.pi = 0; k.speed = speed; k.done = done || null; k.moving = true; k.tx = null; }
+    function hold(k, secs, after){ k.wait = Math.max(0.01, secs); k.after = after; }
+    function slot(k, x, y, z){ k.tx = x; k.ty = y; k.tz = z; }
+
+    function resetSim(){
+      toks.forEach(function(k){ if (k.on) release(k); });
+      trucks.forEach(function(k){ k.on = false; k.g.visible = false; });
+      pops.forEach(function(k){ k.life = 0; k.mesh.visible = false; });
+      erpFlash = 0;
+      S = {n: 0, spawnT: 0.2, truckT: 0.8, pile: [], serveT: 2.2, queue: [], side: [], cfoT: 4.0, manual: []};
+    }
+
+    function pop(key){
+      var k = pops[popI];
+      popI = (popI + 1) % pops.length;
+      k.life = 0.9;
+      k.mesh.visible = true;
+      k.mesh.material.color.copy(C[key]);
+      k.mesh.position.set(10, 3.7, 4.3);
+    }
+
+    function spawnAntes(){
+      var k = spawn(-9.4, -3.4, 'nota');
+      if (!k) return;
+      k.late = (k.n % 5 === 1 || k.n % 5 === 3);
+      go(k, [[-3.5, -3.4]], 4.2, function(a){
+        hold(a, 1.1, function(b){
+          go(b, [[-7.1, 6.7], [-4.9, 6.7]], 4.2, function(c){ c.age = 0; S.pile.push(c); });
+        });
+      });
+    }
+    function stepAntes(dt){
+      S.pile.forEach(function(k, i){
+        k.age += dt;
+        slot(k, -3.5 + (i % 3 - 1) * 0.78, 0.14 + Math.floor(i / 3) * 0.1, 6.7);
+        if (k.late) {
+          if (k.age < 6) { k.ck = 'nota'; k.ck2 = 'warn'; k.mix = clamp((k.age - 3) / 3); }
+          else { k.ck = 'warn'; k.ck2 = 'bad'; k.mix = clamp((k.age - 8) / 3); }
+        }
+      });
+      S.serveT -= dt;
+      if (S.serveT <= 0) {
+        S.serveT += (S.pile.length > 11 ? 1.5 : 2.6);
+        var k = S.pile.shift();
+        if (k) {
+          if (k.late) { k.ck = 'bad'; k.ck2 = null; }
+          go(k, [[4.6, 6.7]], 4.4, function(a){
+            hold(a, 0.45, function(b){
+              go(b, [[10, 6.7]], 4.8, function(c){ if (c.late) pop('bad'); c.dying = 0.25; });
+            });
+          });
+        }
+      }
+    }
+
+    function toQueue(k){ go(k, [[7.2, 1.0]], 4.4, function(a){ S.queue.push(a); }); }
+    function spawnDepois(){
+      var k = spawn(-9.4, -3.4, 'nota');
+      if (!k) return;
+      var r = k.n % 10;
+      k.kind = r === 6 ? 'sem' : ((r === 2 || r === 8) ? 'div' : 'ok');
+      go(k, [[-3.5, -3.4], [3.5, -3.4]], 4.6, function(a){
+        if (a.kind === 'sem') {
+          a.ck = 'idle';
+          go(a, [[-0.8, 6.7], [-2.2, 6.7]], 4.2, function(b){ b.age = 0; S.manual.push(b); });
+        } else {
+          go(a, [[7.2, -3.4]], 4.6, function(b){
+            if (b.kind === 'div') {
+              b.ck = 'warn';
+              erpFlash = 0.9;
+              hold(b, 0.9, function(c){ c.ck = 'ok'; toQueue(c); });
+            } else {
+              b.ck = 'ok';
+              hold(b, 0.15, toQueue);
+            }
+          });
+        }
+      });
+    }
+    function stepDepois(dt){
+      S.queue.forEach(function(k, i){ slot(k, 7.2, 0.14, 5.7 - i * 0.95); });
+      S.side.forEach(function(k, i){ slot(k, 5.9 - i * 0.9, 0.14, 6.7); });
+      S.manual.forEach(function(k, i){
+        k.age += dt;
+        slot(k, -3.5 + (i % 3 - 1) * 0.78, 0.14 + Math.floor(i / 3) * 0.1, 6.7);
+      });
+      if (S.manual.length && S.manual[0].age > 20) {
+        var m = S.manual.shift();
+        m.ck = 'ok';
+        m.side = true;
+        go(m, [[5.9, 6.7]], 4.2, function(a){ S.side.push(a); });
+      }
+      S.cfoT -= dt;
+      if (S.cfoT <= 0) {
+        S.cfoT += 4.6;
+        var q = S.queue.concat(S.side);
+        S.queue = []; S.side = [];
+        q.forEach(function(k, i){
+          k.tx = null;
+          hold(k, 0.02 + i * 0.22, function(a){
+            go(a, a.side ? [[10, 6.7]] : [[7.2, 6.7], [10, 6.7]], 5, function(b){ pop('ok'); b.dying = 0.25; });
+          });
+        });
+      }
+    }
+
+    function stepToks(dt){
+      var e = 1 - Math.exp(-5 * dt);
+      toks.forEach(function(k){
+        if (!k.on) return;
+        var p = k.mesh.position;
+        if (k.dying > 0) {
+          k.dying -= dt;
+          var s = Math.max(0.001, k.dying / 0.25);
+          k.mesh.scale.set(s, s, s);
+          if (k.dying <= 0) release(k);
+          return;
+        }
+        if (k.moving) {
+          var b = k.pts[k.pi], dx = b[0] - p.x, dz = b[1] - p.z;
+          var d = Math.sqrt(dx * dx + dz * dz), len = k.speed * dt;
+          if (d <= len) {
+            p.x = b[0]; p.z = b[1];
+            k.pi++;
+            if (k.pi >= k.pts.length) {
+              k.moving = false;
+              var f = k.done; k.done = null;
+              if (f) f(k);
+            }
+          } else {
+            p.x += dx / d * len; p.z += dz / d * len;
+            k.mesh.rotation.y = Math.atan2(dx, dz);
+          }
+          p.y += (0.14 - p.y) * e;
+        } else {
+          if (k.wait > 0) {
+            k.wait -= dt;
+            if (k.wait <= 0) { var g = k.after; k.after = null; if (g) g(k); }
+          }
+          if (!k.moving && k.tx !== null) {
+            p.x += (k.tx - p.x) * e; p.y += (k.ty - p.y) * e; p.z += (k.tz - p.z) * e;
+            k.mesh.rotation.y += (0 - k.mesh.rotation.y) * e;
+          }
+        }
+        var c = k.mesh.material.color;
+        c.copy(C[k.ck]);
+        if (k.ck2) c.lerp(C[k.ck2], k.mix);
+      });
+    }
+
+    function launchTruck(){
+      for (var i = 0; i < trucks.length; i++) {
+        var k = trucks[i];
+        if (!k.on) {
+          k.on = true; k.fade = 0;
+          k.g.visible = true;
+          k.g.scale.set(1, 1, 1);
+          k.g.position.set(-11.2, 0, -3.6);
+          return;
+        }
+      }
+    }
+    function stepTrucks(dt){
+      trucks.forEach(function(k){
+        if (!k.on) return;
+        if (k.fade > 0) {
+          k.fade -= dt;
+          var s = Math.max(0.001, k.fade / 0.3);
+          k.g.scale.set(s, s, s);
+          if (k.fade <= 0) { k.on = false; k.g.visible = false; }
+          return;
+        }
+        k.g.position.z += 2.4 * dt;
+        if (k.g.position.z >= 1.7) k.fade = 0.3;
+      });
+    }
+
+    function stepFx(dt){
+      pops.forEach(function(k){
+        if (k.life <= 0) return;
+        k.life -= dt;
+        k.mesh.position.y += 1.5 * dt;
+        k.mesh.material.opacity = Math.max(0, k.life / 0.9);
+        if (k.life <= 0) k.mesh.visible = false;
+      });
+      coin.rotation.z = clock * 0.8;
+      rings.forEach(function(o, i){
+        if (mode !== 'depois') { o.visible = false; return; }
+        var ph = (clock * 0.7 + i * 0.5) % 1;
+        var s = 0.6 + ph * 1.8;
+        o.visible = true;
+        o.scale.set(s, s, s);
+        o.material.opacity = 0.75 * (1 - ph);
+        o.material.color.copy(C.ok);
+      });
+      if (erpFlash > 0) {
+        erpFlash -= dt;
+        if (erpFlash <= 0) setKey(mLed, mode === 'depois' ? 'ok' : 'idle');
+        else if (mLed.userData.key !== 'warn') setKey(mLed, 'warn');
+      }
+    }
+
+    function stepSim(dt){
+      clock += dt;
+      S.spawnT -= dt;
+      if (S.spawnT <= 0) { S.spawnT += 1.5; if (mode === 'antes') spawnAntes(); else spawnDepois(); }
+      S.truckT -= dt;
+      if (S.truckT <= 0) { S.truckT += 3.4; launchTruck(); }
+      if (mode === 'antes') stepAntes(dt); else stepDepois(dt);
+      stepToks(dt);
+      stepTrucks(dt);
+      stepFx(dt);
+    }
+
+    /* câmera */
+    var AZ0 = -0.3, EL = 0.62, azUser = 0, dist = 42, dirty = true;
+    var running = !reduce, visible = true, last = 0;
+    var v3 = new T.Vector3();
+    function placeCamera(){
+      var az = AZ0 + azUser + (reduce ? 0 : Math.sin(clock * 0.25) * 0.13);
+      var ce = Math.cos(EL), se = Math.sin(EL);
+      camera.position.set(Math.sin(az) * ce * dist, se * dist + 0.5, Math.cos(az) * ce * dist - 0.6);
+      camera.lookAt(0, 0.5, -0.6);
+      camera.updateMatrixWorld();
+    }
+    function placeLabels(){
+      var w = stage.clientWidth, h = stage.clientHeight;
+      L.forEach(function(l){
+        v3.set(l.p[0], l.p[1], l.p[2]).project(camera);
+        var x = (v3.x + 1) / 2 * w, y = (1 - v3.y) / 2 * h;
+        l.el.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) translate(-50%,-100%)';
+      });
+    }
+    function resize(){
+      var w = stage.clientWidth, h = stage.clientHeight;
+      if (!w || !h) return;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      var tanV = Math.tan(14 * Math.PI / 180);
+      dist = Math.max(18 / (tanV * camera.aspect), 10.4 / tanV);
+      camera.updateProjectionMatrix();
+      dirty = true;
+    }
+    function frame(now){
+      requestAnimationFrame(frame);
+      if (!visible || document.hidden) { last = now; return; }
+      var dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
+      last = now;
+      if (running) { stepSim(dt); dirty = true; }
+      if (dirty) {
+        placeCamera();
+        renderer.render(scene, camera);
+        placeLabels();
+        dirty = false;
+      }
+    }
+
+    function setMode(m){
+      mode = m;
+      var on = m === 'depois';
+      gAntes.visible = !on;
+      gDepois.visible = on;
+      setKey(mEscBase, on ? 'build' : 'dim');
+      setKey(mEscMast, on ? 'roof' : 'dim');
+      setKey(mEscHead, on ? 'ok' : 'dim');
+      setKey(mLed, on ? 'ok' : 'idle');
+      setKey(mStamp, on ? 'ok' : 'dim');
+      desks[0].visible = !on;
+      desks[2].visible = !on;
+      L.forEach(function(l){
+        var d = on ? l.d : l.a;
+        l.b.textContent = d[0];
+        l.s.textContent = d[1];
+        l.el.className = 'mq-label' + (d[2] ? ' is-' + d[2] : '');
+      });
+      resetSim();
+      var keep = clock;
+      for (var i = 0; i < 500; i++) stepSim(0.1);
+      clock = keep;
+      dirty = true;
+    }
+
+    /* controles */
+    function syncPause(){
+      btnP.textContent = running ? 'Pausar' : 'Reproduzir';
+      btnP.setAttribute('aria-pressed', running ? 'false' : 'true');
+    }
+    btnP.addEventListener('click', function(){ running = !running; syncPause(); dirty = true; });
+    syncPause();
+
+    var drag = null;
+    stage.addEventListener('pointerdown', function(ev){
+      drag = {x: ev.clientX, az: azUser};
+      stage.classList.add('is-drag');
+      try { stage.setPointerCapture(ev.pointerId); } catch (e) {}
+    });
+    stage.addEventListener('pointermove', function(ev){
+      if (!drag) return;
+      azUser = Math.max(-0.9, Math.min(0.9, drag.az - (ev.clientX - drag.x) * 0.005));
+      dirty = true;
+    });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(function(name){
+      stage.addEventListener(name, function(){ drag = null; stage.classList.remove('is-drag'); });
+    });
+
+    if (window.ResizeObserver) new ResizeObserver(resize).observe(stage);
+    else window.addEventListener('resize', resize);
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(es){ visible = es[0].isIntersecting; if (visible) dirty = true; }, {threshold: 0}).observe(stage);
+    }
+    function themeChanged(){ readTheme(); dirty = true; }
+    if (window.MutationObserver) new MutationObserver(themeChanged).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+    if (window.matchMedia) {
+      var mq = window.matchMedia('(prefers-color-scheme: dark)');
+      if (mq.addEventListener) mq.addEventListener('change', themeChanged);
+      else if (mq.addListener) mq.addListener(themeChanged);
+    }
+
+    readTheme();
+    resize();
+    requestAnimationFrame(frame);
+    return {setMode: setMode};
+  }
+
+  try { view = build(); } catch (err) { view = null; }
+  if (!view) {
+    canvas.hidden = true;
+    fallback.hidden = false;
+    btnP.hidden = true;
+    stage.style.cursor = 'default';
+  }
+  showMode('antes');
+})();
+</script>
+
+
+</body>
+</html>
